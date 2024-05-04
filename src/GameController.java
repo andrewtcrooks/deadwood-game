@@ -13,7 +13,11 @@ class GameController {
      */
     GameController(int numPlayers) {
         this.numPlayers = numPlayers;
-        // TODO: Initialize other attributes
+        if (numPlayers < 4) {
+            this.days = 3;
+        } else {
+            this.days = 4;
+        }
     }
 
     /**
