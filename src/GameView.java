@@ -11,4 +11,3 @@ class {
        frame.setVisible(true);
     }
 }
-
