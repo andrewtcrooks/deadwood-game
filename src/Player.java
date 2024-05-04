@@ -1,3 +1,7 @@
+/**
+ * This class represents a player in the game.
+ * It holds information about the player's state, such as their rank, money, credits, location, and more.
+ */
 public class Player {
     private int id;
     private int rank;
@@ -8,81 +12,75 @@ public class Player {
     private boolean hasRole;
     private boolean onCard;
 
+    /**
+     * Constructs a new Player with the specified credits and rank.
+     *
+     * @param credits the initial number of credits for the player
+     * @param rank the initial rank of the player
+     */
     Player(int credits, int rank) {
         this.credits = credits;
         this.rank = rank;
-        // TODO: Initialize other attributes as needed
+        // TODO: Initialize other attributes
     }
 
+    /**
+     * Returns the ID of the player.
+     *
+     * @return the ID of the player
+     */
     int getID() {
         // TODO: Implement logic to return id
         return 0;
     }
 
+    /**
+     * Returns the rank of the player.
+     *
+     * @return the rank of the player
+     */
     int getRank() {
         // TODO: Implement logic to return rank
         return 0;
     }
 
+    /**
+     * Returns the amount of money the player has.
+     *
+     * @return the amount of money the player has
+     */
     int getMoney() {
         // TODO: Implement logic to return money
         return 0;
     }
 
+    /**
+     * Returns the number of credits the player has.
+     *
+     * @return the number of credits the player has
+     */
     int getCredits() {
         // TODO: Implement logic to return credits
         return 0;
     }
 
+    /**
+     * Returns the location of the player.
+     *
+     * @return the location of the player
+     */
     String getLocation() {
         // TODO: Implement logic to return locationName
         return null;
     }
 
+    /**
+     * Returns the number of rehearsal tokens the player has.
+     *
+     * @return the number of rehearsal tokens the player has
+     */
     int getRehearsalToken() {
         // TODO: Implement logic to return rehearsalTokens
         return 0;
-    }
-
-    boolean getHasRole() {
-        // TODO: Implement logic to return hasRole
-        return false;
-    }
-
-    boolean getOnCard() {
-        // TODO: Implement logic to return onCard
-        return false;
-    }
-
-    void setID(int id) {
-        // TODO: Implement logic to set id
-    }
-
-    void setRank(int rank) {
-        // TODO: Implement logic to set rank
-    }
-
-    void setMoney(int money) {
-        // TODO: Implement logic to set money
-    }
-
-    void setCredits(int credits) {
-        // TODO: Implement logic to set credits
-    }
-
-    void setLocation(String locationName) {
-        // TODO: Implement logic to set locationName
-    }
-
-    void setRehearsalToken(int rehearsalTokens) {
-        // TODO: Implement logic to set rehearsalTokens
-    }
-
-    void setHasRole(boolean hasRole) {
-        // TODO: Implement logic to set hasRole
-    }
-
-    void setOnCard(boolean onCard) {
-        // TODO: Implement logic to set onCard
     }
 }
