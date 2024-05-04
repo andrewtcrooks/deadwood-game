@@ -4,7 +4,7 @@ import java.util.*;
  * Represents a scene card with an ID, title, description, image, budget, and roles.
  */
 public class SceneCard {
-    private int ID;
+    private int id;
     private String title;
     private String desc;
     private String image;
@@ -14,15 +14,15 @@ public class SceneCard {
     /**
      * Initializes a new SceneCard with the given ID, title, description, image, budget, and roles.
      *
-     * @param ID The unique identifier of the SceneCard.
+     * @param id The unique identifier of the SceneCard.
      * @param title The title of the SceneCard.
      * @param desc The description of the SceneCard.
      * @param image The image on the SceneCard.
      * @param budget The budget for the SceneCard.
      * @param roles The list of roles on the SceneCard.
      */
-    SceneCard(int ID, String title, String desc, String image, int budget, List<Role> roles) {
-        this.ID = ID;
+    SceneCard(int id, String title, String desc, String image, int budget, List<Role> roles) {
+        this.id = id;
         this.title = title;
         this.desc = desc;
         this.image = image;
@@ -36,7 +36,7 @@ public class SceneCard {
      * @return The unique identifier of the SceneCard.
      */
     int getID() {
-        return ID;
+        return id;
     }
 
     /**
