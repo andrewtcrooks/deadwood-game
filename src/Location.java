@@ -5,6 +5,7 @@ import java.util.*;
  */
 public class Location {
     private String name;
+    private int locationShots;
     private int shots;
     private List<String> neighbors;
     private List<Role> locationRoles;
@@ -22,10 +23,11 @@ public class Location {
      */
     Location(String name, int shots, List<String> neighbors, List<Role> roles, SceneCard scene) {
         this.name = name;
+        this.locationShots = shots; // Store initial shots for reset
         this.shots = shots;
         this.neighbors = neighbors;
         this.locationRoles = new ArrayList<>(roles); // Store location roles
-        this.roles = new ArrayList<>(roles); // Create a new list to avoid modifying the location list
+        this.roles = new ArrayList<>(roles); // Create a new list to avoid modifying the locationRoles list
         this.roles.addAll(scene.getRoles()); // Add all roles from the scene
         this.scene = scene;
     }
@@ -73,6 +75,22 @@ public class Location {
      */
     SceneCard getScene() {
         return scene;
+    }
+
+    /**
+     * Decrements the number of shots in the location.
+     * 
+     * @param shots the new number of shots for the location
+     */
+    void decrementShots(int shots) {
+        this.shots -= shots;
+    }
+
+    /**
+     * Resets the number of shots in the location.
+     */
+    void resetShots() {
+        this.shots = locationShots;
     }
 
     /**
