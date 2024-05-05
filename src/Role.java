@@ -57,7 +57,7 @@ public class Role {
     /**
      * Returns true if the Role is from a SceneCard, false if Role is from a Location.
      *
-     * @return The line for the Role.
+     * @return true if the Role is from a SceneCard, false if Role is from a Location.
      */
     boolean onCard() { 
         return onCard; 
@@ -72,6 +72,16 @@ public class Role {
         return occupied;
     }
 
+
+    /**
+     *  Sets the occupied attribute of the role.
+     * 
+     *  @param occupied
+     */
+    void setOccupied(boolean occupied) {
+        this.occupied = occupied;
+    }
+
     /** 
      * Assigns a player to the role.
      *
@@ -79,7 +89,7 @@ public class Role {
      */
     void assignPlayer(Player player) {
         this.player = player;
-        this.occupied = true;
+        setOccupied(true);
     }
 
     /**
@@ -87,6 +97,6 @@ public class Role {
      */
     void removePlayer() {
         this.player = null;
-        this.occupied = false;
+        setOccupied(false);
     }
 }
