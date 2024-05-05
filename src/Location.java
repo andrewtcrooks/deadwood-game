@@ -79,10 +79,8 @@ public class Location {
 
     /**
      * Decrements the number of shots in the location.
-     * 
-     * @param shots the new number of shots for the location
      */
-    void decrementShots(int shots) {
+    void decrementShots() {
         this.shots -= shots;
     }
 
