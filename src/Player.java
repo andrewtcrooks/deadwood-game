@@ -15,10 +15,11 @@ public class Player {
     private int rank;
     private int money;
     private int credits;
-    private String location;
+    private Location location;
     private int rehearsalTokens;
     private boolean hasRole;
     private boolean onCard;
+    private Role role;
 
     /**
      * Constructs a new Player with the specified rank and credits.
@@ -32,11 +33,11 @@ public class Player {
         this.rank = rank;
         this.money = 0;
         this.credits = credits;
-        this.location = "Trailer";
+        this.location = null;
         this.rehearsalTokens = 0;
         this.hasRole = false;
         this.onCard = false;
-        // TODO: Initialize other attributes
+        this.role = null;
     }
 
     /**
@@ -80,7 +81,7 @@ public class Player {
      *
      * @return the location of the player
      */
-    String getLocation() {
+    Location getLocation() {
         return location;
     }
 
@@ -89,7 +90,7 @@ public class Player {
      *
      * @return the number of rehearsal tokens the player has
      */
-    int getRehearsalToken() {
+    int getRehearsalTokens() {
         return rehearsalTokens;
     }
 
@@ -112,39 +113,55 @@ public class Player {
     }
 
     /**
-     * Sets the ID of the player.
+     * Returns the role the player has.
      *
-     * @param id the new ID of the player
+     * @return the role the player has
      */
-    void setID(int id) {
-        this.id = id;
+    Role getRole() {
+        return role;
     }
 
     /**
-     * Sets the rank of the player.
-     *
-     * @param rank the new rank of the player
+     * Increments the rank of the player.
      */
-    void setRank(int rank) {
-        this.rank = rank;
+    void incrementRank() {
+        rank++;
     }
 
     /**
-     * Sets the amount of money the player has.
+     * Adds to the amount of money the player has.
      *
-     * @param money the new amount of money for the player
+     * @param money the amount of money to add for the player
      */
-    void setMoney(int money) {
-        this.money = money;
+    void addMoney(int money) {
+        this.money += money;
     }
 
     /**
-     * Sets the number of credits the player has.
+     * Decreases the amount of money the player has.
      *
-     * @param credits the new number of credits for the player
+     * @param money the amount of money to subtract from the player
      */
-    void setCredits(int credits) {
-        this.credits = credits;
+    void decreaseMoney(int money) {
+        this.money -= money;
+    }
+
+    /**
+     * Adds to the number of credits the player has.
+     *
+     * @param credits the number of credits to add for the player
+     */
+    void addCredits(int credits) {
+        this.credits += credits;
+    }
+
+    /**
+     * Decreases the number of credits the player has.
+     *
+     * @param credits the number of credits to subtract from the player
+     */
+    void decreaseCredits(int credits) {
+        this.credits -= credits;
     }
 
     /**
@@ -152,17 +169,22 @@ public class Player {
      *
      * @param locationName the new location of the player
      */
-    void setLocation(String location) {
+    void setLocation(Location location) {
         this.location = location;
     }
 
     /**
-     * Sets the number of rehearsal tokens the player has.
-     *
-     * @param rehearsalTokens the new number of rehearsal tokens for the player
+     * Increments the number of rehearsal tokens the player has.
      */
-    void setRehearsalToken(int rehearsalTokens) {
-        this.rehearsalTokens = rehearsalTokens;
+    void incrementRehearsalTokens() {
+        rehearsalTokens++;
+    }
+
+    /**
+     * Resets the number of rehearsal tokens the player has.
+     */
+    void resetRehearsalTokens() {
+        rehearsalTokens = 0;
     }
 
     /**
@@ -182,4 +204,29 @@ public class Player {
     void setOnCard(boolean onCard) {
         this.onCard = onCard;
     }
+
+    /**
+     * Sets the role the player has.
+     *
+     * @param role the new role for the player
+     */
+    void takeRole(Role role) {
+        this.role = role;
+        setHasRole(true);
+        setOnCard(role.onCard());
+        role.assignPlayer(this);
+    }
+
+    /**
+     * Removes the role the player has.
+     */
+    public void leaveRole() {
+        if (role != null) {
+            this.role = null;
+            setHasRole(false);
+            setOnCard(false);
+            role.removePlayer();
+        }
+    }
+
 }
