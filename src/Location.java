@@ -7,6 +7,7 @@ public class Location {
     private String name;
     private int shots;
     private List<String> neighbors;
+    private List<Role> locationRoles;
     private List<Role> roles;
     private SceneCard scene;
 
@@ -23,7 +24,8 @@ public class Location {
         this.name = name;
         this.shots = shots;
         this.neighbors = neighbors;
-        this.roles = new ArrayList<>(roles); // Create a new list to avoid modifying the original list
+        this.locationRoles = new ArrayList<>(roles); // Store location roles
+        this.roles = new ArrayList<>(roles); // Create a new list to avoid modifying the location list
         this.roles.addAll(scene.getRoles()); // Add all roles from the scene
         this.scene = scene;
     }
@@ -71,5 +73,16 @@ public class Location {
      */
     SceneCard getScene() {
         return scene;
+    }
+
+    /**
+     * Sets a new scene card for the location and redefines the roles list.
+     *
+     * @param scene the new scene card for the location
+     */
+    void setScene(SceneCard scene) {
+        this.scene = scene;
+        this.roles = new ArrayList<>(locationRoles); // Reset roles to location roles
+        this.roles.addAll(scene.getRoles()); // Add all roles from the new scene
     }
 }
