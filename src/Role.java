@@ -7,6 +7,8 @@ public class Role {
     private int rank;
     private String line;
     private boolean onCard;
+    private boolean occupied;
+    private Player player;
 
     /**
      * Initializes a new Role with the given name, rank, and line.
@@ -21,6 +23,8 @@ public class Role {
         this.rank = rank;
         this.line = line;
         this.onCard = onCard;
+        this.occupied = false;
+        this.player=null;
     }
 
     /**
@@ -57,5 +61,32 @@ public class Role {
      */
     boolean onCard() { 
         return onCard; 
+    }
+
+    /**
+     * Returns true if the Role is occupied, false otherwise.
+     *
+     * @return True if the Role is occupied, false otherwise.
+     */
+    boolean isOccupied() {
+        return occupied;
+    }
+
+    /** 
+     * Assigns a player to the role.
+     *
+     * @param player The player to assign to the role
+     */
+    void assignPlayer(Player player) {
+        this.player = player;
+        this.occupied = true;
+    }
+
+    /**
+     * Removes the player from the role.
+     */
+    void removePlayer() {
+        this.player = null;
+        this.occupied = false;
     }
 }
