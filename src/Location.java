@@ -42,9 +42,9 @@ public class Location {
     }
 
     /**
-     * Returns the number of shots in the location.
+     * Returns the number of shots left in the location.
      *
-     * @return the number of shots in the location
+     * @return the number of shots left in the location
      */
     int getShots() {
         return shots;
