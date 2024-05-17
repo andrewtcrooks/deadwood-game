@@ -1,6 +1,6 @@
 
 /**
- * Represents a role with a name, rank, and line.
+ * Represents a role with a name, rank, line, and indicator if it is on a Scene Card.
  */
 public class Role {
     private String name;
@@ -11,7 +11,7 @@ public class Role {
     private Player player;
 
     /**
-     * Initializes a new Role with the given name, rank, and line.
+     * Initializes a new Role with the given name, rank, line, and onCard indicator.
      *
      * @param name The name of the Role.
      * @param rank The rank of the Role.
@@ -72,13 +72,12 @@ public class Role {
         return occupied;
     }
 
-
     /**
-     *  Sets the occupied attribute of the role.
+     * Sets the occupied attribute of the role.
      * 
-     *  @param occupied
+     * @param occupied The new value of the occupied attribute.
      */
-    void setOccupied(boolean occupied) {
+    private void setOccupied(boolean occupied) {
         this.occupied = occupied;
     }
 
@@ -98,5 +97,14 @@ public class Role {
     void removePlayer() {
         this.player = null;
         setOccupied(false);
+    }
+
+    /**
+     * Returns the player assigned to the Role.
+     *
+     * @return The player assigned to the Role.
+     */
+    Player getPlayer() {
+        return player;
     }
 }
