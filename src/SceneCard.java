@@ -15,9 +15,9 @@ public class SceneCard {
      * Initializes a new SceneCard with the given ID, title, description, image, budget, and roles.
      *
      * @param id The unique identifier of the SceneCard.
-     * @param title The title of the SceneCard.
+     * @param title The title of the SceneCard (i.e. "Evil Wears a Hat").
      * @param desc The description of the SceneCard.
-     * @param image The image on the SceneCard.
+     * @param image The image on the SceneCard. (i.e. "01.png")
      * @param budget The budget for the SceneCard.
      * @param roles The list of roles on the SceneCard.
      */
