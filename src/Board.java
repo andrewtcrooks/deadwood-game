@@ -69,13 +69,6 @@ public class Board {
     }
 
     /**
-     * Resets the number of scenes remaining in the game to 10.
-     */
-    void resetNumScenesRemaining() {
-        this.numScenesRemaining = 10;
-    }
-
-    /**
      * Returns the number of shots remaining at a location.
      *  
      * @param location The location to check.
@@ -143,6 +136,34 @@ public class Board {
         for (Location location : locations) {
             location.setScene(deck.drawCard());
         }
+    }
+
+    /**
+     * Resets the board to its initial state.
+     */
+    void resetBoard() {
+        resetPlayerLocations();
+        resetNumScenesRemaining();
+        for (Location location : locations.values()) {
+            location.resetLocations();
+        }
+        dealNewSceneCards(new ArrayList<>(locations.values()));
+    }
+
+    /**
+     * Change all player locations on the board to "Trailer"
+     */
+    void resetPlayerLocations() {
+        for (Player player : players) {
+            player.setLocation(locations.get("trailer"));
+        }
+    }
+
+    /**
+     * Resets the number of scenes remaining in the game to 10.
+     */
+    void resetNumScenesRemaining() {
+        this.numScenesRemaining = 10;
     }
 
 }
