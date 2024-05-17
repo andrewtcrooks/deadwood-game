@@ -1,6 +1,6 @@
 
 /**
- * Represents a role with a name, rank, line, and indicator if it is on a Scene Card.
+ * Represents a role with a name, rank, line, and indicator if it is on a Scene Card or at a Location.
  */
 public class Role {
     private String name;
