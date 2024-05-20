@@ -21,7 +21,7 @@ public class Location {
      * @param roles the roles for the location
      * @param scene the scene card for the location
      */
-    Location(String name, int shots, List<String> neighbors, List<Role> roles, SceneCard scene) {
+    Location(String name, int shots, List<String> neighbors, List<Role> roles) {
         this.name = name;
         this.locationShots = shots; // Store initial shots for reset
         this.shots = shots;
@@ -90,6 +90,7 @@ public class Location {
     void resetShots() {
         this.shots = locationShots;
     }
+
 
     /**
      * Sets a new scene card for the location and redefines the roles list.
