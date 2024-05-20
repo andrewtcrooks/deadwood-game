@@ -29,7 +29,7 @@ public class Location {
         this.locationRoles = new ArrayList<>(roles); // Store location roles
         this.roles = new ArrayList<>(roles); // Create a new list to avoid modifying the locationRoles list
         this.roles.addAll(scene.getRoles()); // Add all roles from the scene
-        this.scene = scene;
+        this.scene = null;
     }
 
     /**
