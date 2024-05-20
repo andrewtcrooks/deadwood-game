@@ -3,13 +3,13 @@ import java.util.*;
 
 /**
  * Represents a class for parsing scene cards from an XML file.
- * This class implements the IParseXML interface.
+ * This class extends the AbstractParseXML class.
  * 
  * This class provides a method for reading data from a Document object.
  * This class also provides a method for getting the parsed scene cards.
  */
 public class ParseCardsXML extends AbstractParseXML {
-    private ArrayList<SceneCard> cards;
+    private List<SceneCard> cards;
 
     /**
      * Initializes a new ParseCardsXML object.
@@ -75,7 +75,7 @@ public class ParseCardsXML extends AbstractParseXML {
      * 
      * @return
      */
-    public ArrayList<SceneCard> getCards() {
+    public List<SceneCard> getCards() {
         return cards;
     }
 }
