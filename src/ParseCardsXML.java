@@ -8,7 +8,7 @@ import java.util.*;
  * This class provides a method for reading data from a Document object.
  * This class also provides a method for getting the parsed scene cards.
  */
-public class ParseCardsXML extends AbstractParseXML  {
+public class ParseCardsXML extends AbstractParseXML {
     private ArrayList<SceneCard> cards;
 
     /**
