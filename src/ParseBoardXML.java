@@ -9,13 +9,13 @@ import java.util.*;
  * This class also provides a method for getting the parsed locations.
  */
 public class ParseBoardXML extends AbstractParseXML {
-    private List<Location> locations;
+    private Map<String, Location> locations;
 
     /**
      * Initializes a new ParseBoardXML object.
      */
     public ParseBoardXML() {
-        locations = new ArrayList<Location>();
+        locations = new HashMap<String, Location>();
     }
 
     /**
@@ -81,7 +81,7 @@ public class ParseBoardXML extends AbstractParseXML {
                 Location newLocation = new Location(name, shots, neighbors, roles);
     
                 // Add the new Location object to the locations list
-                locations.add(newLocation);
+                locations.put(name, newLocation);
             }
         }
     }
@@ -91,7 +91,7 @@ public class ParseBoardXML extends AbstractParseXML {
      * 
      * @return
      */
-    public List<Location> getLocations() {
+    public Map<String, Location> getLocations() {
         return locations;
     }
 }
