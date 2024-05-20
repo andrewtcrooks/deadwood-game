@@ -1,4 +1,10 @@
+import java.io.IOException;
 import java.util.*;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 /**
  * Represents the game board for the Deadwood game.
@@ -16,20 +22,27 @@ public class Board {
      * @param numDays the number of days for the game
      * @param players the list of players in the game
      */
-    Board(int numDays, List<Player> players) {
+    Board(int numDays, List<Player> players, String xmlFilePath) {
         this.numDays = numDays;
         this.numScenesRemaining = 10;
         this.players = players;
         this.deck = new Deck("resources/cards.xml");
-        this.locations = new HashMap<>();
-        initLocations();
+        this.locations = new List<Location>();
+        initLocations(xmlFilePath);
     }
 
     /**
      * Initializes the locations on the board.
      */
-    private void initLocations() {
-        // TODO: Implement location initialization logic
+    private void initLocations(String xmlFilePath) {
+        ParseBoardXML parser = new ParseBoardXML();
+        try {
+            Document doc = parser.getDocFromFile(xmlFilePath);
+            parser.readData(doc);
+            this.locations = parser.getLocations();
+        } catch (ParserConfigurationException | IOException | SAXException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -144,9 +157,6 @@ public class Board {
     void resetBoard() {
         resetPlayerLocations();
         resetNumScenesRemaining();
-        for (Location location : locations.values()) {
-            location.resetLocations();
-        }
         dealNewSceneCards(new ArrayList<>(locations.values()));
     }
 
