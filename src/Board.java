@@ -27,7 +27,7 @@ public class Board {
         this.numScenesRemaining = 10;
         this.players = players;
         this.deck = new Deck("resources/cards.xml");
-        this.locations = new List<Location>();
+        this.locations = new HashMap<String, Location>();
         initLocations(xmlFilePath);
     }
 
