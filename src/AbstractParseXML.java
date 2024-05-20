@@ -5,6 +5,11 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import java.io.IOException;
 
+/**
+ * Represents an abstract class for parsing XML files.
+ * This class provides a method for getting a Document object from a given filename.
+ * This class also provides an abstract method for reading data from a Document object.
+ */
 public abstract class AbstractParseXML {
     /**
      * Returns a Document object from the given filename.
