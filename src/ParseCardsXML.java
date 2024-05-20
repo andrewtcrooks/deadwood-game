@@ -1,24 +1,30 @@
-import javax.xml.parsers.*;
 import org.w3c.dom.*;
-import org.xml.sax.SAXException;
-import java.io.*;
 import java.util.*;
 
-
-public class ParseCardsXML implements IParseXML {
+/**
+ * Represents a class for parsing scene cards from an XML file.
+ * This class implements the IParseXML interface.
+ * 
+ * This class provides a method for reading data from a Document object.
+ * This class also provides a method for getting the parsed scene cards.
+ */
+public class ParseCardsXML extends AbstractParseXML  {
     private ArrayList<SceneCard> cards;
 
+    /**
+     * Initializes a new ParseCardsXML object.
+     */
     public ParseCardsXML() {
         cards = new ArrayList<SceneCard>();
     }
 
-    public Document getDocFromFile(String filename) throws ParserConfigurationException, IOException, SAXException {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        Document doc = db.parse(filename);
-        return doc;
-    }
-
+    /**
+     * Reads the data from the given Document object.
+     * 
+     * @param d The Document object to read data from.
+     * @return void
+     * @throws Exception
+     */
     @Override
     public void readData(Document d) {
         NodeList cardsList = d.getElementsByTagName("card");
@@ -64,6 +70,11 @@ public class ParseCardsXML implements IParseXML {
         }
     }
 
+    /**
+     * Returns the parsed scene cards.
+     * 
+     * @return
+     */
     public ArrayList<SceneCard> getCards() {
         return cards;
     }
