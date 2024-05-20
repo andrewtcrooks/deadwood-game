@@ -1,5 +1,8 @@
-// import jakarta.xml.bind.JAXBContext;
 import java.util.*;
+import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+import java.io.IOException;
 
 /**
  * Represents a deck of SceneCard objects.
@@ -14,11 +17,17 @@ public class Deck {
      * @param xmlFilePath The path to the XML file containing the card data.
      */
     Deck(String xmlFilePath) {
-        this.cards = new ArrayList<>();
-        // TODO: Initialize SceneCards and Roles from XML file
+        ParseCardsXML parser = new ParseCardsXML();
+        try {
+            Document doc = parser.getDocFromFile(xmlFilePath);
+            parser.readData(doc);
+            this.cards = parser.getCards();
+            this.shuffle();
+        } catch (ParserConfigurationException | IOException | SAXException e) {
+            e.printStackTrace();
+        }
         this.shuffle();
     }
-
 
     /**
      * Removes and returns the top card from the deck.
