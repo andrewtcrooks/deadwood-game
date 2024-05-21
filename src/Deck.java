@@ -26,7 +26,6 @@ public class Deck {
         } catch (ParserConfigurationException | IOException | SAXException e) {
             e.printStackTrace();
         }
-        this.shuffle();
     }
 
     /**
