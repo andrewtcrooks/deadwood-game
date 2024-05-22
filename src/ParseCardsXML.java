@@ -114,7 +114,6 @@ public class ParseCardsXML extends AbstractParseXML {
     private int parseSceneID(Element cardElement) {
         Element sceneElement = (Element) cardElement.getElementsByTagName("scene").item(0);
         int id = Integer.parseInt(sceneElement.getAttribute("number"));
-        String desc = sceneElement.getTextContent().trim();
         return id;
     }
 
@@ -126,7 +125,6 @@ public class ParseCardsXML extends AbstractParseXML {
      */
     private String parseSceneDescription(Element cardElement) {
         Element sceneElement = (Element) cardElement.getElementsByTagName("scene").item(0);
-        int id = Integer.parseInt(sceneElement.getAttribute("number"));
         String desc = sceneElement.getTextContent().trim();
         return desc;
     }
