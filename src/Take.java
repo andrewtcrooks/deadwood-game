@@ -1,3 +1,6 @@
+/**
+ * Take class represents a Take on a deadwood set
+ */
 public class Take {
     private int number;
     private Area area;
