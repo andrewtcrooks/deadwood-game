@@ -5,6 +5,7 @@
 public class Role {
     private String name;
     private int rank;
+    private Area area;
     private String line;
     private boolean onCard;
     private boolean occupied;
@@ -18,9 +19,10 @@ public class Role {
      * @param line The line for the Role.
      * @param onCard True if the Role is from a SceneCard, false if Role is from a Location.
      */
-    Role(String name, int rank, String line, boolean onCard) {
+    Role(String name, int rank, Area area, String line, boolean onCard) {
         this.name = name;
         this.rank = rank;
+        this.area = area;
         this.line = line;
         this.onCard = onCard;
         this.occupied = false;
@@ -43,6 +45,15 @@ public class Role {
      */
     int getRank() { 
         return rank; 
+    }
+
+    /**
+     * Returns the area of the Role.
+     *
+     * @return The area of the Role.
+     */
+    Area getArea() {
+        return area;
     }
 
     /**
