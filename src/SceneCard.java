@@ -21,22 +21,13 @@ public class SceneCard {
      * @param budget The budget for the SceneCard.
      * @param roles The list of roles on the SceneCard.
      */
-    SceneCard(int id, String title, String desc, String image, int budget, List<Role> roles) {
-        this.id = id;
+    SceneCard(String title, String image, int budget, int id, String desc, List<Role> roles) {
         this.title = title;
-        this.desc = desc;
         this.image = image;
         this.budget = budget;
+        this.id = id;
+        this.desc = desc;
         this.roles = roles;
-    }
-
-    /**
-     * Returns the unique identifier of the SceneCard.
-     *
-     * @return The unique identifier of the SceneCard.
-     */
-    int getID() {
-        return id;
     }
 
     /**
@@ -46,15 +37,6 @@ public class SceneCard {
      */
     String getTitle() {
         return title;
-    }
-
-    /**
-     * Returns the description of the SceneCard.
-     *
-     * @return The description of the SceneCard.
-     */
-    String getDesc() {
-        return desc;
     }
 
     /**
@@ -73,6 +55,24 @@ public class SceneCard {
      */
     int getBudget() {
         return budget;
+    }
+
+    /**
+     * Returns the unique identifier of the SceneCard.
+     *
+     * @return The unique identifier of the SceneCard.
+     */
+    int getID() {
+        return id;
+    }
+
+    /**
+     * Returns the description of the SceneCard.
+     *
+     * @return The description of the SceneCard.
+     */
+    String getDesc() {
+        return desc;
     }
 
     /**
