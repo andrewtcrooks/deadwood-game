@@ -1,7 +1,7 @@
 import java.util.*;
 
 /**
- * Represents a location in the game.
+ * Represents a Location in the game.
  */
 public class Location {
     private String name;
@@ -16,12 +16,12 @@ public class Location {
     /**
      * Constructs a new Location with the given parameters.
      *
-     * @param name the name of the location
-     * @param neighbors the neighboring locations
-     * @param area the area of the location
-     * @param shots the number of shots in the location
-     * @param roles the roles for the location
-     * @param scene the scene card for the location
+     * @param name the name of the Location
+     * @param neighbors the neighbors of the Location
+     * @param area the area of the Location
+     * @param shots the number of shots in the Location
+     * @param roles the roles for the Location
+     * @param scene the scene card for the Location
      */
     Location(String name, List<String> neighbors, Area area, int shots, List<Role> roles) {
         this.name = name;
@@ -36,45 +36,45 @@ public class Location {
     }
 
     /**
-     * Returns the name of the location.
+     * Returns the name of the Location.
      *
-     * @return the name of the location
+     * @return the name of the Location
      */
     String getName() {
         return name;
     }
 
     /**
-     * Returns the neighboring locations.
+     * Returns the neighbors of the Location.
      *
-     * @return the neighboring locations
+     * @return the neighbors of the Location
      */
     List<String> getNeighbors() {
         return neighbors;
     }
 
     /**
-     * Returns the area of the location.
+     * Returns the area of the Location.
      *
-     * @return the area of the location
+     * @return the area of the Location
      */
     Area getArea() {
         return area;
     }
 
     /**
-     * Returns the number of shots left in the location.
+     * Returns the number of shots left in the Location.
      *
-     * @return the number of shots left in the location
+     * @return the number of shots left in the Location
      */
     int getShots() {
         return shots;
     }
 
     /**
-     * Returns the roles for the location.
+     * Returns the roles for the Location.
      *
-     * @return the roles for the location
+     * @return the roles for the Location
      */
     List<Role> getRoles() {
         //make a copy of the location's roles
@@ -87,37 +87,36 @@ public class Location {
     }
 
     /**
-     * Returns the scene card for the location.
+     * Returns the scene card for the Location.
      *
-     * @return the scene card for the location
+     * @return the scene card for the Location
      */
     SceneCard getScene() {
         return scene;
     }
 
     /**
-     * Decrements the number of shots in the location.
+     * Decrements the number of shots in the Location.
      */
     void decrementShots() {
         this.shots -= shots;
     }
 
     /**
-     * Resets the number of shots in the location.
+     * Resets the number of shots in the Location.
      */
     void resetShots() {
         this.shots = locationShots;
     }
 
-
     /**
-     * Sets a new scene card for the location and redefines the roles list.
+     * Sets a new scene card for the Location and redefines the roles list.
      *
-     * @param scene the new scene card for the location
+     * @param scene the new scene card for the Location
      */
     void setScene(SceneCard scene) {
         this.scene = scene;
-        this.roles = new ArrayList<>(locationRoles); // Reset roles to location roles
+        this.roles = new ArrayList<>(locationRoles); // Reset roles to Location roles
         this.roles.addAll(scene.getRoles()); // Add all roles from the new scene
     }
 }
