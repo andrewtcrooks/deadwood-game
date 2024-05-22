@@ -17,7 +17,7 @@ public class Area {
      * @param h The height of the Area.
      * @param w The width of the Area.
      */
-    public Area(int x, int y, int h, int w) {
+    Area(int x, int y, int h, int w) {
         this.x = x;
         this.y = y;
         this.h = h;
