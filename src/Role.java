@@ -16,6 +16,7 @@ public class Role {
      *
      * @param name The name of the Role.
      * @param rank The rank of the Role.
+     * @param area The area of the Role.
      * @param line The line for the Role.
      * @param onCard True if the Role is from a SceneCard, false if Role is from a Location.
      */
