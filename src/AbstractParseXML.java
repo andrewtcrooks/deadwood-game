@@ -1,9 +1,7 @@
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
-import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Represents an abstract class for parsing XML files.
@@ -16,14 +14,16 @@ public abstract class AbstractParseXML {
      * Returns a Document object from the given filename.
      * @param filename
      * @return Document
-     * @throws ParserConfigurationException
-     * @throws IOException
-     * @throws SAXException
+     * @throws Exception
      */
-    public Document getDocFromFile(String filename) throws ParserConfigurationException, IOException, SAXException {
+    Document getDocFromFile(String filename) throws Exception {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
-        Document doc = db.parse(filename);
+        InputStream is = getClass().getClassLoader().getResourceAsStream(filename);
+        if (is == null) {
+            throw new IllegalArgumentException("Could not find file " + filename);
+        }
+        Document doc = db.parse(is);
         return doc;
     }
 
@@ -34,5 +34,5 @@ public abstract class AbstractParseXML {
      * Reads the data from the given Document object.
      * @param d
      */
-    public abstract void readData(Document d);
+    abstract void readData(Document d) throws Exception;
 }
