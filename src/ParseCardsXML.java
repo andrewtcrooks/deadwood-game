@@ -15,7 +15,7 @@ public class ParseCardsXML extends AbstractParseXML {
      * Initializes a new ParseCardsXML object.
      */
     public ParseCardsXML() {
-        cards = new ArrayList<SceneCard>();
+        this.cards = new ArrayList<>();
     }
 
     /**
@@ -26,48 +26,54 @@ public class ParseCardsXML extends AbstractParseXML {
      * @throws Exception
      */
     @Override
-    public void readData(Document d) {
-        NodeList cardsList = d.getElementsByTagName("card");
+    public void readData(Document d) throws Exception {
+        Element root = d.getDocumentElement();
+        NodeList cardsList = root.getElementsByTagName("card");
         for (int i = 0; i < cardsList.getLength(); i++) {
             Node card = cardsList.item(i);
-            if (card.getNodeType() == Node.ELEMENT_NODE) {
-                Element cardElement = (Element) card;
-                String title = cardElement.getAttribute("name");
-                String image = cardElement.getAttribute("img");
-                int budget = Integer.parseInt(cardElement.getAttribute("budget"));
-
-                // Parse scene
-                Element sceneElement = (Element) cardElement.getElementsByTagName("scene").item(0);
-                int id = Integer.parseInt(sceneElement.getAttribute("number"));
-                String desc = sceneElement.getTextContent().trim();
-
-                // Parse roles
-                List<Role> roles = new ArrayList<>();
-                NodeList partsList = cardElement.getElementsByTagName("part");
-                for (int j = 0; j < partsList.getLength(); j++) {
-                    Node partNode = partsList.item(j);
-                    if (partNode.getNodeType() == Node.ELEMENT_NODE) {
-                        Element partElement = (Element) partNode;
-                        String roleName = partElement.getAttribute("name");
-                        int roleLevel = Integer.parseInt(partElement.getAttribute("level"));
-    
-                        // Get the line text
-                        Element lineElement = (Element) partElement.getElementsByTagName("line").item(0);
-                        String lineText = lineElement.getTextContent().trim();
-    
-                        // Create Role object
-                        Role role = new Role(roleName, roleLevel, lineText, true);
-                        roles.add(role);
-                    }
-                }
-
-                // Create a new SceneCard object with the parsed attributes
-                SceneCard newCard = new SceneCard(id, title, desc, image, budget, roles);
-
-                // Add the new SceneCard object to the cards list
-                cards.add(newCard);
-            }
+            SceneCard newCard = parseCard((Element) card);
+            cards.add(newCard);
         }
+    }
+    
+    private SceneCard parseCard(Element cardElement) {
+        String title = cardElement.getAttribute("name");
+        String image = cardElement.getAttribute("img");
+        int budget = Integer.parseInt(cardElement.getAttribute("budget"));
+    
+        // Parse scene
+        Element sceneElement = (Element) cardElement.getElementsByTagName("scene").item(0);
+        int id = Integer.parseInt(sceneElement.getAttribute("number"));
+        String desc = sceneElement.getTextContent().trim();
+    
+        // Parse roles
+        List<Role> roles = parseRoles(cardElement);
+    
+        // Create a new SceneCard object with the parsed attributes
+        return new SceneCard(id, title, desc, image, budget, roles);
+    }
+    
+    private List<Role> parseRoles(Element cardElement) {
+        List<Role> roles = new ArrayList<>();
+        NodeList partsList = cardElement.getElementsByTagName("part");
+        for (int j = 0; j < partsList.getLength(); j++) {
+            Node partNode = partsList.item(j);
+            Role role = parseRole((Element) partNode);
+            roles.add(role);
+        }
+        return roles;
+    }
+    
+    private Role parseRole(Element partElement) {
+        String roleName = partElement.getAttribute("name");
+        int roleLevel = Integer.parseInt(partElement.getAttribute("level"));
+    
+        // Get the line text
+        Element lineElement = (Element) partElement.getElementsByTagName("line").item(0);
+        String lineText = lineElement.getTextContent().trim();
+    
+        // Create Role object
+        return new Role(roleName, roleLevel, lineText, true);
     }
 
     /**
