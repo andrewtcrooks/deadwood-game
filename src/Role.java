@@ -55,6 +55,15 @@ public class Role {
     }
 
     /**
+     * Returns the player assigned to the Role.
+     *
+     * @return The player assigned to the Role.
+     */
+    Player getPlayer() {
+        return player;
+    }
+
+    /**
      * Returns true if the Role is from a SceneCard, false if Role is from a Location.
      *
      * @return true if the Role is from a SceneCard, false if Role is from a Location.
@@ -99,12 +108,4 @@ public class Role {
         setOccupied(false);
     }
 
-    /**
-     * Returns the player assigned to the Role.
-     *
-     * @return The player assigned to the Role.
-     */
-    Player getPlayer() {
-        return player;
-    }
 }
