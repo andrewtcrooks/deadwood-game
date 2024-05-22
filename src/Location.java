@@ -5,9 +5,10 @@ import java.util.*;
  */
 public class Location {
     private String name;
+    private List<String> neighbors;
+    private Area area;
     private int locationShots;
     private int shots;
-    private List<String> neighbors;
     private List<Role> locationRoles;
     private List<Role> roles;
     private SceneCard scene;
@@ -16,16 +17,18 @@ public class Location {
      * Constructs a new Location with the given parameters.
      *
      * @param name the name of the location
-     * @param shots the number of shots in the location
      * @param neighbors the neighboring locations
+     * @param area the area of the location
+     * @param shots the number of shots in the location
      * @param roles the roles for the location
      * @param scene the scene card for the location
      */
-    Location(String name, int shots, List<String> neighbors, List<Role> roles) {
+    Location(String name, List<String> neighbors, Area area, int shots, List<Role> roles) {
         this.name = name;
+        this.neighbors = neighbors;
+        this.area = area;
         this.locationShots = shots; // Store initial shots for reset
         this.shots = shots;
-        this.neighbors = neighbors;
         this.locationRoles = new ArrayList<>(roles); // Store location roles
         this.roles = new ArrayList<>(roles); // Create a new list to avoid modifying the locationRoles list
         this.roles.addAll(scene.getRoles()); // Add all roles from the scene
@@ -42,15 +45,6 @@ public class Location {
     }
 
     /**
-     * Returns the number of shots left in the location.
-     *
-     * @return the number of shots left in the location
-     */
-    int getShots() {
-        return shots;
-    }
-
-    /**
      * Returns the neighboring locations.
      *
      * @return the neighboring locations
@@ -60,11 +54,35 @@ public class Location {
     }
 
     /**
+     * Returns the area of the location.
+     *
+     * @return the area of the location
+     */
+    Area getArea() {
+        return area;
+    }
+
+    /**
+     * Returns the number of shots left in the location.
+     *
+     * @return the number of shots left in the location
+     */
+    int getShots() {
+        return shots;
+    }
+
+    /**
      * Returns the roles for the location.
      *
      * @return the roles for the location
      */
     List<Role> getRoles() {
+        //make a copy of the location's roles
+        List<Role> roles = new ArrayList<>(locationRoles);
+        // Get the roles from the scene card
+        List<Role> sceneRoles = scene.getRoles();
+        roles.addAll(sceneRoles);
+
         return roles;
     }
 
