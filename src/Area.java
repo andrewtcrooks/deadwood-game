@@ -29,7 +29,7 @@ public class Area {
      *
      * @return The x-coordinate of the Area.
      */
-    public int getX() {
+    int getX() {
         return x;
     }
 
@@ -38,7 +38,7 @@ public class Area {
      *
      * @return The y-coordinate of the Area.
      */
-    public int getY() {
+    int getY() {
         return y;
     }
 
@@ -47,7 +47,7 @@ public class Area {
      *
      * @return The height of the Area.
      */
-    public int getH() {
+    int getH() {
         return h;
     }
 
@@ -56,7 +56,7 @@ public class Area {
      *
      * @return The width of the Area.
      */
-    public int getW() {
+    int getW() {
         return w;
     }
 }
