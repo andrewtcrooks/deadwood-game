@@ -1,9 +1,6 @@
 import java.util.*;
-import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
-import java.io.IOException;
-import java.io.FileNotFoundException;
+
 
 /**
  * Represents a deck of SceneCard objects.
