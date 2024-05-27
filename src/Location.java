@@ -121,7 +121,7 @@ public class Location {
      *
      * @param scene the new scene card for the Location
      */
-    void setScene(SceneCard scene) {
+    void setSceneCard(SceneCard scene) {
         this.scene = scene;
         this.allRoles.addAll(scene.getRoles()); // Add all roles from the new scene
     }
