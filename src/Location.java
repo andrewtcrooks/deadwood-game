@@ -57,6 +57,15 @@ public class Location {
     }
 
     /**
+     * Returns the takes for the Location.
+     *
+     * @return the takes for the Location
+     */
+    List<Take> getTakes() {
+        return takes;
+    }
+    
+    /**
      * Returns the number of shots left in the Location.
      *
      * @return the number of shots left in the Location
