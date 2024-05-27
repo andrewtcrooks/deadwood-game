@@ -51,7 +51,7 @@ public class ParseBoardXML extends AbstractParseXML {
      * @param setElement
      * @return Location
      */
-    public Location parseLocation(Element setElement) {
+    private Location parseLocation(Element setElement) {
         
         // Parse name
         String name = parseName(setElement);
