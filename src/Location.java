@@ -8,9 +8,9 @@ public class Location {
     private List<String> neighbors;
     private Area area;
     private int locationShots;
-    private int shots;
+    private List<Take> takes;
     private List<Role> locationRoles;
-    private List<Role> roles;
+    private List<Role> allRoles;
     private SceneCard scene;
 
     /**
@@ -19,19 +19,16 @@ public class Location {
      * @param name the name of the Location
      * @param neighbors the neighbors of the Location
      * @param area the area of the Location
-     * @param shots the number of shots in the Location
+     * @param takes the takes for the Location
      * @param roles the roles for the Location
-     * @param scene the scene card for the Location
      */
-    Location(String name, List<String> neighbors, Area area, int shots, List<Role> roles) {
+    Location(String name, List<String> neighbors, Area area, List<Take> takes, List<Role> roles) {
         this.name = name;
         this.neighbors = neighbors;
         this.area = area;
-        this.locationShots = shots; // Store initial shots for reset
-        this.shots = shots;
-        this.locationRoles = new ArrayList<>(roles); // Store location roles
-        this.roles = new ArrayList<>(roles); // Create a new list to avoid modifying the locationRoles list
-        this.roles.addAll(scene.getRoles()); // Add all roles from the scene
+        this.takes = takes;
+        this.locationRoles = roles;
+        this.allRoles = new ArrayList<>(roles); // Create a new list to avoid modifying the locationRoles list
         this.scene = null;
     }
 
@@ -68,22 +65,22 @@ public class Location {
      * @return the number of shots left in the Location
      */
     int getShots() {
+        int shots = 0;
+        for (Take take : this.takes) {
+            if (!take.isWrapped()) {
+                shots += 1;
+            }
+        }
         return shots;
     }
 
     /**
-     * Returns the roles for the Location.
+     * Returns the all roles for the Location and Scene.
      *
-     * @return the roles for the Location
+     * @return the all roles for the Location and Scene
      */
     List<Role> getRoles() {
-        //make a copy of the location's roles
-        List<Role> roles = new ArrayList<>(locationRoles);
-        // Get the roles from the scene card
-        List<Role> sceneRoles = scene.getRoles();
-        roles.addAll(sceneRoles);
-
-        return roles;
+        return allRoles;
     }
 
     /**
@@ -96,17 +93,21 @@ public class Location {
     }
 
     /**
-     * Decrements the number of shots in the Location.
+     * Wraps the next available shot in the Location.
      */
-    void decrementShots() {
-        this.shots -= shots;
-    }
-
-    /**
-     * Resets the number of shots in the Location.
-     */
-    void resetShots() {
-        this.shots = locationShots;
+    void wrapShot() {
+        // wrap take with the lowest number from getNumber(), the numbers can range from 1 to 3 or 1 to 4
+        int lowest = 4;
+        Take lowestTake = null;
+        for (Take take : this.takes) {
+            if (take.getNumber() <= lowest && !take.isWrapped()) {
+                lowest = take.getNumber();
+                lowestTake = take;
+            }
+        }
+        if (lowestTake != null) {
+            lowestTake.wrap();
+        }
     }
 
     /**
@@ -116,7 +117,6 @@ public class Location {
      */
     void setScene(SceneCard scene) {
         this.scene = scene;
-        this.roles = new ArrayList<>(locationRoles); // Reset roles to Location roles
-        this.roles.addAll(scene.getRoles()); // Add all roles from the new scene
+        this.allRoles.addAll(scene.getRoles()); // Add all roles from the new scene
     }
 }
