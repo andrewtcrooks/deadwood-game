@@ -7,9 +7,7 @@ public class Location {
     private String name;
     private List<String> neighbors;
     private Area area;
-    private int locationShots;
     private List<Take> takes;
-    private List<Role> locationRoles;
     private List<Role> allRoles;
     private SceneCard scene;
 
@@ -27,8 +25,7 @@ public class Location {
         this.neighbors = neighbors;
         this.area = area;
         this.takes = takes;
-        this.locationRoles = roles;
-        this.allRoles = new ArrayList<>(roles); // Create a new list to avoid modifying the locationRoles list
+        this.allRoles = roles;
         this.scene = null;
     }
 
@@ -96,7 +93,7 @@ public class Location {
      * Wraps the next available shot in the Location.
      */
     void wrapShot() {
-        // wrap take with the lowest number from getNumber(), the numbers can range from 1 to 3 or 1 to 4
+        // wrap take with the lowest number from getNumber(), the numbers can range from 1 up to 4
         int lowest = 4;
         Take lowestTake = null;
         for (Take take : this.takes) {
