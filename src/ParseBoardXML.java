@@ -15,7 +15,7 @@ public class ParseBoardXML extends AbstractParseXML {
      * Initializes a new ParseBoardXML object.
      */
     public ParseBoardXML() {
-        locations = new HashMap<String, Location>();
+        this.locations = new HashMap<String, Location>();
     }
 
     /**
@@ -26,70 +26,165 @@ public class ParseBoardXML extends AbstractParseXML {
      * @throws Exception
      */
     @Override
-    public void readData(Document d) {
-        NodeList setsList = d.getElementsByTagName("set");
-        for (int i = 0; i < setsList.getLength(); i++) {
-            Node set = setsList.item(i);
-            if (set.getNodeType() == Node.ELEMENT_NODE) {
-                Element setElement = (Element) set;
-                String name = setElement.getAttribute("name");
-    
-                // Parse neighbors
-                List<String> neighbors = new ArrayList<>();
-                NodeList neighborsList = ((Element) setElement.getElementsByTagName("neighbors").item(0)).getElementsByTagName("neighbor");
-                for (int j = 0; j < neighborsList.getLength(); j++) {
-                    Node neighborNode = neighborsList.item(j);
-                    if (neighborNode.getNodeType() == Node.ELEMENT_NODE) {
-                        Element neighborElement = (Element) neighborNode;
-                        String neighborName = neighborElement.getAttribute("name");
-                        neighbors.add(neighborName);
-                    }
-                }
-    
-                // Parse takes
-                int shots = 0;
-                NodeList takesList = ((Element) setElement.getElementsByTagName("takes").item(0)).getElementsByTagName("take");
-                if (takesList.getLength() > 0) {
-                    Node firstTakeNode = takesList.item(0);
-                    if (firstTakeNode.getNodeType() == Node.ELEMENT_NODE) {
-                        Element firstTakeElement = (Element) firstTakeNode;
-                        shots = Integer.parseInt(firstTakeElement.getAttribute("number"));
-                    }
-                }
-    
-                // Parse roles
-                List<Role> roles = new ArrayList<>();
-                NodeList partsList = ((Element) setElement.getElementsByTagName("parts").item(0)).getElementsByTagName("part");
-                for (int j = 0; j < partsList.getLength(); j++) {
-                    Node partNode = partsList.item(j);
-                    if (partNode.getNodeType() == Node.ELEMENT_NODE) {
-                        Element partElement = (Element) partNode;
-                        String roleName = partElement.getAttribute("name");
-                        int roleLevel = Integer.parseInt(partElement.getAttribute("level"));
+    public void readData(Document d) throws Exception {
+        Element root = d.getDocumentElement();
+        NodeList locationsList = root.getElementsByTagName("set");
+        parseLocations(locationsList);
+    }
 
-                        // Get the line text
-                        Element lineElement = (Element) partElement.getElementsByTagName("line").item(0);
-                        String lineText = lineElement.getTextContent().trim();
-
-                        // Create Role object
-                        Role role = new Role(roleName, roleLevel, lineText, true);
-                        roles.add(role);
-                    }
-                }
-
-                // Create a new Location object with the parsed attributes
-                Location newLocation = new Location(name, shots, neighbors, roles);
-    
-                // Add the new Location object to the locations list
-                locations.put(name, newLocation);
-            }
+    /**
+     * Parses the locations from the given NodeList object.
+     * 
+     * @param locationsList
+     */
+    private void parseLocations(NodeList locationsList) {
+        for (int i = 0; i < locationsList.getLength(); i++) {
+            Node location = locationsList.item(i);
+            Location newLocation = parseLocation((Element) location);
+            locations.put(newLocation.getName(), newLocation);
         }
+    }
+
+    /**
+     * Parses a location from the given Element object.
+     * 
+     * @param setElement
+     * @return Location
+     */
+    public Location parseLocation(Element setElement) {
+        
+        // Parse name
+        String name = parseName(setElement);
+
+        // Parse neighbors
+        List<String> neighbors = parseNeighbors(setElement);
+    
+        // Parse area
+        Element areaElement = (Element) setElement.getElementsByTagName("area").item(0);
+        Area area = parseArea(areaElement);
+
+        // Parse takes
+        List<Take> takes = parseTakes(setElement);
+    
+        // Parse parts
+        List<Role> roles = parseRoles(setElement);
+    
+        return new Location(name, neighbors, area, takes,  roles);
+    }
+
+    /**
+     * Parses the name from the given Element object.
+     * 
+     * @param setElement
+     * @return String
+     */
+    private String parseName(Element setElement) {
+        return setElement.getAttribute("name");
+    }
+
+    /**
+     * Parses the neighbors from the given Element object.
+     * 
+     * @param setElement
+     * @return List<String>
+     */
+    private List<String> parseNeighbors(Element setElement) {
+        List<String> neighbors = new ArrayList<>();
+        NodeList neighborsList = setElement.getElementsByTagName("neighbor");
+        for (int i = 0; i < neighborsList.getLength(); i++) {
+            Element neighborElement = (Element) neighborsList.item(i);
+            neighbors.add(neighborElement.getAttribute("name"));
+        }
+        return neighbors;
+    }
+    
+    /**
+     * Parses the takes from the given Element object.
+     * 
+     * @param setElement
+     * @return int
+     */
+    private List<Take> parseTakes(Element setElement) {
+        NodeList takesList = setElement.getElementsByTagName("take");
+        List<Take> takes = new ArrayList<>();
+        for (int i = 0; i < takesList.getLength(); i++) {
+            Node takeNode = takesList.item(i);
+            Take take = parseTake((Element) takeNode);
+            takes.add(take);
+        }
+        return takes;
+    }
+    
+    /*
+     * Parses a take from the given Element object.
+     * 
+     * @param takeElement
+     * @return Take
+     */
+    Take parseTake(Element takeElement) {
+        int number = Integer.parseInt(takeElement.getAttribute("number"));
+        Element areaElement = (Element) takeElement.getElementsByTagName("area").item(0);
+        Area area = parseArea(areaElement);
+        return new Take(number, area);
+    }
+
+    /**
+     * Parses the roles from the given Element object.
+     * 
+     * @param setElement
+     * @return List<Role>
+     */
+    private List<Role> parseRoles(Element setElement) {
+        List<Role> roles = new ArrayList<>();
+        NodeList partsList = setElement.getElementsByTagName("part");
+        for (int j = 0; j < partsList.getLength(); j++) {
+            Node partNode = partsList.item(j);
+            Role role = parseRole((Element) partNode);
+            roles.add(role);
+        }
+        return roles;
+    }
+    
+    /**
+     * Parses a role from the given Element object.
+     * 
+     * @param partElement
+     * @return Role
+     */
+    private Role parseRole(Element partElement) {
+        String roleName = partElement.getAttribute("name");
+        int roleLevel = Integer.parseInt(partElement.getAttribute("level"));
+    
+        // Parse the Area
+        Element areaElement = (Element) partElement.getElementsByTagName("area").item(0);
+        Area roleArea = parseArea(areaElement);
+
+        // Get the line text
+        Element lineElement = (Element) partElement.getElementsByTagName("line").item(0);
+        String lineText = lineElement.getTextContent().trim();
+    
+        // Create Role object
+        return new Role(roleName, roleLevel, roleArea, lineText, true);
+    }
+
+    /**
+     * Parses an area from the given Element object.
+     * 
+     * @param areaElement
+     * @return Area
+     */
+    private Area parseArea(Element areaElement) {
+        int x = Integer.parseInt(areaElement.getAttribute("x"));
+        int y = Integer.parseInt(areaElement.getAttribute("y"));
+        int h = Integer.parseInt(areaElement.getAttribute("h"));
+        int w = Integer.parseInt(areaElement.getAttribute("w"));
+        return new Area(x, y, h, w);
     }
 
     /**
      * Returns the parsed locations.
      * 
-     * @return
+     * @return Map<String, Location>
      */
     public Map<String, Location> getLocations() {
         return locations;
