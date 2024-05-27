@@ -1,10 +1,5 @@
-import java.io.IOException;
 import java.util.*;
-
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 /**
  * Represents the game board for the Deadwood game.
@@ -13,6 +8,7 @@ public class Board {
     private int numDays;
     private int numScenesRemaining;
     private List<Player> players;
+    private String xmlFilePath;
     private Map<String, Location> locations;
     private Deck deck;
 
@@ -26,21 +22,23 @@ public class Board {
         this.numDays = numDays;
         this.numScenesRemaining = 10;
         this.players = players;
+        this.xmlFilePath = xmlFilePath;
         this.deck = new Deck("resources/cards.xml");
         this.locations = new HashMap<String, Location>();
-        initLocations(xmlFilePath);
+        initLocations(this.xmlFilePath);
+        dealSceneCardsToLocations();
     }
 
     /**
      * Initializes the locations on the board.
      */
-    private void initLocations(String xmlFilePath) {
+    void initLocations(String xmlFilePath) {
         ParseBoardXML parser = new ParseBoardXML();
         try {
             Document doc = parser.getDocFromFile(xmlFilePath);
             parser.readData(doc);
             this.locations = parser.getLocations();
-        } catch (ParserConfigurationException | IOException | SAXException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -82,32 +80,31 @@ public class Board {
     }
 
     /**
+     * Returns the locations on the board.
+     * 
+     * @return The locations on the board.
+     */
+    Map<String, Location> getLocations() {
+        return locations;
+    }
+
+    /**
      * Returns the number of shots remaining at a location.
      *  
      * @param location The location to check.
      * @return The number of shots remaining at the location.
      */
     int getLocationShotsRemaining(Location location) {
-        // TODO: Implement logic to return shots remaining at a location
-        return 0;
+        return location.getShots();
     }
 
     /**
-     * Decrements the number of shots remaining at a location by 1.
-     *  
-     * @param location The location to decrement shots at.
+     * Wraps a shot at a location.
+     * 
+     * @param location The location to wrap a shot at.
      */
-    void setLocationShotsDecrement(Location location) {
-        // TODO: Implement logic to decrement shots remaining at location by 1
-    }
-
-    /**
-     * Resets the number of shots remaining at a location to the initial value.
-     *  
-     * @param location The location to reset shots at.
-     */
-    void setLocationShotsReset(Location location) {
-        // TODO: Implement logic to reset shots remaining at location to initial value
+    void wrapLocationShot(Location location) {
+        location.wrapShot();
     }
 
     /**
@@ -116,9 +113,8 @@ public class Board {
      * @param location The location to check.
      * @return The neighbors of the location.
      */
-    List<Location> getLocationNeighbors(Location location) {
-        // TODO: Implement logic to return neighbors of a location as list of Location objects using locations Map
-        return null;
+    List<String> getLocationNeighbors(Location location) {
+        return location.getNeighbors();
     }
 
     /**
@@ -141,13 +137,13 @@ public class Board {
         return location.getScene();
     }
 
-    /** Deal new Scene Cards to all lcoations
-     * 
-     * @param locations
-     */ 
-    void dealNewSceneCards(List<Location> locations) {
-        for (Location location : locations) {
-            location.setScene(deck.drawCard());
+    /**
+     * Deals new scene card to each location on the board.
+     */
+    void dealSceneCardsToLocations() {
+        for (Location location : locations.values()) {
+            SceneCard card = deck.drawCard();
+            location.setSceneCard(card);
         }
     }
 
@@ -155,9 +151,9 @@ public class Board {
      * Resets the board to its initial state.
      */
     void resetBoard() {
+        initLocations(this.xmlFilePath);
+        dealSceneCardsToLocations();
         resetPlayerLocations();
-        resetNumScenesRemaining();
-        dealNewSceneCards(new ArrayList<>(locations.values()));
     }
 
     /**
