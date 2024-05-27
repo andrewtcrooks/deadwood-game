@@ -72,7 +72,7 @@ public class ParseCardsXML extends AbstractParseXML {
         List<Role> roles = parseRoles(cardElement);
     
         // Create a new SceneCard object with the parsed attributes
-        return new SceneCard(id, title, desc, image, budget, roles);
+        return new SceneCard(title, image, budget, id, desc, roles);
     }
     
     /**
