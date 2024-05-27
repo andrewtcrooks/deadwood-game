@@ -4,6 +4,7 @@
 public class Take {
     private int number;
     private Area area;
+    private boolean wrapped = false;
 
     /**
      * Initializes a new Take with the given number and area.
@@ -32,5 +33,21 @@ public class Take {
      */
     public Area getArea() {
         return this.area;
+    }
+
+    /**
+     * Returns whether the Take is wrapped.
+     * 
+     * @return True if the Take is wrapped, false otherwise.
+     */
+    public boolean isWrapped() {
+        return this.wrapped;
+    }
+
+    /**
+     * Wraps the Take.
+     */
+    public void wrap() {
+        this.wrapped = true;
     }
 }
