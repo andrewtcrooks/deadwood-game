@@ -8,6 +8,7 @@ public class Location {
     private List<String> neighbors;
     private Area area;
     private List<Take> takes;
+    private boolean wrapped;
     private List<Role> allRoles;
     private SceneCard scene;
 
@@ -25,6 +26,7 @@ public class Location {
         this.neighbors = neighbors;
         this.area = area;
         this.takes = takes;
+        this.wrapped = false;
         this.allRoles = roles;
         this.scene = null;
     }
@@ -114,6 +116,29 @@ public class Location {
         if (lowestTake != null) {
             lowestTake.wrap();
         }
+
+        // Check if all takes are wrapped
+        boolean allWrapped = true;
+        for (Take take : this.takes) {
+            if (!take.isWrapped()) {
+                allWrapped = false;
+                break;
+            }
+        }
+
+        // If all takes are wrapped, set this.wrapped to true
+        if (allWrapped) {
+            this.wrapped = true;
+        }
+    }
+
+    /**
+     * Returns whether the Location is wrapped.
+     *
+     * @return whether the Location is wrapped
+     */
+    boolean isWrapped() {
+        return wrapped;
     }
 
     /**
