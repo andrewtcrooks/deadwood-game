@@ -156,6 +156,16 @@ public class Board {
         resetPlayerLocations();
     }
 
+    // return player object 
+    Player getPlayer(int ID) {
+        for (Player player : players) {
+            if (Integer.valueOf(player.getID()).equals(ID)) {
+                return player;
+            }
+        }
+        throw new IllegalArgumentException("No player " + ID);
+    }
+
     /**
      * Change all player locations on the board to "Trailer"
      */
