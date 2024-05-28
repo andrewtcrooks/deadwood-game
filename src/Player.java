@@ -1,6 +1,3 @@
-import java.util.*;
-
-
 /**
  * This class represents a player in the game.
  * It holds information about the player's state, including:
@@ -18,7 +15,6 @@ public class Player {
     private int money;
     private int credits;
     private Location location;
-    private List<Location> adjLocations;
     private int rehearsalTokens;
     private boolean hasRole;
     private boolean onCard;
@@ -86,12 +82,6 @@ public class Player {
      */
     Location getLocation() {
         return location;
-    }
-
-
-    List<Location> getAdjacentLocations() {
-        // @TODO: Implement logic to return adjacent locations
-        return adjLocations;
     }
 
     /**
