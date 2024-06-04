@@ -96,7 +96,7 @@ public class Location {
      *
      * @return the scene card for the Location
      */
-    SceneCard getScene() {
+    SceneCard getSceneCard() {
         return scene;
     }
 
