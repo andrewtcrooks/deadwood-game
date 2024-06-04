@@ -44,7 +44,7 @@ public class Player {
      *
      * @return the ID of the player
      */
-    int getID() {
+    public int getID() {
         return id;
     }
 
@@ -53,7 +53,7 @@ public class Player {
      *
      * @return the rank of the player
      */
-    int getRank() {
+    public int getRank() {
         return rank;
     }
 
@@ -62,7 +62,7 @@ public class Player {
      *
      * @return the amount of money the player has
      */
-    int getMoney() {
+    public int getMoney() {
         return money;
     }
 
@@ -71,8 +71,8 @@ public class Player {
      *
      * @return the number of credits the player has
      */
-    int getCredits() {
-        return credits;
+    public int getCredits() {
+        return this.credits;
     }
 
     /**
@@ -80,8 +80,8 @@ public class Player {
      *
      * @return the location of the player
      */
-    Location getLocation() {
-        return location;
+    public Location getLocation() {
+        return this.location;
     }
 
     /**
@@ -89,8 +89,8 @@ public class Player {
      *
      * @return the number of rehearsal tokens the player has
      */
-    int getRehearsalTokens() {
-        return rehearsalTokens;
+    public int getRehearsalTokens() {
+        return this.rehearsalTokens;
     }
 
     /**
@@ -98,8 +98,8 @@ public class Player {
      *
      * @return true if the player has a role, false otherwise
      */
-    boolean getHasRole() {
-        return hasRole;
+    public boolean getHasRole() {
+        return this.hasRole;
     }
 
     /**
@@ -107,8 +107,8 @@ public class Player {
      *
      * @return true if the player has a role on a card, false otherwise
      */
-    boolean getOnCard() {
-        return onCard;
+    public boolean getOnCard() {
+        return this.onCard;
     }
 
     /**
@@ -116,15 +116,15 @@ public class Player {
      *
      * @return the role the player has
      */
-    Role getRole() {
-        return role;
+    public Role getRole() {
+        return this.role;
     }
 
     /**
      * Increments the rank of the player.
      */
-    void incrementRank() {
-        rank++;
+    public void incrementRank() {
+        this.rank++;
     }
 
     /**
@@ -132,7 +132,7 @@ public class Player {
      *
      * @param money the amount of money to add for the player
      */
-    void addMoney(int money) {
+    public void addMoney(int money) {
         this.money += money;
     }
 
@@ -141,7 +141,7 @@ public class Player {
      *
      * @param money the amount of money to subtract from the player
      */
-    void decreaseMoney(int money) {
+    public void decreaseMoney(int money) {
         this.money -= money;
     }
 
@@ -150,7 +150,7 @@ public class Player {
      *
      * @param credits the number of credits to add for the player
      */
-    void addCredits(int credits) {
+    public void addCredits(int credits) {
         this.credits += credits;
     }
 
@@ -159,7 +159,7 @@ public class Player {
      *
      * @param credits the number of credits to subtract from the player
      */
-    void decreaseCredits(int credits) {
+    public void decreaseCredits(int credits) {
         this.credits -= credits;
     }
 
@@ -168,21 +168,21 @@ public class Player {
      *
      * @param locationName the new location of the player
      */
-    void setLocation(Location location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 
     /**
      * Increments the number of rehearsal tokens the player has.
      */
-    void incrementRehearsalTokens() {
+    public void incrementRehearsalTokens() {
         rehearsalTokens++;
     }
 
     /**
      * Resets the number of rehearsal tokens the player has.
      */
-    void resetRehearsalTokens() {
+    public void resetRehearsalTokens() {
         rehearsalTokens = 0;
     }
 
@@ -191,7 +191,7 @@ public class Player {
      *
      * @param hasRole true if the player has a role, false otherwise
      */
-    void setHasRole(boolean hasRole) {
+    public void setHasRole(boolean hasRole) {
         this.hasRole = hasRole;
     }
 
@@ -200,7 +200,7 @@ public class Player {
      *
      * @param onCard true if the player is on a card, false otherwise
      */
-    void setOnCard(boolean onCard) {
+    public void setOnCard(boolean onCard) {
         this.onCard = onCard;
     }
 
@@ -209,7 +209,7 @@ public class Player {
      *
      * @param role the new role for the player
      */
-    void takeRole(Role role) {
+    public void takeRole(Role role) {
         this.role = role;
         setHasRole(true);
         setOnCard(role.onCard());
@@ -220,11 +220,11 @@ public class Player {
      * Removes the role the player has.
      */
     public void leaveRole() {
-        if (role != null) {
+        if (this.role != null) {
             this.role = null;
             setHasRole(false);
             setOnCard(false);
-            role.removePlayer();
+            this.role.removePlayer();
         }
     }
 
