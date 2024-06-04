@@ -27,12 +27,12 @@ public class Player {
      * @param rank the initial rank of the player
      * @param credits the initial number of credits for the player
      */
-    Player(int id, int rank, int credits) {
+    Player(int id, int rank, int credits, Location location) {
         this.id = id;
         this.rank = rank;
         this.money = 0;
         this.credits = credits;
-        this.location = null;
+        this.location = location;
         this.rehearsalTokens = 0;
         this.hasRole = false;
         this.onCard = false;
