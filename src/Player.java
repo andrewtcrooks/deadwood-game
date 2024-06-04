@@ -19,6 +19,7 @@ public class Player {
     private boolean hasRole;
     private boolean onCard;
     private Role role;
+    private boolean active;
 
     /**
      * Constructs a new Player with the specified rank and credits.
@@ -37,6 +38,7 @@ public class Player {
         this.hasRole = false;
         this.onCard = false;
         this.role = null;
+        this.active = false;
     }
 
     /**
@@ -118,6 +120,15 @@ public class Player {
      */
     public Role getRole() {
         return this.role;
+    }
+
+    /**
+     * Returns whether the player is active.
+     *
+     * @return true if the player is active, false otherwise
+     */
+    public boolean getActive() {
+        return this.active;
     }
 
     /**
@@ -228,4 +239,12 @@ public class Player {
         }
     }
 
+    /**
+     * Sets whether the player is active or not.
+     *
+     * @param active true if the player is active, false otherwise
+     */
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }
