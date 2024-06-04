@@ -134,7 +134,7 @@ public class Board {
      * @return The scene card at the location.
      */
     SceneCard getLocationScene(Location location) {
-        return location.getScene();
+        return location.getSceneCard();
     }
 
     /**
