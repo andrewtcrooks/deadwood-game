@@ -67,6 +67,24 @@ public class Location {
         return takes;
     }
     
+    void removeShotCounter() {
+        Take smallestTake = null;
+    
+        // Find the Take with the smallest integer name that is not already wrapped
+        for (Take take : this.takes) {
+            if (!take.isWrapped() && (smallestTake == null || take.getNumber() < smallestTake.getNumber())) {
+                smallestTake = take;
+            }
+        }
+    
+        // Wrap the Take with the smallest integer name
+        if (smallestTake != null) {
+            smallestTake.wrap();
+        } else {
+            System.out.println("Scene is Wrapped");
+        }
+    }
+
     /**
      * Returns the number of shots left in the Location.
      *
