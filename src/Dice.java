@@ -5,12 +5,10 @@ public class Dice {
     private int value;
 
     /**
-     * Constructs a new Dice with the given value.
-     *
-     * @param value the value of the Dice
+     * Constructs a new Dice object and rolls it.
      */
-    Dice(int value) {
-        this.value = value;
+    public Dice() {
+        roll();
     }
 
     /**
@@ -23,7 +21,7 @@ public class Dice {
     }
 
     /**
-     * Rolls the Dice.
+     * Rolls the Dice and initializes its value.
      */
     public void roll() {
         value = (int) (Math.random() * 6) + 1;
