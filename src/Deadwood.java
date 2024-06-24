@@ -6,6 +6,8 @@
  * It also initializes the controller and runs the application.
  */
 public class Deadwood {
+    private static String boardXMLFilePath = "resources/board.xml";
+    private static String cardsXMLFilePath = "resources/cards.xml";
     public static void main(String[] args) {
         
         /**
@@ -38,7 +40,7 @@ public class Deadwood {
         /**
          * Initializes the game
          */
-        controller.initializeGame(model, view);
+        controller.initializeGame(model, view, boardXMLFilePath, cardsXMLFilePath);
 
         /**
          * Starts the game and manages the game flow after the game is initialized
