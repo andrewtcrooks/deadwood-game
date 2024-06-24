@@ -1,36 +1,73 @@
-import javax.swing.*;
+import java.util.List;
 
-/**
- * This class represents the GUI view for the game.
- */
-public class GameView {
-    /**
-     * The main method that starts the GUI.
-     *
-     * @param args the command line arguments
-     */
-    public static void main(String args[]){
-        // Game game = new Game();
-        // game.start();
+public interface GameView extends Observer{
 
-        /**
-         * Create a new JFrame object to represent the main window of the GUI.
-         * Set the title of the window, the default close operation, and the size of the window.
-         */
-        JFrame frame = new JFrame("My First GUI");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(300,300);
+    void update(Object arg);
 
-        /**
-         * Create a new JButton object to represent a button in the GUI.
-         * Add the button to the content pane of the frame.
-         */
-        JButton button = new JButton("Press");
-        frame.getContentPane().add(button); // Adds Button to content pane of frame
+    int getNumPlayers();
+    String getPlayerInput();
 
-        /**
-         * Make the frame visible.
-         */
-        frame.setVisible(true);
-    }
+    void displayWelcomeMessage();
+
+    void showMessage(String message);
+
+    // Invalid Commands
+    void displayInvalidCommand();
+    void displayInvalidCommandReenter();
+    void displayInvalidLocation();
+    void displayInvalidRole();
+    void displayPlayerRankTooLow(int playerRank, int roleRank);
+    void displayInvalidUpgrade();
+
+    // Player Info
+    void displayPlayerInfo(int id, int rank, int money, int credits, int rehearsalTokens);
+
+    // Player Location
+    void displayPlayerLocation(String locationName);
+    void displayPlayerLocation(String locationName, boolean isSceneWrapped, String sceneTitle, int sceneID);
+    
+    // Board
+    void displayBoard(List<Player> players);
+
+    // Player Move
+    void displayPlayerMoveOptions(List<String> neighbors);
+    void displayPlayerMove(String startLocation, String endLocation);
+    void displayPlayerAlreadyMoved();
+    void displayPlayerCannotMove();
+
+    // Player Upgrade
+    void displayNotInOfficeMessage(Player player);
+    void displayUpgradeOptions(Player player);
+    void displayDualPaymentOptions(Player player);
+    void displayPlayerAlreadyUpgraded();
+    void displayUpgradeSuccess(int chosenRank);
+    void displayUpgradeFailure();
+
+    // Player Work
+    void displayPlayerRole(Player player);
+    void displayWorkOptions(Player player);
+    void displayPlayerAlreadyHasRole(Player player);
+    void displayPlayerHasNoRole();
+
+    // Player Rehearse
+    void displayPlayerRehearsed(Player player);
+
+    // Player Act
+    void displayAct(Player player);
+    void displayActSuccess(int roll);
+    void displayActFail(int roll);
+
+    // Player Save Game
+    void displaySaveGameCurrentMessage();
+    void displaySaveGameInputMessage();
+    void displaySaveGameFiles();
+    void displaySaveGameMustBeUnique();
+    void displaySaveGameDoesNotExist();
+
+    // Player Load Game
+    void displayLoadGameInputMessage();
+
+    // Player Help Options
+    void displayPlayerOptions();
+
 }
