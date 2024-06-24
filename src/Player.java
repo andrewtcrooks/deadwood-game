@@ -132,13 +132,6 @@ public class Player {
     }
 
     /**
-     * Increments the rank of the player.
-     */
-    public void incrementRank() {
-        this.rank++;
-    }
-
-    /**
      * Adds to the amount of money the player has.
      *
      * @param money the amount of money to add for the player
@@ -187,7 +180,7 @@ public class Player {
      * Increments the number of rehearsal tokens the player has.
      */
     public void incrementRehearsalTokens() {
-        rehearsalTokens++;
+        ++this.rehearsalTokens;
     }
 
     /**
@@ -195,6 +188,15 @@ public class Player {
      */
     public void resetRehearsalTokens() {
         rehearsalTokens = 0;
+    }
+
+    /**
+     * Sets the rank of the player.
+     *
+     * @param rank the new rank for the player
+     */
+    public void setRank(int rank) {
+        this.rank = rank;
     }
 
     /**
@@ -223,7 +225,7 @@ public class Player {
     public void takeRole(Role role) {
         this.role = role;
         setHasRole(true);
-        setOnCard(role.onCard());
+        setOnCard(role.getOnCard());
         role.assignPlayer(this);
     }
 

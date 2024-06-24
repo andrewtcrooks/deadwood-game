@@ -80,8 +80,13 @@ public class Role {
      *
      * @return true if the Role is from a SceneCard, false if Role is from a Location.
      */
-    boolean onCard() { 
+    boolean getOnCard() { 
         return onCard; 
+    }
+
+    public boolean setOnCard(boolean onCard) {
+        this.onCard = onCard;
+        return onCard;
     }
 
     /**

@@ -8,9 +8,10 @@ public class Board {
     private int numDays;
     private int numScenesRemaining;
     private List<Player> players;
-    private String xmlFilePath;
-    private Map<String, Location> locations;
     private Deck deck;
+    private Map<String, Location> locations;
+    private String boardXMLFilePath;
+
 
     /**
      * Constructs a new Board with the specified number of days and players.
@@ -18,24 +19,24 @@ public class Board {
      * @param numDays the number of days for the game
      * @param players the list of players in the game
      */
-    Board(int numDays, List<Player> players, String xmlFilePath) {
+    Board(int numDays, List<Player> players, String boardXMLFilePath, String cardsXMLFilePath) {
         this.numDays = numDays;
         this.numScenesRemaining = 10;
         this.players = players;
-        this.xmlFilePath = xmlFilePath;
-        this.deck = new Deck("resources/cards.xml");
+        this.deck = new Deck(cardsXMLFilePath);
         this.locations = new HashMap<String, Location>();
-        initLocations(this.xmlFilePath);
+        this.boardXMLFilePath = boardXMLFilePath;
+        initLocations(boardXMLFilePath);
         dealSceneCardsToLocations();
     }
 
     /**
      * Initializes the locations on the board.
      */
-    void initLocations(String xmlFilePath) {
+    void initLocations(String boardXMLFilePath) {
         ParseBoardXML parser = new ParseBoardXML();
         try {
-            Document doc = parser.getDocFromFile(xmlFilePath);
+            Document doc = parser.getDocFromFile(boardXMLFilePath);
             parser.readData(doc);
             this.locations = parser.getLocations();
         } catch (Exception e) {
@@ -151,7 +152,7 @@ public class Board {
      * Resets the board to its initial state.
      */
     void resetBoard() {
-        initLocations(this.xmlFilePath);
+        initLocations(this.boardXMLFilePath);
         dealSceneCardsToLocations();
         resetPlayerLocations();
     }
