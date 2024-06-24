@@ -168,6 +168,24 @@ public class Player {
     }
 
     /**
+     * Sets the amount of money the player has.
+     *
+     * @param money the new amount of money for the player
+     */
+    public void setMoney(int money) {
+        this.money = money;
+    }
+
+    /**
+     * Sets the number of credits the player has.
+     *
+     * @param credits the new number of credits for the player
+     */
+    public void setCredits(int credits) {
+        this.credits = credits;
+    }
+
+    /**
      * Sets the location of the player.
      *
      * @param locationName the new location of the player
