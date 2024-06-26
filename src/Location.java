@@ -5,10 +5,12 @@ import java.util.*;
  */
 public class Location {
     private String name;
+    private List<Player> players;
     private List<String> neighbors;
     private Area area;
     private List<Take> takes;
     private boolean wrapped;
+    private List<Role> locationRoles;
     private List<Role> allRoles;
     private SceneCard scene;
 
@@ -23,11 +25,13 @@ public class Location {
      */
     Location(String name, List<String> neighbors, Area area, List<Take> takes, List<Role> roles) {
         this.name = name;
+        this.players = null;
         this.neighbors = neighbors;
         this.area = area;
         this.takes = takes;
         this.wrapped = false;
-        this.allRoles = roles;
+        this.locationRoles = roles;
+        this.allRoles = null;
         this.scene = null;
     }
 
@@ -38,6 +42,33 @@ public class Location {
      */
     String getName() {
         return name;
+    }
+
+    /**
+     * Adds a player to the Location.
+     *
+     * @param player the player to add
+     */
+    public void addPlayer(Player player) {
+        players.add(player);
+    }
+
+    /**
+     * Removes a player from the Location.
+     *
+     * @param player the player to remove
+     */
+    public void removePlayer(Player player) {
+        players.remove(player);
+    }
+
+    /**
+     * Returns the players at the Location.
+     *
+     * @return the players at the Location
+     */
+    public List<Player> getPlayers() {
+        return players;
     }
 
     /**
@@ -81,7 +112,7 @@ public class Location {
         if (smallestTake != null) {
             smallestTake.wrap();
         } else {
-            System.out.println("Scene is Wrapped");
+            this.wrapped = true;
         }
     }
 
@@ -166,6 +197,8 @@ public class Location {
      */
     void setSceneCard(SceneCard scene) {
         this.scene = scene;
+        this.allRoles = new ArrayList<Role>(this.locationRoles); // Copy the roles from the location
         this.allRoles.addAll(scene.getRoles()); // Add all roles from the new scene
+        this.wrapped = false;
     }
 }
