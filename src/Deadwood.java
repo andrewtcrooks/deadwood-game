@@ -1,3 +1,7 @@
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 /*
  * Deadwood.java by Andrew Crooks
  *  
@@ -6,51 +10,73 @@
  * It also initializes the controller and runs the application.
  */
 public class Deadwood {
-    private static String boardXMLFilePath = "resources/board.xml";
-    private static String cardsXMLFilePath = "resources/cards.xml";
+    private static Properties config = new Properties();
+
     public static void main(String[] args) {
-        
-        /**
-         * Initializes the view for the game.
-         */
+        loadConfiguration();
+        try {
+            GameView view = initializeView();
+            GameModel model = initializeModel(view);
+            GameController controller = initializeController(model, view);
+            startGame(controller);
+        } catch (Exception e) {
+            System.err.println("An error occurred during initialization: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Load the configuration file.
+     */
+    private static void loadConfiguration() {
+        try (InputStream input = Deadwood.class.getClassLoader().getResourceAsStream("resources/config.properties")) {
+            if (input == null) {
+                throw new IOException("Unable to find config.properties");
+            }
+            // Load a properties file from class path
+            config.load(input);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    /**
+     * Initializes the game view.
+     */
+    private static GameView initializeView() {
         GameView view = GameCLIView.getInstance();
-
-        /**
-         * Displays the welcome message to the user.
-         */
         view.displayWelcomeMessage();
+        return view;
+    }
 
-        /**
-         * Initializes the model for the game and requests the number of players 
-         * from the user since this is the first time the model is being created.
-         */
+    /**
+     * Initializes the game model.
+     */
+    private static GameModel initializeModel(GameView view) {
         GameModel model = GameModel.getInstance();
-              
-        /**
-         * Registers the view with the model.
-         */
         model.registerObserver(view);
+        return model;
+    }
 
-        /**
-         * Initializes the controller for the game.
-         * The controller will interact with the model and view.
-         */
+    /**
+     * Initializes the game controller.
+     */
+    private static GameController initializeController(GameModel model, GameView view) {
         GameController controller = new GameController();
+        controller.initializeGame(model, 
+                                  view, 
+                                  config.getProperty("boardXMLFilePath"), 
+                                  config.getProperty("cardsXMLFilePath")
+        );
+        return controller;
+    }
 
-        /**
-         * Initializes the game
-         */
-        controller.initializeGame(model, view, boardXMLFilePath, cardsXMLFilePath);
-
-        /**
-         * Starts the game and manages the game flow after the game is initialized
-         * It should manage the game flow by calling the playerTurn method for each player.
-         */
+    /**
+     * Start the game.
+     */
+    private static void startGame(GameController controller) {
         controller.playGame();
-
-        /**
-         * End game, calculate scores and winner.
-         */
         controller.endGame();
     }
+
 }
