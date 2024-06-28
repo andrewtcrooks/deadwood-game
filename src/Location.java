@@ -24,7 +24,7 @@ public class Location {
      * @param takes the takes for the Location
      * @param roles the roles for the Location
      */
-    Location(String name, List<String> neighbors, Area area, List<Take> takes, List<Role> roles) {
+    public Location(String name, List<String> neighbors, Area area, List<Take> takes, List<Role> roles) {
         this.name = name;
         this.players = null;
         this.neighbors = neighbors;
@@ -41,7 +41,7 @@ public class Location {
      *
      * @return the name of the Location
      */
-    String getName() {
+    public String getName() {
         return name;
     }
 
@@ -77,7 +77,7 @@ public class Location {
      *
      * @return the neighbors of the Location
      */
-    List<String> getNeighbors() {
+    public List<String> getNeighbors() {
         return neighbors;
     }
 
@@ -86,7 +86,7 @@ public class Location {
      *
      * @return the area of the Location
      */
-    Area getArea() {
+    public Area getArea() {
         return area;
     }
 
@@ -95,11 +95,11 @@ public class Location {
      *
      * @return the takes for the Location
      */
-    List<Take> getTakes() {
+    public List<Take> getTakes() {
         return takes;
     }
     
-    void removeShotCounter() {
+    public void removeShotCounter() {
         Take smallestTake = null;
     
         // Find the Take with the smallest integer name that is not already wrapped
@@ -122,7 +122,7 @@ public class Location {
      *
      * @return the number of shots left in the Location
      */
-    int getShots() {
+    public int getShots() {
         int shots = 0;
         for (Take take : this.takes) {
             if (!take.isWrapped()) {
@@ -137,7 +137,7 @@ public class Location {
      *
      * @return the all roles for the Location and Scene
      */
-    List<Role> getRoles() {
+    public List<Role> getRoles() {
         return allRoles;
     }
 
@@ -146,14 +146,14 @@ public class Location {
      *
      * @return the scene card for the Location
      */
-    SceneCard getSceneCard() {
+    public SceneCard getSceneCard() {
         return scene;
     }
 
     /**
      * Wraps the next available shot in the Location.
      */
-    void wrapShot() {
+    public void wrapShot() {
         // wrap take with the lowest number from getNumber(), the numbers can range from 1 up to 4
         int lowest = 4;
         Take lowestTake = null;
@@ -209,7 +209,7 @@ public class Location {
     /**
      * Pays out the bonus to all players at the Location.
      */
-    void payOutBonus() {
+    public void payOutBonus() {
         int movieBudget = getSceneCard().getBudget(); // Get the movie budget
         List<Integer> diceRolls = rollDice(movieBudget); // Roll dice equal to the budget
         Collections.sort(diceRolls, Collections.reverseOrder()); // Sort dice rolls in descending order
@@ -241,7 +241,7 @@ public class Location {
      * @param numDice the number of dice to roll
      * @return the results of the dice rolls
      */
-    List<Integer> rollDice(int numDice) {
+    public List<Integer> rollDice(int numDice) {
         List<Integer> rolls = new ArrayList<>();
         for (int i = 0; i < numDice; i++) {
             Dice dice = new Dice(); // Use the Dice class to roll the dice
@@ -255,7 +255,7 @@ public class Location {
      *
      * @return whether the Location is wrapped
      */
-    boolean isWrapped() {
+    public boolean isWrapped() {
         return wrapped;
     }
 
@@ -264,7 +264,7 @@ public class Location {
      *
      * @param scene the new scene card for the Location
      */
-    void setSceneCard(SceneCard scene) {
+    public void setSceneCard(SceneCard scene) {
         this.scene = scene;
         this.allRoles = new ArrayList<Role>(this.locationRoles); // Copy the roles from the location
         this.allRoles.addAll(scene.getRoles()); // Add all roles from the new scene
