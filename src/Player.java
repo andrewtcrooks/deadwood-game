@@ -123,6 +123,15 @@ public class Player {
     }
 
     /**
+     * Returns the rank of the role the player has.
+     *
+     * @return the rank of the role the player has
+     */
+    public int getRoleRank() {
+        return this.role.getRank();
+    }
+
+    /**
      * Returns whether the player is active.
      *
      * @return true if the player is active, false otherwise
@@ -256,6 +265,7 @@ public class Player {
             setHasRole(false);
             setOnCard(false);
             this.role.removePlayer();
+            resetRehearsalTokens();
         }
     }
 
