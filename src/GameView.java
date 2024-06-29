@@ -56,6 +56,7 @@ public interface GameView extends Observer{
     void displayAct(Player player);
     void displayActSuccess(int roll);
     void displayActFail(int roll);
+    void displaySceneIsWrapped();
 
     // Player Save Game
     void displaySaveGameCurrentMessage();
