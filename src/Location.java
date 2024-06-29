@@ -212,15 +212,6 @@ public class Location {
     }
 
     /**
-     * Resets all takes in the Location.
-     */
-    public void resetTakes() {
-        for (Take take : this.takes) {
-            take.reset();
-        }
-    }
-
-    /**
      * Pays out the bonus to all players at the Location.
      */
     public void payOutBonus() {
@@ -249,6 +240,23 @@ public class Location {
         .forEach(player -> player.addMoney(player.getRole().getRank()));
     }
     
+    /**
+     * Resets all takes in the Location.
+     */
+    public void resetTakes() {
+        for (Take take : this.takes) {
+            take.reset();
+        }
+    }
+
+    /**
+     * Clears the scene card from the Location and redefines the roles list.
+     */
+    public void clearSceneCard() {
+        this.scene = null;
+        this.allRoles = new ArrayList<Role>(this.locationRoles);
+    }
+
     /**
      * Rolls a number of dice and returns the results.
      *
@@ -283,13 +291,5 @@ public class Location {
         this.allRoles = new ArrayList<Role>(this.locationRoles); // Copy the roles from the location
         this.allRoles.addAll(scene.getRoles()); // Add all roles from the new scene
         this.wrapped = false;
-    }
-
-    /**
-     * Clears the scene card from the Location and redefines the roles list.
-     */
-    public void clearSceneCard() {
-        this.scene = null;
-        this.allRoles = new ArrayList<Role>(this.locationRoles);
     }
 }
