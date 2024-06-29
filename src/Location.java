@@ -26,7 +26,7 @@ public class Location {
      */
     public Location(String name, List<String> neighbors, Area area, List<Take> takes, List<Role> roles) {
         this.name = name;
-        this.players = null;
+        this.players = new ArrayList<Player>();
         this.neighbors = neighbors;
         this.area = area;
         this.takes = takes;
