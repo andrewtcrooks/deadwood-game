@@ -186,7 +186,8 @@ public class Location {
     public void wrapScene() {
         this.wrapped = true;
 
-        // remove all players from their roles while checking for a single player onCard
+        // remove all players from their roles and reset all rehearsal tokens
+        //  while checking for a single player onCard
         List<Player> playersAtLocation = getPlayers();
         boolean anyPlayerOnCard = false;
         for (Player player : playersAtLocation) {
@@ -194,16 +195,29 @@ public class Location {
                 anyPlayerOnCard = true;
             }
             player.leaveRole();
+            player.resetRehearsalTokens();
         }
 
-        // pay out bonus to all players at locatoin if any player was on a card
+        // pay out bonus to all players at location if any player was on a card
         if (anyPlayerOnCard) {
             payOutBonus(); // Call payOutBonus if any player was on a card
             
         }
 
+        //reset takes
+        resetTakes();
+
         // clear the scene card after paying out bonus
         clearSceneCard();
+    }
+
+    /**
+     * Resets all takes in the Location.
+     */
+    public void resetTakes() {
+        for (Take take : this.takes) {
+            take.reset();
+        }
     }
 
     /**
