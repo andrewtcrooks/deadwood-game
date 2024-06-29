@@ -50,4 +50,11 @@ public class Take {
     public void wrap() {
         this.wrapped = true;
     }
+
+    /**
+     * Unwraps the Take.
+     */
+    public void reset() {
+        this.wrapped = false;
+    }
 }
