@@ -167,20 +167,21 @@ public class Location {
             lowestTake.wrap();
         }
 
-        // Check if all takes are wrapped
-        boolean allWrapped = true;
-        for (Take take : this.takes) {
-            if (!take.isWrapped()) {
-                allWrapped = false;
-                break;
-            }
-        }
+        // TODO: remove
+        // // Check if all takes are wrapped
+        // boolean allWrapped = true;
+        // for (Take take : this.takes) {
+        //     if (!take.isWrapped()) {
+        //         allWrapped = false;
+        //         break;
+        //     }
+        // }
 
-        // If all takes are wrapped, wrap the scene
-        if (allWrapped) {
-            wrapScene();
+        // // If all takes are wrapped, wrap the scene
+        // if (allWrapped) {
+        //     wrapScene();
             
-        }
+        // }
     }
 
     public void wrapScene() {
@@ -243,7 +244,7 @@ public class Location {
     /**
      * Resets all takes in the Location.
      */
-    public void resetTakes() {
+    private void resetTakes() {
         for (Take take : this.takes) {
             take.reset();
         }
@@ -252,7 +253,7 @@ public class Location {
     /**
      * Clears the scene card from the Location and redefines the roles list.
      */
-    public void clearSceneCard() {
+    private void clearSceneCard() {
         this.scene = null;
         this.allRoles = new ArrayList<Role>(this.locationRoles);
     }
@@ -263,7 +264,7 @@ public class Location {
      * @param numDice the number of dice to roll
      * @return the results of the dice rolls
      */
-    public List<Integer> rollDice(int numDice) {
+    private List<Integer> rollDice(int numDice) {
         List<Integer> rolls = new ArrayList<>();
         for (int i = 0; i < numDice; i++) {
             Dice dice = new Dice(); // Use the Dice class to roll the dice
