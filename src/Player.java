@@ -261,11 +261,15 @@ public class Player {
      */
     public void leaveRole() {
         if (this.role != null) {
-            this.role = null;
+            
+            // Remove the player from the role
+            this.role.removePlayer();
+
+            // Reset the role related attributes for the player
             setHasRole(false);
             setOnCard(false);
-            this.role.removePlayer();
             resetRehearsalTokens();
+            this.role = null;
         }
     }
 
