@@ -374,7 +374,7 @@ public class GameCLIView implements GameView {
     @Override
     public void displayWorkOptions(Player player) {
         if (player.getLocation().isWrapped()) {
-            System.out.println("Location is wrapped. Cannot work.");
+            System.out.println("Location is wrapped. No more work available until tomorrow.");
         } else {
             System.out.println("You can work on one of the following roles:");
             List<Role> allRoles = new ArrayList<>();
