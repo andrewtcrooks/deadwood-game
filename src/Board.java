@@ -38,7 +38,7 @@ public class Board {
         try {
             Document doc = parser.getDocFromFile(boardXMLFilePath);
             parser.readData(doc);
-            this.locations = renameLocations(parser.getLocations());
+            this.locations = renameOfficeAndTrailer(parser.getLocations());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -47,7 +47,7 @@ public class Board {
     /**
      * Renames the "trailer" and "office" locations to "Trailer" and "Casting Office" respectively.
      */
-    private Map<String, Location> renameLocations(Map<String, Location> locations) {
+    private Map<String, Location> renameOfficeAndTrailer(Map<String, Location> locations) {
         // create a new map to store the updated locations
         Map<String, Location> updatedLocations = new HashMap<>(locations);
         // check if the locations map contains the key "trailer"
