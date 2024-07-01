@@ -38,10 +38,34 @@ public class Board {
         try {
             Document doc = parser.getDocFromFile(boardXMLFilePath);
             parser.readData(doc);
-            this.locations = parser.getLocations();
+            this.locations = renameLocations(parser.getLocations());
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Renames the "trailer" and "office" locations to "Trailer" and "Casting Office" respectively.
+     */
+    private Map<String, Location> renameLocations(Map<String, Location> locations) {
+        // create a new map to store the updated locations
+        Map<String, Location> updatedLocations = new HashMap<>(locations);
+        // check if the locations map contains the key "trailer"
+        if (locations.containsKey("trailer")) {
+            Location trailer = locations.get("trailer");
+            updatedLocations.remove("trailer");
+            updatedLocations.put("Trailer", trailer);
+        } // check if the locations map contains the key "office"
+        if (locations.containsKey("office")) {
+            Location office = locations.get("office");
+            updatedLocations.remove("office");
+            updatedLocations.put("Casting Office", office);
+        }
+        // clear the locations map and add all the updated locations
+        locations.clear();
+        locations.putAll(updatedLocations);
+
+        return locations;
     }
 
     /**
