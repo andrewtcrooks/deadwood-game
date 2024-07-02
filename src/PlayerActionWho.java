@@ -6,7 +6,7 @@ public class PlayerActionWho implements PlayerAction{
      * @param player the player to who
      * @param model the game model
      * @param view the game view
-     * @return always returns true to validate who action
+     * @return always true to validate who action
      */
     @Override
     public boolean validate(Player player, GameModel model, GameView view) {
