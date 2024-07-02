@@ -1,7 +1,7 @@
 public class PlayerActionQuit implements PlayerAction {
 
     /**
-     * Validates the end action for the player.
+     * Validates the quit action for the player.
      *  
      * @param player the player
      * @param model the game model
