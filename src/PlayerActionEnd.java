@@ -6,7 +6,7 @@ public class PlayerActionEnd implements PlayerAction {
      * @param player the player
      * @param model the game model
      * @param view the game view
-     * @return always returns true to validate end action
+     * @return always true to validate end action
      */
     @Override
     public boolean validate(Player player, GameModel model, GameView view) {
