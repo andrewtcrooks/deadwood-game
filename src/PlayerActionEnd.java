@@ -19,7 +19,7 @@ public class PlayerActionEnd implements PlayerAction {
      * @param player the player
      * @param model the game model
      * @param view the game view
-     * @return always returns true to end player turn
+     * @return always true to end player turn
      */
     @Override
     public boolean execute(Player player, GameModel model, GameView view) {
