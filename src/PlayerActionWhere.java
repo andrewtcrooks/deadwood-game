@@ -6,7 +6,7 @@ public class PlayerActionWhere implements PlayerAction {
      * @param player the player
      * @param model the game model
      * @param view the game view
-     * @return always returns true to validate where action
+     * @return always true to validate where action
      */
     @Override
     public boolean validate(Player player, GameModel model, GameView view) {
