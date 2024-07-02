@@ -16,7 +16,7 @@ public class PlayerActionEnd implements PlayerAction {
     /**
      * Executes the end action for the player.
      *  
-     * @param player the player to help
+     * @param player the player
      * @param model the game model
      * @param view the game view
      * @return always returns true to end player turn
