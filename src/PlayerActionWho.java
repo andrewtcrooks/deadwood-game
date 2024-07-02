@@ -19,7 +19,7 @@ public class PlayerActionWho implements PlayerAction{
      * @param player the player
      * @param model the game model
      * @param view the game view
-     * @return always returns false to prevent player turn end
+     * @return always false to prevent player turn end
      */
     @Override
     public boolean execute(Player player, GameModel model, GameView view) {
