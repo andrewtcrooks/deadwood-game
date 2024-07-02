@@ -1,7 +1,7 @@
 public class PlayerActionWhere implements PlayerAction {
 
     /**
-     * Validates the who action for the player.
+     * Validates the where action for the player.
      *
      * @param player the player
      * @param model the game model
@@ -14,7 +14,7 @@ public class PlayerActionWhere implements PlayerAction {
     }
 
     /**
-     * Executes the who action for the player.
+     * Executes the where action for the player.
      *
      * @param player the player
      * @param model the game model
