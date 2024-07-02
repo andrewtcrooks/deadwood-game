@@ -1,3 +1,4 @@
 public interface PlayerAction {
-    boolean execute(Player player);
+    boolean validate(Player player, GameModel model, GameView view);
+    boolean execute(Player player, GameModel model, GameView view);
 }
