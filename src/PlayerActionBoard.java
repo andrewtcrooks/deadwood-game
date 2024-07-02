@@ -8,7 +8,7 @@ public class PlayerActionBoard implements PlayerAction {
      * @param player the player
      * @param model the game model
      * @param view the game view
-     * @return always returns true to validate end action
+     * @return always true to validate board action
      */
     @Override
     public boolean validate(Player player, GameModel model, GameView view) {
@@ -21,7 +21,7 @@ public class PlayerActionBoard implements PlayerAction {
      * @param player the player
      * @param model the game model
      * @param view the game view
-     * @return always returns false to prevent player turn end
+     * @return always false to prevent player turn end
      */
     @Override
     public boolean execute(Player player, GameModel model, GameView view) {
