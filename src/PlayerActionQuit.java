@@ -16,7 +16,7 @@ public class PlayerActionQuit implements PlayerAction {
     /**
      * Executes the quit action for the player.
      *  
-     * @param player the player to help
+     * @param player the player
      * @param model the game model
      * @param view the game view
      * @return just a placeholder as game exits before use
