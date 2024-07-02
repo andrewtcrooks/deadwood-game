@@ -20,6 +20,9 @@ public class Player {
     private boolean onCard;
     private Role role;
     private boolean active;
+    private boolean hasMoved;
+    private boolean hasWorked;
+    private boolean hasUpgraded;
 
     /**
      * Constructs a new Player with the specified rank and credits.
@@ -39,6 +42,9 @@ public class Player {
         this.onCard = false;
         this.role = null;
         this.active = false;
+        this.hasMoved = false;
+        this.hasWorked = false;
+        this.hasUpgraded = false;
     }
 
     /**
@@ -138,6 +144,30 @@ public class Player {
      */
     public boolean getActive() {
         return this.active;
+    }
+
+    /**
+     * Returns whether the player has moved.
+     * @return true if the player has moved, false otherwise
+     */
+    public boolean getHasMoved() {
+        return hasMoved;
+    }
+
+    /**
+     * Returns whether the player has worked.
+     * @return true if the player has worked, false otherwise
+     */
+    public boolean getHasWorked() {
+        return hasWorked;
+    }
+
+    /**
+     * Returns whether the player has upgraded.
+     * @return true if the player has upgraded, false otherwise
+     */
+    public boolean getHasUpgraded() {
+        return hasUpgraded;
     }
 
     /**
@@ -280,5 +310,29 @@ public class Player {
      */
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    /**
+     * Sets whether the player has moved.
+     * @param hasMoved true if the player has moved, false otherwise
+     */
+    public void setHasMoved(boolean hasMoved) {
+        this.hasMoved = hasMoved;
+    }
+
+    /**
+     * Sets whether the player has worked.
+     * @param hasWorked true if the player has worked, false otherwise
+     */
+    public void setHasWorked(boolean hasWorked) {
+        this.hasWorked = hasWorked;
+    }
+
+    /**
+     * Sets whether the player has upgraded.
+     * @param hasUpgraded true if the player has upgraded, false otherwise
+     */
+    public void setHasUpgraded(boolean hasUpgraded) {
+        this.hasUpgraded = hasUpgraded;
     }
 }
