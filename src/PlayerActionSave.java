@@ -52,11 +52,11 @@ public class PlayerActionSave implements PlayerAction {
         }
 
         // Get user input filename to save
-        view.showMessage("Enter filename to save game:");
+        view.showMessage("Enter name for new saved game:");
         String filename = view.getPlayerInput();
     
         // Prepend "saved/" directory to the filename and append ".deadwood" extension
-        String directoryPath = "saved/";
+        String directoryPath = "./saved/";
         filename = directoryPath + filename + ".deadwood";
     
         // Ensure the "saved" directory exists
