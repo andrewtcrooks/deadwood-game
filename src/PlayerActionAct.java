@@ -12,7 +12,7 @@ public class PlayerActionAct implements PlayerAction {
     public boolean validate(Player player, GameModel model, GameView view) {
         // Check if player has a role
         if (!player.getHasRole()) {
-            view.displayPlayerHasNoRole();
+            view.showMessage("You do not have a role to act.");
             return false;
         }
         return true;
@@ -40,7 +40,7 @@ public class PlayerActionAct implements PlayerAction {
         // Compare the dice roll to the budget
         if (roll >= budget) {
             // If the roll is equal to or higher than the budget, the player succeeds
-            view.displayActSuccess(roll);
+            view.showMessage("You rolled a " + roll + ". Success!");
 
             // Remove one shot counter from the location
             player.getLocation().removeShotCounter();
@@ -56,7 +56,7 @@ public class PlayerActionAct implements PlayerAction {
             }
         } else {
             // If the roll is lower than the budget, the player fails
-            view.displayActFail(roll);
+            view.showMessage("You rolled a " + roll + ". Failure.");
 
             // Check if the role is not on the card
             if (!player.getRole().getOnCard()) {
@@ -69,7 +69,7 @@ public class PlayerActionAct implements PlayerAction {
         if (player.getLocation().getShots() == 0) {
             // If the location has no more shot counters, wrap the scene
             player.getLocation().wrapScene();
-            view.displaySceneIsWrapped();
+            view.showMessage("The scene is wrapped.");
         }
 
         return true;
