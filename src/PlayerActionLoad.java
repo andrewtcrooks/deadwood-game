@@ -69,7 +69,7 @@ public class PlayerActionLoad implements PlayerAction {
         try (FileInputStream fileIn = new FileInputStream(file);
             ObjectInputStream in = new ObjectInputStream(fileIn)) {
             GameModel loadedModel = (GameModel) in.readObject();
-            // Assuming there's a method to set the current model to the loaded one
+            // Set the loaded model
             model.setModel(loadedModel);
             view.showMessage("Game loaded successfully.");
         } catch (IOException | ClassNotFoundException e) {
