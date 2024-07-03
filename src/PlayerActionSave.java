@@ -2,6 +2,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
 
 public class PlayerActionSave implements PlayerAction {
 
@@ -28,12 +32,32 @@ public class PlayerActionSave implements PlayerAction {
      */
     @Override
     public boolean execute(Player player, GameModel model, GameView view) {
+        // display the current list of save game names
+        view.showMessage("Current saved games");
+        
+        // print the filenames of all .savegame files in the current directory
+        try (Stream<Path> paths = Files.walk(Paths.get("./saves"))) {
+            paths
+                .filter(Files::isRegularFile)
+                .map(Path::toFile)
+                .filter(file -> file.getName().endsWith(".deadwood"))
+                .forEach(file -> {
+                    String filename = file.getName();
+                    // clip off the .deadwood extension
+                    String trimmedFilename = filename.substring(0, filename.length() - ".deadwood".length());
+                    System.out.println(trimmedFilename);
+                });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         // Get user input filename to save
-        String filename = view.getPlayerInput("Enter filename to save game:");
+        view.showMessage("Enter filename to save game:");
+        String filename = view.getPlayerInput();
     
-        // Append ".save" extension and prepend "saved/" directory to the filename
+        // Prepend "saved/" directory to the filename and append ".deadwood" extension
         String directoryPath = "saved/";
-        filename = directoryPath + filename + ".save";
+        filename = directoryPath + filename + ".deadwood";
     
         // Ensure the "saved" directory exists
         File directory = new File(directoryPath);
@@ -47,7 +71,8 @@ public class PlayerActionSave implements PlayerAction {
         // Check if the file already exists
         if (file.exists()) {
             // Ask the user if they want to overwrite the existing file
-            String overwrite = view.getPlayerInput("File exists. Overwrite? (y/n): ");
+            view.showMessage("File exists. Overwrite? (y/n): ");
+            String overwrite = view.getPlayerInput();
     
             // If the user does not want to overwrite, return
             if (!overwrite.equalsIgnoreCase("y")) {
