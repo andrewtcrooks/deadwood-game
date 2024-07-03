@@ -12,7 +12,7 @@ public class PlayerActionRehearse implements PlayerAction {
     public boolean validate(Player player, GameModel model, GameView view) {
         // Check if player has a role
         if (!player.getHasRole()) {
-            view.displayPlayerHasNoRole();
+            view.showMessage("You do not have a role to rehearse.");
             return false;
         }
         return true;
@@ -30,7 +30,7 @@ public class PlayerActionRehearse implements PlayerAction {
     public boolean execute(Player player, GameModel model, GameView view) {
         // Add a rehearsal token and display message
         player.incrementRehearsalTokens();
-        view.displayPlayerRehearsed(player);
+        view.showMessage("success! You got a rehearsal token!");
         return true;
     }
 
