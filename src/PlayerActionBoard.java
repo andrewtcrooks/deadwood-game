@@ -45,9 +45,9 @@ public class PlayerActionBoard implements PlayerAction {
                                               locationName
             );
             // Check if the location is not "Trailer" or "Casting Office" before showing shots remaining
-            if (!locationName.equalsIgnoreCase("Trailer") && !locationName.equalsIgnoreCase("Casting Office")) {
-                int shotsRemaining = p.getLocation().getShots();
-                if (shotsRemaining > 0) {
+            if (!locationName.equals("Trailer") && !locationName.equals("Casting Office")) {
+                if (!p.getLocation().isWrapped()) {
+                    int shotsRemaining = p.getLocation().getShots();
                     playerInfo += " - Shots remaining: " + shotsRemaining;
                 } else {
                     playerInfo += " - Scene wrapped";
