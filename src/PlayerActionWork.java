@@ -52,6 +52,11 @@ public class PlayerActionWork implements PlayerAction {
                 allRoles.add(role);
             }
         }
+        // return false if there are no roles to work
+        if (allRoles.isEmpty()) {
+            view.showMessage("There are no roles available for you to work.");
+            return false;
+        }
         // Sort roles by rank, then by "for scale"
         allRoles.sort((role1, role2) -> {
             int rankCompare = Integer.compare(role1.getRank(), role2.getRank());
