@@ -80,7 +80,6 @@ public class PlayerActionWork implements PlayerAction {
                     .orElse(null);
         // process the role input
         if (role == null) {
-            view.displayInvalidRole();
             view.showMessage("Invalid role.");
         }else{
             // Set the player's role
