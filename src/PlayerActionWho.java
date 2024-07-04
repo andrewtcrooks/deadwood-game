@@ -1,3 +1,6 @@
+/*
+ * Represents the who action for the player.
+ */
 public class PlayerActionWho implements PlayerAction{
 
     /**

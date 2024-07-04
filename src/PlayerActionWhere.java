@@ -1,3 +1,6 @@
+/*
+ * Represents the where action for the player.
+ */
 public class PlayerActionWhere implements PlayerAction {
 
     /**

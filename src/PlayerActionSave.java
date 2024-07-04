@@ -7,6 +7,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
+/*
+ * Represents the save action for the player.
+ */
 public class PlayerActionSave implements PlayerAction {
 
     /**

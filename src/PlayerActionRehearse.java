@@ -1,3 +1,6 @@
+/*
+ * Represents the rehearse action for the player.
+ */
 public class PlayerActionRehearse implements PlayerAction {
 
     /**

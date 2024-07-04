@@ -1,3 +1,6 @@
+/*
+ * Represents the end action for the player.
+ */
 public class PlayerActionEnd implements PlayerAction {
 
     /**

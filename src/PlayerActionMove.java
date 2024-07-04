@@ -1,5 +1,8 @@
 import java.util.List;
 
+/*
+ * Represents the move action for the player.
+ */
 public class PlayerActionMove implements PlayerAction {
 
     /**

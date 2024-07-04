@@ -1,3 +1,6 @@
+/*
+ * Represents the quit action for the player.
+ */
 public class PlayerActionQuit implements PlayerAction {
 
     /**

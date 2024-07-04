@@ -1,3 +1,6 @@
+/*
+ * Represents the help action for the player.
+ */
 public class PlayerActionHelp implements PlayerAction {
 
     /**

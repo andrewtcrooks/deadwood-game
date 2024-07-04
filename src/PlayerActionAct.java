@@ -1,3 +1,6 @@
+/*
+ * Represents the act action for the player.
+ */
 public class PlayerActionAct implements PlayerAction {
 
     /**
