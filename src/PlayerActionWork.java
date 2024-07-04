@@ -1,6 +1,9 @@
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * Represents the work action for the player.
+ */
 public class PlayerActionWork implements PlayerAction {
 
     /**
