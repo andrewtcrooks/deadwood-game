@@ -45,7 +45,7 @@ public class Deadwood {
      */
     private static GameView initializeView() {
         GameView view = GameCLIView.getInstance();
-        view.displayWelcomeMessage();
+        view.showMessage("Welcome to Deadwood! Let's play!");
         return view;
     }
 
