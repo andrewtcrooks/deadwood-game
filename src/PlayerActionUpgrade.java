@@ -1,6 +1,9 @@
 import java.util.HashMap;
 import java.util.Map;
 
+/*
+ * Represents the upgrade action for the player.
+ */
 public class PlayerActionUpgrade implements PlayerAction {
 
     /**
@@ -63,8 +66,12 @@ public class PlayerActionUpgrade implements PlayerAction {
         creditCosts.put(6, 25);
         // Display the cost of each rank
         for (int i = player.getRank() + 1; i <= 6; i++) {
-            view.showMessage(i + " - $" + dollarCosts.getOrDefault(i, 0) + " or " + 
-                             creditCosts.getOrDefault(i, 0) + " credits");
+            String message = String.format("%d - $%4d or %4d credits", i, 
+                                    dollarCosts.getOrDefault(i, 0), 
+                                    creditCosts.getOrDefault(i, 0));
+            view.showMessage(message);
+            // view.showMessage(i + " - $" + dollarCosts.getOrDefault(i, 0) + " or " + 
+            // creditCosts.getOrDefault(i, 0) + " credits");
         }
         // Get the user input
         int chosenRank = Integer.parseInt(view.getPlayerInput());
