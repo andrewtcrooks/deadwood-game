@@ -70,6 +70,19 @@ public class PlayerActionAct implements PlayerAction {
 
         // Check if the location has no more shot counters
         if (player.getLocation().getShots() == 0) {
+            // Check if any of the players at the location are onCard
+            boolean anyPlayerOnCard = false;
+            for (Player p : player.getLocation().getPlayers()) {
+                if (p.getOnCard()) {
+                    anyPlayerOnCard = true;
+                    break;
+                }
+            }
+            // If there is a player onCard, show message that bonus was paid out
+            if (anyPlayerOnCard) {
+                view.showMessage("Bonus payout!");
+            }
+
             // If the location has no more shot counters, wrap the scene
             player.getLocation().wrapScene();
             view.showMessage("The scene is wrapped.");
