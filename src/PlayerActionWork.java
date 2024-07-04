@@ -29,7 +29,9 @@ public class PlayerActionWork implements PlayerAction {
         }
         // Check if the player has already has a role
         if (player.getHasRole()) {
-            view.showMessage(player.getRole().getName());
+            String roleName = player.getRole().getName();
+            String roleLine = player.getRole().getLine();
+            view.showMessage(roleName + " - \"" + roleLine + "\"");
             return false;
         }
         return true;
