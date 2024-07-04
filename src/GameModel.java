@@ -9,7 +9,6 @@ import java.util.*;
 public class GameModel implements Subject {
 
     private static GameModel instance = null;
-    private static GameView view = null;
     private List<Observer> observers = new ArrayList<>();
     static private int numPlayers = 0;
     private int numDays;
