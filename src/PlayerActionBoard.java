@@ -1,6 +1,9 @@
 import java.util.Comparator;
 import java.util.List;
 
+/*
+ * Represents the board action for the player.
+ */
 public class PlayerActionBoard implements PlayerAction {
 
     /**
