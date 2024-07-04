@@ -35,7 +35,15 @@ public class PlayerActionBoard implements PlayerAction {
         // iterate through players
         for (Player p : players) {
             String locationName = p.getLocation().getName();
-            String playerInfo = "Player " + p.getID() + " - " + locationName;
+            // Construct player info string with rank, money, credits, and rehearsal tokens
+            String playerInfo = String.format("Player %d (rank %d, $%d, %dcr, %drt) - %s", 
+                                              p.getID(), 
+                                              p.getRank(), 
+                                              p.getMoney(), 
+                                              p.getCredits(), 
+                                              p.getRehearsalTokens(), 
+                                              locationName
+            );
             // Check if the location is not "Trailer" or "Casting Office" before showing shots remaining
             if (!locationName.equalsIgnoreCase("Trailer") && !locationName.equalsIgnoreCase("Casting Office")) {
                 int shotsRemaining = p.getLocation().getShots();
