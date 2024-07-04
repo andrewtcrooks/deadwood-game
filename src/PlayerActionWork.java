@@ -31,7 +31,13 @@ public class PlayerActionWork implements PlayerAction {
         if (player.getHasRole()) {
             String roleName = player.getRole().getName();
             String roleLine = player.getRole().getLine();
-            view.showMessage(roleName + " - \"" + roleLine + "\"");
+            boolean onCard = player.getRole().getOnCard();
+            if (onCard) {
+                view.showMessage(roleName + " - \"" + roleLine + "\"");
+            } else {
+                view.showMessage(roleName + " - \"" + roleLine + "\" (for scale)");
+            }
+            
             return false;
         }
         return true;
@@ -71,7 +77,7 @@ public class PlayerActionWork implements PlayerAction {
         // Print roles with rank and "for scale" tag as needed
         for (Role role : allRoles) {
             System.out.print(role.getName());
-            System.out.print("  Rank: " + role.getRank());
+            System.out.print(" Rank: " + role.getRank());
             if (!role.getOnCard()) {
                 System.out.println(" (for scale)");
             } else {
