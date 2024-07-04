@@ -19,7 +19,7 @@ public class PlayerActionWork implements PlayerAction {
         }
         // Checkif the player is in their Trailer
         if (player.getLocation().getName().equals("Trailer")) {
-            view.showMessage("There is no work in the Trailer.");
+            view.showMessage("There is no work in your Trailer.");
             return false;
         }
         // Check if location is wrapped
