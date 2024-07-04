@@ -13,7 +13,7 @@ public class PlayerActionWork implements PlayerAction {
      */
     public boolean validate(Player player, GameModel model, GameView view) {
         // Check if the player is in the Casting Office
-        if (!player.getLocation().getName().equals("Casting Office")) {
+        if (player.getLocation().getName().equals("Casting Office")) {
             view.showMessage("There is no work in the Casting Office.");
             return false;
         }
