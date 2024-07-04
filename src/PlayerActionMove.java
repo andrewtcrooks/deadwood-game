@@ -50,7 +50,14 @@ public class PlayerActionMove implements PlayerAction {
         }
         // Get the location from the player
         String location = view.getPlayerInput();
-        if (!neighbors.contains(location)) {
+        String locationLower = location;
+        // handle the XML file referencing office and trailer in lower case
+        if ("Trailer".equals(locationLower)) {
+            locationLower = "trailer";
+        } else if ("Casting Office".equals(locationLower)) {
+            locationLower = "office";
+        }
+        if (!neighbors.contains(locationLower)) {
             view.showMessage("Invalid location.");
             return false;
         }

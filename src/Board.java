@@ -80,12 +80,44 @@ public class Board {
     }
 
     /**
+     * Resets the number of scenes remaining in the game to 10.
+     */
+    public void resetNumScenesRemaining() {
+        this.numScenesRemaining = 10;
+    }
+
+    /**
      * Returns the locations on the board.
      * 
      * @return The locations on the board.
      */
     public Map<String, Location> getLocations() {
         return locations;
+    }
+
+    /**
+     * Returns the player with the given ID.
+     * 
+     * @param ID The ID of the player.
+     * @throws IllegalArgumentException If no player with the given ID is found.
+     * @return The player with the given ID.
+     */
+    public Player getPlayer(int ID) {
+        for (Player player : players) {
+            if (Integer.valueOf(player.getID()).equals(ID)) {
+                return player;
+            }
+        }
+        throw new IllegalArgumentException("No Player " + ID);
+    }
+
+    /**
+     * Change all player locations on the board to "Trailer"
+     */
+    private void resetPlayerLocations() {
+        for (Player player : players) {
+            player.setLocation(locations.get("Trailer"));
+        }
     }
 
     /**
@@ -138,35 +170,20 @@ public class Board {
     }
 
     /**
-     * Resets the number of scenes remaining in the game to 10.
+     * Deals new scene card to each location on the board.
      */
-    public void resetNumScenesRemaining() {
-        this.numScenesRemaining = 10;
-    }
-
-    /**
-     * Resets the board to its initial state.
-     */
-    public void resetBoard() {
-        initLocations(this.boardXMLFilePath);
-        dealSceneCardsToLocations();
-        resetPlayerLocations();
-    }
-
-    // return player object 
-    public Player getPlayer(int ID) {
-        for (Player player : players) {
-            if (Integer.valueOf(player.getID()).equals(ID)) {
-                return player;
-            }
+    private void dealSceneCardsToLocations() {
+        for (Location location : locations.values()) {
+            SceneCard card = deck.drawCard();
+            location.setSceneCard(card);
         }
-        throw new IllegalArgumentException("No player " + ID);
     }
 
     /**
-     * Initializes the locations on the board.
+     * Initialize the locations on the board.
      * 
      * @param boardXMLFilePath The file path to the board XML file.
+     * @throws Exception If an error occurs while parsing the board XML file.
      */
     private void initLocations(String boardXMLFilePath) {
         ParseBoardXML parser = new ParseBoardXML();
@@ -180,24 +197,12 @@ public class Board {
     }
 
     /**
-     * Deals new scene card to each location on the board.
+     * Resets the board to its initial state.
      */
-    private void dealSceneCardsToLocations() {
-        for (Location location : locations.values()) {
-            SceneCard card = deck.drawCard();
-            location.setSceneCard(card);
-        }
+    public void resetBoard() {
+        initLocations(this.boardXMLFilePath);
+        dealSceneCardsToLocations();
+        resetPlayerLocations();
     }
-
-    /**
-     * Change all player locations on the board to "Trailer"
-     */
-    private void resetPlayerLocations() {
-        for (Player player : players) {
-            player.setLocation(locations.get("trailer"));
-        }
-    }
-
-
 
 }

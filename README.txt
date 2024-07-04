@@ -1,6 +1,10 @@
+# Author
+
+Andrew Crooks
+
 # Deadwood
 
-This is a Java application for the Deadwood game.
+This is a Java application for the game Deadwood.
 
 ## Prerequisites
 

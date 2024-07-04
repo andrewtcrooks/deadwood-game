@@ -36,7 +36,7 @@ public class PlayerActionSave implements PlayerAction {
         view.showMessage("Current saved games");
         
         // print the filenames of all .savegame files in the current directory
-        try (Stream<Path> paths = Files.walk(Paths.get("./saved"))) {
+        try (Stream<Path> paths = Files.walk(Paths.get("./saved/"))) {
             paths
                 .filter(Files::isRegularFile)
                 .map(Path::toFile)
