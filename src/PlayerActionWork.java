@@ -35,10 +35,11 @@ public class PlayerActionWork implements PlayerAction {
             String roleName = player.getRole().getName();
             String roleLine = player.getRole().getLine();
             boolean onCard = player.getRole().getOnCard();
+            String message = "Current role: " + roleName + " - \"" + roleLine + "\"";
             if (onCard) {
-                view.showMessage(roleName + " - \"" + roleLine + "\"");
+                view.showMessage(message);
             } else {
-                view.showMessage(roleName + " - \"" + roleLine + "\" (for scale)");
+                view.showMessage(message + " (for scale)");
             }
             
             return false;
