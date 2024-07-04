@@ -104,6 +104,8 @@ public class PlayerActionUpgrade implements PlayerAction {
         // Upgrade the player's rank
         player.setRank(chosenRank); 
         view.showMessage("You have successfully upgraded to rank " + chosenRank + ".");
+        // set player has upgraded
+        player.setHasUpgraded(true);
         // Check if the player has already moved during their turn
         if (player.getHasMoved()) {
             return true; // End the turn if the player has already moved
