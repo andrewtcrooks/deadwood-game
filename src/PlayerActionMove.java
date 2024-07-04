@@ -40,7 +40,13 @@ public class PlayerActionMove implements PlayerAction {
         // Display the list of options
         view.showMessage("Where would you like to move?");
         for (String neighbor : neighbors) {
-            view.showMessage(neighbor);
+            if ("trailer".equals(neighbor)) {
+                view.showMessage("Trailer");
+            } else if ("office".equals(neighbor)) {
+                view.showMessage("Casting Office");
+            } else {
+                view.showMessage(neighbor);
+            }
         }
         // Get the location from the player
         String location = view.getPlayerInput();
