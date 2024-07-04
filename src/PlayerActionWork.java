@@ -56,7 +56,6 @@ public class PlayerActionWork implements PlayerAction {
      */
     public boolean execute(Player player, GameModel model, GameView view) {
         // Make a list of roles the player can work
-        view.showMessage("You can work the following roles:");
         List<Role> allRoles = new ArrayList<>();
         for (Role role : player.getLocation().getRoles()) {
             if (role.getRank() <= player.getRank() && !role.isOccupied()) {
@@ -67,6 +66,8 @@ public class PlayerActionWork implements PlayerAction {
         if (allRoles.isEmpty()) {
             view.showMessage("There are no roles available for you to work.");
             return false;
+        } else {
+            view.showMessage("You can work the following roles:");
         }
         // Sort roles by rank, then by "for scale"
         allRoles.sort((role1, role2) -> {
@@ -81,11 +82,9 @@ public class PlayerActionWork implements PlayerAction {
         for (Role role : allRoles) {
             System.out.print(role.getName());
             if (!role.getOnCard()) {
-                System.out.println(" (for scale)");
-            } else {
-                System.out.println();
+                System.out.print(" (for scale)");
             }
-            System.out.print(" -> Rank " + role.getRank());
+            System.out.println(" -> Rank " + role.getRank());
         }
         // Get player input
         String roleString = view.getPlayerInput();
