@@ -77,12 +77,12 @@ public class PlayerActionWork implements PlayerAction {
         // Print roles with rank and "for scale" tag as needed
         for (Role role : allRoles) {
             System.out.print(role.getName());
-            System.out.print(" Rank: " + role.getRank());
             if (!role.getOnCard()) {
                 System.out.println(" (for scale)");
             } else {
                 System.out.println();
             }
+            System.out.print(" -> Rank " + role.getRank());
         }
         // Get player input
         String roleString = view.getPlayerInput();
