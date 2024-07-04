@@ -23,21 +23,18 @@ public class PlayerActionWhere implements PlayerAction {
      */
     @Override
     public boolean execute(Player player, GameModel model, GameView view) {
-        // Get the player location name
         String locationName = player.getLocation().getName();
-        // Display the player location and scene details
-        if ("Trailer".equals(locationName)) {
+        // Check if the scene is wrapped first
+        if (player.getLocation().isWrapped()) {
+            view.showMessage(locationName + " wrapped");
+        } else if ("Trailer".equals(locationName)) {
             view.showMessage("You are still in your Trailer!");
         } else if ("Casting Office".equals(locationName)) {
             view.showMessage("You are at the Casting Office");
         } else {
             String sceneTitle = player.getLocation().getSceneCard().getTitle();
             int sceneID = player.getLocation().getSceneCard().getID();
-            if (player.getLocation().isWrapped()) {
-                view.showMessage(locationName + " wrapped");
-            } else {
-                view.showMessage(locationName + " shooting " + sceneTitle + " (scene " + sceneID + ")");
-            }
+            view.showMessage(locationName + " shooting " + sceneTitle + " (scene " + sceneID + ")");
         }
         return false;
     }
