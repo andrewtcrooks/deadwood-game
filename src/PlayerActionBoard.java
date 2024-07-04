@@ -39,7 +39,7 @@ public class PlayerActionBoard implements PlayerAction {
         for (Player p : players) {
             String locationName = p.getLocation().getName();
             // Construct player info string with rank, money, credits, and rehearsal tokens
-            String playerInfo = String.format("Player %d (rank %d, $%d, %dcr, %drt) - %s", 
+            String playerInfo = String.format("Player %d (rank %d, $%d, %dcr, %drt) - %14s", 
                                               p.getID(), 
                                               p.getRank(), 
                                               p.getMoney(), 
