@@ -26,7 +26,7 @@ public class PlayerActionWork implements PlayerAction {
             return false;
         }
         // Check if location is wrapped
-        if (player.getLocation().isWrapped()) {
+        if (player.getLocation().getIsWrapped()) {
             view.showMessage("Location is wrapped. No more work available until tomorrow.");
             return false;
         }

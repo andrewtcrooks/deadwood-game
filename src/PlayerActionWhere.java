@@ -28,7 +28,7 @@ public class PlayerActionWhere implements PlayerAction {
     public boolean execute(Player player, GameModel model, GameView view) {
         String locationName = player.getLocation().getName();
         // Check if the scene is wrapped first
-        if (player.getLocation().isWrapped()) {
+        if (player.getLocation().getIsWrapped()) {
             view.showMessage(locationName + " wrapped");
         } else if ("Trailer".equals(locationName)) {
             view.showMessage("You are still in your Trailer!");

@@ -46,24 +46,6 @@ public class Location {
     }
 
     /**
-     * Adds a player to the Location.
-     *
-     * @param player the player to add
-     */
-    public void addPlayer(Player player) {
-        players.add(player);
-    }
-
-    /**
-     * Removes a player from the Location.
-     *
-     * @param player the player to remove
-     */
-    public void removePlayer(Player player) {
-        players.remove(player);
-    }
-
-    /**
      * Returns the players at the Location.
      *
      * @return the players at the Location
@@ -98,38 +80,14 @@ public class Location {
     public List<Take> getTakes() {
         return takes;
     }
-    
-    public void removeShotCounter() {
-        Take smallestTake = null;
-    
-        // Find the Take with the smallest integer name that is not already wrapped
-        for (Take take : this.takes) {
-            if (!take.isWrapped() && (smallestTake == null || take.getNumber() < smallestTake.getNumber())) {
-                smallestTake = take;
-            }
-        }
-    
-        // Wrap the Take with the smallest integer name
-        if (smallestTake != null) {
-            smallestTake.wrap();
-        } else {
-            this.wrapped = true;
-        }
-    }
 
     /**
-     * Returns the number of shots left in the Location.
+     * Returns whether the Location is wrapped.
      *
-     * @return the number of shots left in the Location
+     * @return whether the Location is wrapped
      */
-    public int getShots() {
-        int shots = 0;
-        for (Take take : this.takes) {
-            if (!take.isWrapped()) {
-                shots += 1;
-            }
-        }
-        return shots;
+    public boolean getIsWrapped() {
+        return wrapped;
     }
 
     /**
@@ -151,6 +109,71 @@ public class Location {
     }
 
     /**
+     * Returns the number of shots left in the Location.
+     *
+     * @return the number of shots left in the Location
+     */
+    public int getShots() {
+        int shots = 0;
+        for (Take take : this.takes) {
+            if (!take.isWrapped()) {
+                shots += 1;
+            }
+        }
+        return shots;
+    }
+
+    /**
+     * Sets a new scene card for the Location and redefines the roles list.
+     *
+     * @param scene the new scene card for the Location
+     */
+    public void setSceneCard(SceneCard scene) {
+        this.scene = scene;
+        this.allRoles = new ArrayList<Role>(this.locationRoles); // Copy the roles from the location
+        this.allRoles.addAll(scene.getRoles()); // Add all roles from the new scene
+        this.wrapped = false;
+    }
+
+    /**
+     * Adds a player to the Location.
+     *
+     * @param player the player to add
+     */
+    public void addPlayer(Player player) {
+        players.add(player);
+    }
+
+    /**
+     * Removes a player from the Location.
+     *
+     * @param player the player to remove
+     */
+    public void removePlayer(Player player) {
+        players.remove(player);
+    }
+
+    /**
+     * Removes a shot counter from the Location.
+     */
+    public void removeShotCounter() {
+        Take smallestTake = null;
+        // Find the Take with the smallest integer name that is not already wrapped
+        for (Take take : this.takes) {
+            if (!take.isWrapped() && (smallestTake == null || take.getNumber() < smallestTake.getNumber())) {
+                smallestTake = take;
+            }
+        }
+        // Wrap the Take with the smallest integer name
+        // else mark the scene as wrapped
+        if (smallestTake != null) {
+            smallestTake.wrap();
+        } else {
+            this.wrapped = true;
+        }
+    }
+
+    /**
      * Wraps the next available shot in the Location.
      */
     public void wrapShot() {
@@ -166,27 +189,13 @@ public class Location {
         if (lowestTake != null) {
             lowestTake.wrap();
         }
-
-        // TODO: remove
-        // // Check if all takes are wrapped
-        // boolean allWrapped = true;
-        // for (Take take : this.takes) {
-        //     if (!take.isWrapped()) {
-        //         allWrapped = false;
-        //         break;
-        //     }
-        // }
-
-        // // If all takes are wrapped, wrap the scene
-        // if (allWrapped) {
-        //     wrapScene();
-            
-        // }
     }
 
+    /**
+     * Wraps the scene in the Location.
+     */
     public void wrapScene() {
         this.wrapped = true;
-
         // remove all players from their roles and reset all rehearsal tokens
         //  while checking for a single player onCard
         List<Player> playersAtLocation = getPlayers();
@@ -198,16 +207,13 @@ public class Location {
             player.leaveRole();
             player.resetRehearsalTokens();
         }
-
         // pay out bonus to all players at location if any player was on a card
         if (anyPlayerOnCard) {
             payOutBonus(); // Call payOutBonus if any player was on a card
             
         }
-
         //reset takes
         resetTakes();
-
         // clear the scene card after paying out bonus
         clearSceneCard();
     }
@@ -215,7 +221,7 @@ public class Location {
     /**
      * Pays out the bonus to all players at the Location.
      */
-    public void payOutBonus() {
+    private void payOutBonus() {
         int movieBudget = getSceneCard().getBudget(); // Get the movie budget
         List<Integer> diceRolls = rollDice(movieBudget); // Roll dice equal to the budget
         Collections.sort(diceRolls, Collections.reverseOrder()); // Sort dice rolls in descending order
@@ -273,24 +279,4 @@ public class Location {
         return rolls;
     }
 
-    /**
-     * Returns whether the Location is wrapped.
-     *
-     * @return whether the Location is wrapped
-     */
-    public boolean isWrapped() {
-        return wrapped;
-    }
-
-    /**
-     * Sets a new scene card for the Location and redefines the roles list.
-     *
-     * @param scene the new scene card for the Location
-     */
-    public void setSceneCard(SceneCard scene) {
-        this.scene = scene;
-        this.allRoles = new ArrayList<Role>(this.locationRoles); // Copy the roles from the location
-        this.allRoles.addAll(scene.getRoles()); // Add all roles from the new scene
-        this.wrapped = false;
-    }
 }
