@@ -73,7 +73,7 @@ public class PlayerActionAct implements PlayerAction {
             // Check if any of the players at the location are onCard
             boolean anyPlayerOnCard = false;
             for (Player p : player.getLocation().getPlayers()) {
-                if (p.getOnCard()) {
+                if (p.getRole().getOnCard()) {
                     anyPlayerOnCard = true;
                     break;
                 }
