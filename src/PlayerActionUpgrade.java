@@ -1,7 +1,7 @@
 import java.util.HashMap;
 import java.util.Map;
 
-/*
+/**
  * Represents the upgrade action for the player.
  */
 public class PlayerActionUpgrade implements PlayerAction {
@@ -52,7 +52,15 @@ public class PlayerActionUpgrade implements PlayerAction {
             view.showMessage("You do not have enough money or credits to upgrade.");
             return false;
         }
-
+        // Determine the cost for the next possible rank
+        int nextRank = player.getRank() + 1;
+        int dollarCostForNextRank = dollarCosts.getOrDefault(nextRank, Integer.MAX_VALUE);
+        int creditCostForNextRank = creditCosts.getOrDefault(nextRank, Integer.MAX_VALUE);
+        // Check if player has enough money or credits to upgrade to the next rank
+        if (player.getMoney() < dollarCostForNextRank && player.getCredits() < creditCostForNextRank) {
+            view.showMessage("You do not have enough money or credits to upgrade to a higher rank.");
+            return false;
+        }
         return true;
     }
 
@@ -71,9 +79,7 @@ public class PlayerActionUpgrade implements PlayerAction {
             return false;
         }
         String paymentMethod = determinePaymentMethod(player, chosenRank, view);
-        // Validate payment method
-        if (paymentMethod == null || (!"money".equals(paymentMethod) && !"credits".equals(paymentMethod))) {
-            view.showMessage("Invalid payment method.");
+        if (!isValidPaymentMethod(paymentMethod, view)) {
             return false;
         }
         processPayment(player, chosenRank, paymentMethod);
@@ -82,8 +88,12 @@ public class PlayerActionUpgrade implements PlayerAction {
         return player.getHasMoved();
     }
 
-    /*
+    /**
      * Displays the upgrade options for the player.
+     * 
+     * @param player The player
+     * @param view The game view
+     * @return true if the player can upgrade, false otherwise
      */
     private void displayUpgradeOptions(Player player, GameView view) {
         view.showMessage("You can upgrade to one of the following ranks:");
@@ -95,16 +105,23 @@ public class PlayerActionUpgrade implements PlayerAction {
         }
     }
 
-    /* 
-    * Returns users chosen rank
-    */
+    /**
+     * Gets the rank chosen by the player
+     * @param view the game view
+     * @return The rank chosen by the player
+     */
     private int getUserChosenRank(GameView view) {
         return Integer.parseInt(view.getPlayerInput());
     }
 
-    /*
-    * Validates the chosen rank
-    */
+    /**
+     * Validates the chosen rank
+     *
+     * @param chosenRank The rank chosen by the player
+     * @param playerRank The rank of the player
+     * @param view The game view
+     * @return true if the chosen rank is valid, false otherwise
+     */
     private boolean validateChosenRank(int chosenRank, int playerRank, GameView view) {
         if (chosenRank <= playerRank || chosenRank > 6) {
             view.showMessage("Invalid rank. Rank must be between " + (playerRank + 1) + " and 6 inclusively.");
@@ -113,8 +130,13 @@ public class PlayerActionUpgrade implements PlayerAction {
         return true;
     }
 
-    /* 
+    /**
      * Determines the payment method
+     * 
+     * @param player The player
+     * @param chosenRank The rank chosen by the player
+     * @param view The game view
+     * @return The payment method
      */
     private String determinePaymentMethod(Player player, int chosenRank, GameView view) {
         boolean canAffordWithDollars = player.getMoney() >= dollarCosts.getOrDefault(chosenRank, 0);
@@ -131,9 +153,33 @@ public class PlayerActionUpgrade implements PlayerAction {
         return null;
     }
 
-    /*
-    * Processes payment
-    */
+    /**
+     * Validates payment method
+     * 
+     * @param paymentMethod The payment method
+     * @param view The game view
+     * @return true if the payment method is valid, false otherwise
+     */
+    private boolean isValidPaymentMethod(String paymentMethod, GameView view) {
+        if (paymentMethod == null) {
+            view.showMessage("You cannot afford to upgrade to this rank.");
+            return false;
+        }
+        if (!"money".equals(paymentMethod) && !"credits".equals(paymentMethod)) {
+            view.showMessage("Invalid payment method.");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Processes payment
+     * 
+     * @param player The player
+     * @param chosenRank The rank chosen by the player
+     * @param paymentMethod The payment method
+     * @return true if the payment was successful, false otherwise
+     */
     private void processPayment(Player player, int chosenRank, String paymentMethod) {
         if ("money".equals(paymentMethod)) {
             player.setMoney(player.getMoney() - dollarCosts.get(chosenRank));
@@ -142,9 +188,14 @@ public class PlayerActionUpgrade implements PlayerAction {
         }
     }
 
-    /*
-    * Upgrades player rank
-    */
+    /**
+     * Upgrades player rank
+     * 
+     * @param player The player
+     * @param chosenRank The rank chosen by the player
+     * @param view The game view
+     * @return true if the player was successfully upgraded, false otherwise
+     */
     private void upgradePlayerRank(Player player, int chosenRank, GameView view) {
         player.setRank(chosenRank);
         view.showMessage("You have successfully upgraded to rank " + chosenRank + ".");
