@@ -44,33 +44,6 @@ public class GameModel implements Subject {
     }
 
     /**
-     * Registers an observer with the model.
-     *
-     * @param observer The observer to register.
-     */
-    public void registerObserver(Observer observer) {
-        observers.add(observer);
-    }
-
-    /**
-     * Removes an observer from the list of observers.
-     *
-     * @param observer The observer to remove.
-     */
-    public void removeObserver(Observer observer) {
-        observers.remove(observer);
-    }
-
-    /**
-     * Notifies all observers that the state has changed.
-     */
-    public void notifyObservers() {
-        for (Observer observer : observers) {
-            observer.update(this);
-        }
-    }
-
-    /**
      * Initializes the model with the given number of players and XML file path.
      *
      * @param numPlayers The number of players.
@@ -132,6 +105,33 @@ public class GameModel implements Subject {
     }
 
     /**
+     * Registers an observer with the model.
+     *
+     * @param observer The observer to register.
+     */
+    public void registerObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    /**
+     * Removes an observer from the list of observers.
+     *
+     * @param observer The observer to remove.
+     */
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    /**
+     * Notifies all observers that the state has changed.
+     */
+    public void notifyObservers() {
+        for (Observer observer : observers) {
+            observer.update(this);
+        }
+    }
+
+    /**
      * Returns the board.
      *
      * @return The board.
@@ -139,25 +139,6 @@ public class GameModel implements Subject {
     public Board getBoard() {
         return board;
     }
-
-    // TODO: complete the two methods below
-    // /**
-    //  * Returns the locations.
-    //  *
-    //  * @return The locations.
-    //  */
-    // public List<Location> getLocations() {
-    //     return locations;
-    // }
-    //
-    // /**
-    //  * Returns the Deck.
-    //  *
-    //  * @return The Deck.
-    //  */
-    // public Deck getDeck() {
-    //     return deck;
-    // }
 
     /**
      * Returns the number of players.
