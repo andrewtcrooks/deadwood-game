@@ -17,7 +17,6 @@ public class Player {
     private Location location;
     private int rehearsalTokens;
     private boolean hasRole;
-    private boolean onCard;
     private Role role;
     private boolean active;
     private boolean hasMoved;
@@ -39,7 +38,6 @@ public class Player {
         this.location = null;
         this.rehearsalTokens = 0;
         this.hasRole = false;
-        this.onCard = false;
         this.role = null;
         this.active = false;
         this.hasMoved = false;
@@ -108,15 +106,6 @@ public class Player {
      */
     public boolean getHasRole() {
         return this.hasRole;
-    }
-
-    /**
-     * Returns whether the player has a role on a card.
-     *
-     * @return true if the player has a role on a card, false otherwise
-     */
-    public boolean getOnCard() {
-        return this.onCard;
     }
 
     /**
@@ -266,15 +255,6 @@ public class Player {
     }
 
     /**
-     * Sets whether the player is on a card.
-     *
-     * @param onCard true if the player is on a card, false otherwise
-     */
-    public void setOnCard(boolean onCard) {
-        this.onCard = onCard;
-    }
-
-    /**
      * Sets the role the player has.
      *
      * @param role the new role for the player
@@ -282,7 +262,6 @@ public class Player {
     public void takeRole(Role role) {
         this.role = role;
         setHasRole(true);
-        setOnCard(role.getOnCard());
         role.assignPlayer(this);
     }
 
@@ -297,7 +276,6 @@ public class Player {
 
             // Reset the role related attributes for the player
             setHasRole(false);
-            setOnCard(false);
             resetRehearsalTokens();
             this.role = null;
         }
