@@ -106,11 +106,8 @@ public class PlayerActionWork implements PlayerAction {
             // set player has worked
             player.setHasWorked(true);
         }
-        // Check if the player has already moved during their turn
-        if (player.getHasMoved()) {
-            return true; // End the turn if the player has already moved
-        }
-        return false;
+        // End the turn if the player has already moved
+        return player.getHasMoved();
     }
 
 }

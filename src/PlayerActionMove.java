@@ -75,11 +75,8 @@ public class PlayerActionMove implements PlayerAction {
         view.showMessage(startLocation + " -> " + endLocation);
         // set player has moved
         player.setHasMoved(true);
-        // Check if the player has already upgraded during their turn
-        if (player.getHasUpgraded()) {
-            return true; // End the turn if the player has already upgraded
-        }
-        return false;
+        // End the turn if the player has already upgraded
+        return player.getHasUpgraded();
     }
 
 }
