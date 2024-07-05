@@ -5,6 +5,23 @@ import java.util.Map;
  * Represents the upgrade action for the player.
  */
 public class PlayerActionUpgrade implements PlayerAction {
+    // Dollar costs for each rank
+    private static final Map<Integer, Integer> dollarCosts = new HashMap<>();
+    // Credit costs for each rank
+    private static final Map<Integer, Integer> creditCosts = new HashMap<>();
+    // Initialize dollar costs and credit costs for each rank
+    static {
+        dollarCosts.put(2, 4); // $4 for rank 2
+        dollarCosts.put(3, 10); // $10 for rank 3
+        dollarCosts.put(4, 18); // $18 for rank 4
+        dollarCosts.put(5, 28); // $28 for rank 5
+        dollarCosts.put(6, 40); // $40 for rank 6
+        creditCosts.put(2, 5); // 5 credits for rank 2
+        creditCosts.put(3, 10); // 10 credits for rank 3
+        creditCosts.put(4, 15); // 15 credits for rank 4
+        creditCosts.put(5, 20); // 20 credits for rank 5
+        creditCosts.put(6, 25); // 25 credits for rank 6
+    }
 
     /**
      * Validates the upgrade action for the player.
@@ -48,76 +65,89 @@ public class PlayerActionUpgrade implements PlayerAction {
      * @return true to end turn if player has previously moved, false otherwise
      */
     public boolean execute(Player player, GameModel model, GameView view) {
-        // Display the upgrade options for the player
+        displayUpgradeOptions(player, view);
+        int chosenRank = getUserChosenRank(view);
+        if (!validateChosenRank(chosenRank, player.getRank(), view)) {
+            return false;
+        }
+        String paymentMethod = determinePaymentMethod(player, chosenRank, view);
+        // Validate payment method
+        if (paymentMethod == null || (!"money".equals(paymentMethod) && !"credits".equals(paymentMethod))) {
+            view.showMessage("Invalid payment method.");
+            return false;
+        }
+        processPayment(player, chosenRank, paymentMethod);
+        upgradePlayerRank(player, chosenRank, view);
+        // End the turn if the player has already moved
+        return player.getHasMoved();
+    }
+
+    /*
+     * Displays the upgrade options for the player.
+     */
+    private void displayUpgradeOptions(Player player, GameView view) {
         view.showMessage("You can upgrade to one of the following ranks:");
-        // Define the cost of each rank in dollars
-        Map<Integer, Integer> dollarCosts = new HashMap<>();
-        dollarCosts.put(2, 4);
-        dollarCosts.put(3, 10);
-        dollarCosts.put(4, 18);
-        dollarCosts.put(5, 28);
-        dollarCosts.put(6, 40);
-        // Define the cost of each rank in credits
-        Map<Integer, Integer> creditCosts = new HashMap<>();
-        creditCosts.put(2, 5);
-        creditCosts.put(3, 10);
-        creditCosts.put(4, 15);
-        creditCosts.put(5, 20);
-        creditCosts.put(6, 25);
-        // Display the cost of each rank
         for (int i = player.getRank() + 1; i <= 6; i++) {
             String message = String.format("%d - $%4d or %4d credits", i, 
                                     dollarCosts.getOrDefault(i, 0), 
                                     creditCosts.getOrDefault(i, 0));
             view.showMessage(message);
-            // view.showMessage(i + " - $" + dollarCosts.getOrDefault(i, 0) + " or " + 
-            // creditCosts.getOrDefault(i, 0) + " credits");
         }
-        // Get the user input
-        int chosenRank = Integer.parseInt(view.getPlayerInput());
-        // Get the player rank
-        int playerRank = player.getRank();
-        // Check if the chosen rank is valid
+    }
+
+    /* 
+    * Returns users chosen rank
+    */
+    private int getUserChosenRank(GameView view) {
+        return Integer.parseInt(view.getPlayerInput());
+    }
+
+    /*
+    * Validates the chosen rank
+    */
+    private boolean validateChosenRank(int chosenRank, int playerRank, GameView view) {
         if (chosenRank <= playerRank || chosenRank > 6) {
             view.showMessage("Invalid rank. Rank must be between " + (playerRank + 1) + " and 6 inclusively.");
             return false;
         }
-        // Check if the player can afford the upgrade in dollars or credits
+        return true;
+    }
+
+    /* 
+     * Determines the payment method
+     */
+    private String determinePaymentMethod(Player player, int chosenRank, GameView view) {
         boolean canAffordWithDollars = player.getMoney() >= dollarCosts.getOrDefault(chosenRank, 0);
         boolean canAffordWithCredits = player.getCredits() >= creditCosts.getOrDefault(chosenRank, 0);
-        // If player can afford either payment method, get user choice
-        String paymentMethod = null;
         if (canAffordWithDollars && canAffordWithCredits) {
             view.showMessage("You can afford to upgrade to this rank with either money or credits.");
             view.showMessage("Would you like to pay with money or credits?");
-            paymentMethod = view.getPlayerInput();
-            if (!"money".equals(paymentMethod) && !"credits".equals(paymentMethod)) {
-                view.showMessage("Invalid payment method.");
-                return false;
-            }
+            return view.getPlayerInput();
         } else if (canAffordWithDollars) {
-            paymentMethod = "money";
+            return "money";
         } else if (canAffordWithCredits) {
-            paymentMethod = "credits";
+            return "credits";
         }
-        // Process the payment based on the chosen method
+        return null;
+    }
+
+    /*
+    * Processes payment
+    */
+    private void processPayment(Player player, int chosenRank, String paymentMethod) {
         if ("money".equals(paymentMethod)) {
-            // Deduct the dollar cost
             player.setMoney(player.getMoney() - dollarCosts.get(chosenRank));
         } else if ("credits".equals(paymentMethod)) {
-            // Deduct the credit cost
             player.setCredits(player.getCredits() - creditCosts.get(chosenRank));
         }
-        // Upgrade the player's rank
-        player.setRank(chosenRank); 
-        view.showMessage("You have successfully upgraded to rank " + chosenRank + ".");
-        // set player has upgraded
-        player.setHasUpgraded(true);
-        // Check if the player has already moved during their turn
-        if (player.getHasMoved()) {
-            return true; // End the turn if the player has already moved
-        }
-        return false;
+    }
 
+    /*
+    * Upgrades player rank
+    */
+    private void upgradePlayerRank(Player player, int chosenRank, GameView view) {
+        player.setRank(chosenRank);
+        view.showMessage("You have successfully upgraded to rank " + chosenRank + ".");
+        player.setHasUpgraded(true);
     }
 }
