@@ -177,7 +177,8 @@ public class Location {
      * Wraps the next available shot in the Location.
      */
     public void wrapShot() {
-        // wrap take with the lowest number from getNumber(), the numbers can range from 1 up to 4
+        // wrap take with the lowest number from getNumber(), 
+        // the numbers can range from 1 up to 4
         int lowest = 4;
         Take lowestTake = null;
         for (Take take : this.takes) {
@@ -195,26 +196,21 @@ public class Location {
      * Wraps the scene in the Location.
      */
     public void wrapScene() {
-        this.wrapped = true;
-        // remove all players from their roles and reset all rehearsal tokens
-        //  while checking for a single player onCard
+        //Check for any player working a role on a card
         List<Player> playersAtLocation = getPlayers();
-        boolean anyPlayerOnCard = false;
-        for (Player player : playersAtLocation) {
-            if (player.getOnCard()) {
-                anyPlayerOnCard = true;
-            }
+        boolean anyPlayerOnCard = playersAtLocation.stream().anyMatch(Player::getOnCard);
+        //Pay out bonus if any player was on a card
+        if (anyPlayerOnCard) {
+            payOutBonus();
+        }
+        //Remove all players from their roles and reset rehearsal tokens
+        playersAtLocation.forEach(player -> {
             player.leaveRole();
             player.resetRehearsalTokens();
-        }
-        // pay out bonus to all players at location if any player was on a card
-        if (anyPlayerOnCard) {
-            payOutBonus(); // Call payOutBonus if any player was on a card
-            
-        }
-        //reset takes
+        });
+        //Reset takes
         resetTakes();
-        // clear the scene card after paying out bonus
+        //Clear the scene card
         clearSceneCard();
     }
 
@@ -231,16 +227,13 @@ public class Location {
             .filter(Player::getOnCard)
             .sorted(Comparator.comparingInt(Player::getRoleRank).reversed())
             .collect(Collectors.toList());
-
         // Distribute dice rolls in a round-robin fashion
         for (int i = 0; i < diceRolls.size(); i++) {
             Player player = playersOnCard.get(i % playersOnCard.size()); // Wrap around if more dice than players
             player.addMoney(diceRolls.get(i)); // Add the dice roll as a bonus
         }
-
         // Players leave their roles after receiving bonuses
         playersOnCard.forEach(Player::leaveRole);
-
         // Pay each player who has a role but is not on the card an amount equal to the rank of the role they are in
         getPlayers().stream()
         .filter(player -> player.getRole() != null && !player.getOnCard())
