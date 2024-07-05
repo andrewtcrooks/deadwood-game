@@ -198,7 +198,8 @@ public class Location {
     public void wrapScene() {
         //Check for any player working a role on a card
         List<Player> playersAtLocation = getPlayers();
-        boolean anyPlayerOnCard = playersAtLocation.stream().anyMatch(Player::getOnCard);
+        boolean anyPlayerOnCard = playersAtLocation.stream()
+            .anyMatch(player -> player.getRole() != null && player.getRole().getOnCard());
         //Pay out bonus if any player was on a card
         if (anyPlayerOnCard) {
             payOutBonus();
@@ -224,7 +225,7 @@ public class Location {
 
         // Get all players on the card, sorted by their role rank in descending order
         List<Player> playersOnCard = getPlayers().stream()
-            .filter(Player::getOnCard)
+            .filter(player -> player.getRole() != null && player.getRole().getOnCard())
             .sorted(Comparator.comparingInt(Player::getRoleRank).reversed())
             .collect(Collectors.toList());
         // Distribute dice rolls in a round-robin fashion
@@ -236,7 +237,7 @@ public class Location {
         playersOnCard.forEach(Player::leaveRole);
         // Pay each player who has a role but is not on the card an amount equal to the rank of the role they are in
         getPlayers().stream()
-        .filter(player -> player.getRole() != null && !player.getOnCard())
+        .filter(player -> player.getRole() != null && !player.getRole().getOnCard())
         .forEach(player -> player.addMoney(player.getRole().getRank()));
     }
     
