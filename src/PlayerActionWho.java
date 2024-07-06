@@ -27,12 +27,14 @@ public class PlayerActionWho implements PlayerAction{
     @Override
     public boolean execute(Player player, GameModel model, GameView view) {
         // Display the player info
-        view.showMessage("Player " + player.getID() +
-                         " (rank " + player.getRank() + 
-                         ", $" + player.getMoney() + 
-                         ", " + player.getCredits() + "cr, " + 
-                         player.getRehearsalTokens() + "rt) "
+        String playerInfo = String.format("Player %d (rank %d, $%4d, %4dcr, %drt)", 
+                player.getID(), 
+                player.getRank(), 
+                player.getMoney(), 
+                player.getCredits(), 
+                player.getRehearsalTokens()
         );
+        view.showMessage(playerInfo);
         return false;
     }
 
