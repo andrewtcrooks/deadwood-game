@@ -18,6 +18,13 @@ public class PlayerActionMove implements PlayerAction {
         return checkPlayerHasNoRole(player, view) && checkPlayerHasNotMoved(player, view);
     }
 
+    /**
+     * Checks if the player has no role.
+     *
+     * @param player the player
+     * @param view the game view
+     * @return true if the player has no role, false otherwise
+     */
     private boolean checkPlayerHasNoRole(Player player, GameView view) {
         if (player.getHasRole()) {
             view.showMessage("You must finish your role before moving.");
@@ -26,6 +33,13 @@ public class PlayerActionMove implements PlayerAction {
         return true;
     }
 
+    /**
+     * Checks if the player has not moved.
+     *
+     * @param player the player
+     * @param view the game view
+     * @return true if the player has not moved, false otherwise
+     */
     private boolean checkPlayerHasNotMoved(Player player, GameView view) {
         if (player.getHasMoved()) {
             view.showMessage("You have already moved this turn.");
