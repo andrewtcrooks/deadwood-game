@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -29,41 +30,87 @@ public class PlayerActionBoard implements PlayerAction {
      */
     @Override
     public boolean execute(Player player, GameModel model, GameView view) {
-        // Get list of players
-        List<Player> players = model.getPlayers();
-        // Show message
-        view.showMessage("Board:");
-        // Sort players by ID
-        players.sort(Comparator.comparing(Player::getID));
-        // iterate through players
-        for (Player p : players) {
-            String locationName = p.getLocation().getName();
-            // Construct player info string with rank, money, credits, and rehearsal tokens
-            String playerInfo = String.format("Player %d (rank %d, $%4d, %4dcr, %drt) - %14s", 
-                                              p.getID(), 
-                                              p.getRank(), 
-                                              p.getMoney(), 
-                                              p.getCredits(), 
-                                              p.getRehearsalTokens(), 
-                                              locationName
-            );
-            // Check if the location is not "Trailer" or "Casting Office" before showing shots remaining
-            if (!locationName.equals("Trailer") && !locationName.equals("Casting Office")) {
-                if (!p.getLocation().getIsWrapped()) {
-                    int shotsRemaining = p.getLocation().getShots();
-                    playerInfo += " - Shots remaining: " + shotsRemaining;
-                } else {
-                    playerInfo += " - Scene wrapped";
-                }
-            }
-            // If the player is active, prepend with an asterisk
-            if (p.getActive()) {
-                view.showMessage("* " + playerInfo);
-            } else {
-                view.showMessage("  " + playerInfo);
-            }
-        }
+        List<Player> players = getSortedPlayers(model);
+        displayBoard(players, view);
         return false;
+    }
+
+    /**
+     * Returns the sorted list of players.
+     * 
+     * @param model the game model
+     * @return the sorted list of players
+     */
+    private List<Player> getSortedPlayers(GameModel model) {
+        List<Player> players = new ArrayList<>(model.getPlayers());
+        players.sort(Comparator.comparing(Player::getID));
+        return players;
+    }
+
+    /**
+     * Displays the board with the player information.
+     * 
+     * @param players the players
+     * @param view the game view
+     */
+    private void displayBoard(List<Player> players, GameView view) {
+        view.showMessage("Board:");
+        for (Player p : players) {
+            displayPlayerInfo(p, view);
+        }
+    }
+
+    /**
+     * Displays the player information on the board.
+     * 
+     * @param player the player
+     * @param view the game view
+     */
+    private void displayPlayerInfo(Player player, GameView view) {
+        String playerInfo = constructPlayerInfo(player);
+        if (player.getActive()) {
+            view.showMessage("* " + playerInfo);
+        } else {
+            view.showMessage("  " + playerInfo);
+        }
+    }
+
+    /**
+     * Constructs the player information to be displayed on the board.
+     * 
+     * @param player the player
+     * @return the player information
+     */
+    private String constructPlayerInfo(Player player) {
+        String locationName = player.getLocation().getName();
+        String playerInfo = String.format("Player %d (rank %d, $%4d, %4dcr, %drt) - %14s", 
+                                          player.getID(), 
+                                          player.getRank(), 
+                                          player.getMoney(), 
+                                          player.getCredits(), 
+                                          player.getRehearsalTokens(), 
+                                          locationName);
+
+        if (!locationName.equals("Trailer") && !locationName.equals("Casting Office")) {
+            playerInfo += getLocationStatus(player);
+        }
+
+        return playerInfo;
+    }
+
+    /**
+     * Returns the status of the player's location.
+     * 
+     * @param player the player
+     * @return the status of the player's location
+     */
+    private String getLocationStatus(Player player) {
+        if (!player.getLocation().getIsWrapped()) {
+            int shotsRemaining = player.getLocation().getShots();
+            return " - Shots remaining: " + shotsRemaining;
+        } else {
+            return " - Scene wrapped";
+        }
     }
 
 }
