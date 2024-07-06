@@ -36,7 +36,7 @@ public class Role {
      * @return The name of the Role.
      */
     String getName() { 
-        return name; 
+        return this.name; 
     }
 
     /**
@@ -45,7 +45,7 @@ public class Role {
      * @return The rank of the Role.
      */
     int getRank() { 
-        return rank; 
+        return this.rank; 
     }
 
     /**
@@ -54,7 +54,7 @@ public class Role {
      * @return The area of the Role.
      */
     Area getArea() {
-        return area;
+        return this.area;
     }
 
     /**
@@ -63,7 +63,7 @@ public class Role {
      * @return The line for the Role.
      */
     String getLine() { 
-        return line; 
+        return this.line; 
     }
 
     /**
@@ -72,7 +72,7 @@ public class Role {
      * @return The player assigned to the Role.
      */
     Player getPlayer() {
-        return player;
+        return this.player;
     }
 
     /**
@@ -81,12 +81,12 @@ public class Role {
      * @return true if the Role is from a SceneCard, false if Role is from a Location.
      */
     boolean getOnCard() { 
-        return onCard; 
+        return this.onCard; 
     }
 
-    public boolean setOnCard(boolean onCard) {
+    public void setOnCard(boolean onCard) {
         this.onCard = onCard;
-        return onCard;
+        // return onCard;
     }
 
     /**

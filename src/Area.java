@@ -1,7 +1,6 @@
 
 /**
  * Area class represents a rectangular area on the board.
- * 
  */
 public class Area {
     private int x;
@@ -30,7 +29,7 @@ public class Area {
      * @return The x-coordinate of the Area.
      */
     int getX() {
-        return x;
+        return this.x;
     }
 
     /**
@@ -39,7 +38,7 @@ public class Area {
      * @return The y-coordinate of the Area.
      */
     int getY() {
-        return y;
+        return this.y;
     }
 
     /**
@@ -48,7 +47,7 @@ public class Area {
      * @return The height of the Area.
      */
     int getH() {
-        return h;
+        return this.h;
     }
 
     /**
@@ -57,6 +56,6 @@ public class Area {
      * @return The width of the Area.
      */
     int getW() {
-        return w;
+        return this.w;
     }
 }

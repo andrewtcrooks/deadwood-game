@@ -196,23 +196,25 @@ public class Location {
      * Wraps the scene in the Location.
      */
     public void wrapScene() {
-        //Check for any player working a role on a card
+        // Check for any player working a role on a card
         List<Player> playersAtLocation = getPlayers();
         boolean anyPlayerOnCard = playersAtLocation.stream()
             .anyMatch(player -> player.getRole() != null && player.getRole().getOnCard());
-        //Pay out bonus if any player was on a card
+        // Pay out bonus if any player was on a card
         if (anyPlayerOnCard) {
             payOutBonus();
         }
-        //Remove all players from their roles and reset rehearsal tokens
+        // Remove all players from their roles and reset rehearsal tokens
         playersAtLocation.forEach(player -> {
             player.leaveRole();
             player.resetRehearsalTokens();
         });
-        //Reset takes
+        // Reset takes
         resetTakes();
-        //Clear the scene card
+        // Clear the scene card
         clearSceneCard();
+        // set wrapped to true
+        this.wrapped = true;
     }
 
     /**

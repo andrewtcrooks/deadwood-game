@@ -32,8 +32,8 @@ public class Deck {
      * @throws IllegalStateException If the deck is empty.
      */
     SceneCard drawCard() {
-        if (!cards.isEmpty()) {
-            return cards.remove(cards.size() - 1);
+        if (!this.cards.isEmpty()) {
+            return this.cards.remove(this.cards.size() - 1);
         } else {
             throw new IllegalStateException("Deck is empty");
         }
@@ -43,13 +43,13 @@ public class Deck {
      * Shuffles the cards in the deck.
      */
     void shuffle() {
-        Collections.shuffle(cards);
+        Collections.shuffle(this.cards);
     }
     
     /**
      * Returns true if the deck is empty, false otherwise.
      */
     boolean isEmpty() {
-        return cards.isEmpty();
+        return this.cards.isEmpty();
     }
 }

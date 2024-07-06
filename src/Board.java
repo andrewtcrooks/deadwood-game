@@ -92,7 +92,7 @@ public class Board {
      * @return The locations on the board.
      */
     public Map<String, Location> getLocations() {
-        return locations;
+        return this.locations;
     }
 
     /**
@@ -103,7 +103,7 @@ public class Board {
      * @return The player with the given ID.
      */
     public Player getPlayer(int ID) {
-        for (Player player : players) {
+        for (Player player : this.players) {
             if (Integer.valueOf(player.getID()).equals(ID)) {
                 return player;
             }
@@ -115,7 +115,7 @@ public class Board {
      * Change all player locations on the board to "Trailer"
      */
     private void resetPlayerLocations() {
-        for (Player player : players) {
+        for (Player player : this.players) {
             player.setLocation(locations.get("Trailer"));
         }
     }
@@ -173,8 +173,8 @@ public class Board {
      * Deals new scene card to each location on the board.
      */
     private void dealSceneCardsToLocations() {
-        for (Location location : locations.values()) {
-            SceneCard card = deck.drawCard();
+        for (Location location : this.locations.values()) {
+            SceneCard card = this.deck.drawCard();
             location.setSceneCard(card);
         }
     }

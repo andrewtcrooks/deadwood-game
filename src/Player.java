@@ -51,7 +51,7 @@ public class Player {
      * @return the ID of the player
      */
     public int getID() {
-        return id;
+        return this.id;
     }
 
     /**
@@ -60,7 +60,7 @@ public class Player {
      * @return the rank of the player
      */
     public int getRank() {
-        return rank;
+        return this.rank;
     }
 
     /**
@@ -69,7 +69,7 @@ public class Player {
      * @return the amount of money the player has
      */
     public int getMoney() {
-        return money;
+        return this.money;
     }
 
     /**
@@ -140,7 +140,7 @@ public class Player {
      * @return true if the player has moved, false otherwise
      */
     public boolean getHasMoved() {
-        return hasMoved;
+        return this.hasMoved;
     }
 
     /**
@@ -148,7 +148,7 @@ public class Player {
      * @return true if the player has worked, false otherwise
      */
     public boolean getHasWorked() {
-        return hasWorked;
+        return this.hasWorked;
     }
 
     /**
@@ -156,7 +156,7 @@ public class Player {
      * @return true if the player has upgraded, false otherwise
      */
     public boolean getHasUpgraded() {
-        return hasUpgraded;
+        return this.hasUpgraded;
     }
 
     /**
@@ -233,7 +233,7 @@ public class Player {
      * Resets the number of rehearsal tokens the player has.
      */
     public void resetRehearsalTokens() {
-        rehearsalTokens = 0;
+        this.rehearsalTokens = 0;
     }
 
     /**

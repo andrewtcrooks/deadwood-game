@@ -17,13 +17,13 @@ public class Dice {
      * @return the value of the Dice
      */
     public int getValue() {
-        return value;
+        return this.value;
     }
 
     /**
      * Rolls the Dice and initializes its value.
      */
     public void roll() {
-        value = (int) (Math.random() * 6) + 1;
+        this.value = (int) (Math.random() * 6) + 1;
     }
 }
