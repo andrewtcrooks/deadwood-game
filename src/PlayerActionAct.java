@@ -31,64 +31,90 @@ public class PlayerActionAct implements PlayerAction {
      */
     @Override
     public boolean execute(Player player, GameModel model, GameView view) {
-        // Roll the dice
+        int budget = getSceneBudget(player);
+        int roll = performDiceRoll(player);
+        // Check if the player succeeded
+        if (roll >= budget) {
+            processSuccess(player, view, roll);
+        } else {
+            processFailure(player, view, roll);
+        }
+        checkAndWrapScene(player, view);
+        return true;
+    }
+
+    /**
+     * Gets the budget of the scene the player is acting in.
+     *  
+     * @param player the player
+     * @return the budget of the scene
+     */
+    private int getSceneBudget(Player player) {
+        return player.getLocation().getSceneCard().getBudget();
+    }
+
+    /**
+     * Performs a dice roll for the player.
+     *  
+     * @param player the player
+     * @return the result of the dice roll
+     */
+    private int performDiceRoll(Player player) {
         Dice dice = new Dice();
         dice.roll();
-        int rehearsalTokens = player.getRehearsalTokens();
-        int roll = rehearsalTokens + dice.getValue();
+        return player.getRehearsalTokens() + dice.getValue();
+    }
 
-        // Get the budget of the scene at the player's location
-        int budget = player.getLocation().getSceneCard().getBudget();
-
-        // Compare the dice roll to the budget
-        if (roll >= budget) {
-            // If the roll is equal to or higher than the budget, the player succeeds
-            view.showMessage("You rolled a " + roll + ". Success!");
-
-            // Remove one shot counter from the location
-            player.getLocation().removeShotCounter();
-
-            // Check if the role is on the card
-            if (player.getRole().getOnCard()) {
-                // If the role is on the card, give the player +2 credits
-                player.addCredits(2);
-            } else {
-                // If the role is not on the card, give the player +1 dollar and +1 credit
-                player.addMoney(1);
-                player.addCredits(1);
-            }
+    /**
+     * Processes a successful act action for the player.
+     *  
+     * @param player the player
+     * @param view the game view
+     * @param roll the result of the dice roll
+     */
+    private void processSuccess(Player player, GameView view, int roll) {
+        view.showMessage("You rolled a " + roll + ". Success!");
+        player.getLocation().removeShotCounter();
+        // Check if the player is on-card
+        if (player.getRole().getOnCard()) {
+            player.addCredits(2);
         } else {
-            // If the roll is lower than the budget, the player fails
-            view.showMessage("You rolled a " + roll + ". Failure.");
-
-            // Check if the role is not on the card
-            if (!player.getRole().getOnCard()) {
-                // If the role is not on the card, give the player +1 dollar
-                player.addMoney(1);
-            }
+            player.addMoney(1);
+            player.addCredits(1);
         }
+    }
 
-        // Check if the location has no more shot counters
+    /**
+     * Processes a failed act action for the player.
+     *  
+     * @param player the player
+     * @param view the game view
+     * @param roll the result of the dice roll
+     */
+    private void processFailure(Player player, GameView view, int roll) {
+        view.showMessage("You rolled a " + roll + ". Failure.");
+        // Check if the player is on-card
+        if (!player.getRole().getOnCard()) {
+            player.addMoney(1);
+        }
+    }
+
+    /**
+     * Checks if the scene is wrapped and wraps it if necessary.
+     *  
+     * @param player the player
+     * @param view the game view
+     */
+    private void checkAndWrapScene(Player player, GameView view) {
         if (player.getLocation().getShots() == 0) {
-            // Check if any of the players at the location are onCard
-            boolean anyPlayerOnCard = false;
-            for (Player p : player.getLocation().getPlayers()) {
-                if (p.getRole().getOnCard()) {
-                    anyPlayerOnCard = true;
-                    break;
-                }
-            }
-            // If there is a player onCard, show message that bonus was paid out
+            boolean anyPlayerOnCard = player.getLocation().getPlayers().stream()
+                    .anyMatch(p -> p.getRole().getOnCard());
             if (anyPlayerOnCard) {
                 view.showMessage("Bonus payout!");
             }
-
-            // If the location has no more shot counters, wrap the scene
             player.getLocation().wrapScene();
             view.showMessage("The scene is wrapped.");
         }
-
-        return true;
     }
 
 }
