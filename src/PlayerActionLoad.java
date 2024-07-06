@@ -35,52 +35,77 @@ public class PlayerActionLoad implements PlayerAction {
      */
     @Override
     public boolean execute(Player player, GameModel model, GameView view) {
-        // display the current list of save game names
-        view.showMessage("Current saved games");
-        
-        // print the filenames of all .savegame files in the current directory
+        displaySavedGames(view);
+        String filename = getSavedGameNameFromUser(view);
+        loadGameFromFile(filename, model, view);
+        return false;
+    }
+    
+    /**
+     * Displays the saved games to the player.
+     * 
+     * @param view
+     */
+    private void displaySavedGames(GameView view) {
+        view.showMessage("Current saved games:");
         try (Stream<Path> paths = Files.walk(Paths.get("./saved"))) {
-            paths
-                .filter(Files::isRegularFile)
-                .map(Path::toFile)
-                .filter(file -> file.getName().endsWith(".deadwood"))
-                .forEach(file -> {
-                    String filename = file.getName();
-                    // clip off the .deadwood extension
-                    String trimmedFilename = filename.substring(0, filename.length() - ".deadwood".length());
-                    System.out.println(trimmedFilename);
-                });
+            paths.filter(Files::isRegularFile)
+                 .map(Path::toFile)
+                 .filter(file -> file.getName().endsWith(".deadwood"))
+                 .forEach(file -> {
+                     String filename = file.getName();
+                     String trimmedFilename = filename.substring(0, filename.length() - ".deadwood".length());
+                     view.showMessage(trimmedFilename);
+                 });
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        // Get user input filename to save
+    }
+    
+    /**
+     * Gets the saved game name from the player.
+     * 
+     * @param view
+     * @return the saved game name
+     */
+    private String getSavedGameNameFromUser(GameView view) {
         view.showMessage("Enter saved game name to load:");
-        String filename = view.getPlayerInput();
-
-        // Append ".deadwood" extension and construct full path
+        return view.getPlayerInput();
+    }
+    
+    /**
+     * Loads the game from the file.
+     * 
+     * @param filename the saved game name
+     * @param model the game model
+     * @param view the game view
+     * @return true if the game is loaded successfully, false otherwise
+     */
+    private void loadGameFromFile(String filename, GameModel model, GameView view) {
+        // Validate filename: only allow alphanumeric characters and dashes/underscores
+        if (!filename.matches("^[a-zA-Z0-9_-]+$")) {
+            view.showMessage("Invalid filename. Only alphanumeric characters, dashes, and underscores are allowed.");
+            return;
+        }
+        // construct the full path to the saved game file
         String fullPath = "./saved/" + filename + ".deadwood";
+        // check if the file exists
         File file = new File(fullPath);
-
-        // Check if the file exists
         if (!file.exists()) {
             view.showMessage("Saved game not found.");
-            return false;
+            return;
         }
-
-        // Load the game from the file
+        // load the game from the file
         try (FileInputStream fileIn = new FileInputStream(file);
-            ObjectInputStream in = new ObjectInputStream(fileIn)) {
+             ObjectInputStream in = new ObjectInputStream(fileIn)) {
             GameModel loadedModel = (GameModel) in.readObject();
-            // Set the loaded model
             model.setModel(loadedModel);
             view.showMessage("Game loaded successfully.");
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
             view.showMessage("Failed to load the game.");
         }
-
-        return false;
+        return;
     }
 
 }

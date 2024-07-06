@@ -35,67 +35,85 @@ public class PlayerActionSave implements PlayerAction {
      */
     @Override
     public boolean execute(Player player, GameModel model, GameView view) {
-        // display the current list of save game names
-        view.showMessage("Current saved games");
-        
-        // print the filenames of all .savegame files in the current directory
-        try (Stream<Path> paths = Files.walk(Paths.get("./saved/"))) {
-            paths
-                .filter(Files::isRegularFile)
-                .map(Path::toFile)
-                .filter(file -> file.getName().endsWith(".deadwood"))
-                .forEach(file -> {
-                    String filename = file.getName();
-                    // clip off the .deadwood extension
-                    String trimmedFilename = filename.substring(0, filename.length() - ".deadwood".length());
-                    System.out.println(trimmedFilename);
-                });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // Get user input filename to save
-        view.showMessage("Enter name for new saved game:");
-        String filename = view.getPlayerInput();
-    
-        // Prepend "saved/" directory to the filename and append ".deadwood" extension
-        String directoryPath = "./saved/";
-        filename = directoryPath + filename + ".deadwood";
-    
-        // Ensure the "saved" directory exists
-        File directory = new File(directoryPath);
-        if (!directory.exists()) {
-            directory.mkdirs(); // Create the directory if it doesn't exist
-        }
-    
-        // Create a file object with the updated filename
-        File file = new File(filename);
-    
-        // Check if the file already exists
-        if (file.exists()) {
-            // Ask the user if they want to overwrite the existing file
-            view.showMessage("File exists. Overwrite? (y/n): ");
-            String overwrite = view.getPlayerInput();
-    
-            // If the user does not want to overwrite, return
-            if (!overwrite.equalsIgnoreCase("y")) {
-                view.showMessage("Save operation cancelled.");
-                return false;
-            }
-        }
-    
-        // Proceed to save the game model to a file
-        try {
-            FileOutputStream fileOut = new FileOutputStream(file);
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(model);
-            out.close();
-            fileOut.close();
-            view.showMessage("Game saved successfully.");
-        } catch (IOException i) {
-            i.printStackTrace();
-            view.showMessage("Error saving game.");}
+        displaySavedGames(view);
+        String filename = getSavedGameNameForSaving(view);
+        saveGameToFile(filename, model, view);
         return false;
     }
 
+    /**
+     * Displays the saved games to the player.
+     * 
+     * @param view
+     */
+    private void displaySavedGames(GameView view) {
+        view.showMessage("Current saved games:");
+        try (Stream<Path> paths = Files.walk(Paths.get("./saved"))) {
+            paths.filter(Files::isRegularFile)
+                 .map(Path::toFile)
+                 .filter(file -> file.getName().endsWith(".deadwood"))
+                 .forEach(file -> {
+                     String filename = file.getName();
+                     String trimmedFilename = filename.substring(0, filename.length() - ".deadwood".length());
+                     view.showMessage(trimmedFilename);
+                 });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Gets the name of the saved game from the user.
+     * 
+     * @param view
+     * @return the name of the saved game
+     */
+    private String getSavedGameNameForSaving(GameView view) {
+        view.showMessage("Enter name for new saved game:");
+        return view.getPlayerInput();
+    }
+
+    /**
+     * Saves the game to a file.
+     * 
+     * @param filename the name of the file
+     * @param model the game model
+     * @param view the game view
+     * @return true if the game was saved successfully, false otherwise
+     */
+    private void saveGameToFile(String filename, GameModel model, GameView view) {
+        // Validate filename: only allow alphanumeric characters and dashes/underscores
+        if (!filename.matches("^[a-zA-Z0-9_-]+$")) {
+            view.showMessage("Invalid filename. Only alphanumeric characters, dashes, and underscores are allowed.");
+            return;
+        }
+        // construct the full path to the saved game file
+        String directoryPath = "./saved/";
+        filename = directoryPath + filename + ".deadwood";
+        // create the directory if it does not exist
+        File directory = new File(directoryPath);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        // check if the file exists
+        File file = new File(filename);
+        if (file.exists()) {
+            view.showMessage("File exists. Overwrite? (y/n): ");
+            String overwrite = view.getPlayerInput();
+            if (!overwrite.equalsIgnoreCase("y")) {
+                view.showMessage("Save operation cancelled.");
+                return;
+            }
+        }
+        // save the game to the file
+        try (FileOutputStream fileOut = new FileOutputStream(file);
+             ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
+            out.writeObject(model);
+            view.showMessage("Game saved successfully.");
+        } catch (IOException i) {
+            i.printStackTrace();
+            view.showMessage("Error saving game.");
+        }
+        return;
+    }
 }
