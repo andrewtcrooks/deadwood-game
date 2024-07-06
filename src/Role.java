@@ -86,7 +86,6 @@ public class Role {
 
     public void setOnCard(boolean onCard) {
         this.onCard = onCard;
-        // return onCard;
     }
 
     /**
@@ -95,7 +94,7 @@ public class Role {
      * @return True if the Role is occupied, false otherwise.
      */
     boolean isOccupied() {
-        return occupied;
+        return this.occupied;
     }
 
     /**
