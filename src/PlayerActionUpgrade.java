@@ -31,6 +31,7 @@ public class PlayerActionUpgrade implements PlayerAction {
      * @param view the game view
      * @return true if the player can upgrade, false otherwise
      */
+    @Override
     public boolean validate(Player player, GameModel model, GameView view) {
         return isAtCastingOffice(player, view) && // true if at Casting Office
                hasNotAlreadyUpgraded(player, view) && // true if not already upgraded
@@ -109,6 +110,7 @@ public class PlayerActionUpgrade implements PlayerAction {
      * @param view the game view
      * @return true to end turn if player has previously moved, false otherwise
      */
+    @Override
     public boolean execute(Player player, GameModel model, GameView view) {
         displayUpgradeOptions(player, view);
         int chosenRank = getUserChosenRank(view);
