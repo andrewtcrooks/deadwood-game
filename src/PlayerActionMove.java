@@ -15,12 +15,18 @@ public class PlayerActionMove implements PlayerAction {
      */
     @Override
     public boolean validate(Player player, GameModel model, GameView view) {
-        // Check if player has role
+        return checkPlayerHasNoRole(player, view) && checkPlayerHasNotMoved(player, view);
+    }
+
+    private boolean checkPlayerHasNoRole(Player player, GameView view) {
         if (player.getHasRole()) {
             view.showMessage("You must finish your role before moving.");
             return false;
         }
-        // Check if player has moved
+        return true;
+    }
+
+    private boolean checkPlayerHasNotMoved(Player player, GameView view) {
         if (player.getHasMoved()) {
             view.showMessage("You have already moved this turn.");
             return false;
