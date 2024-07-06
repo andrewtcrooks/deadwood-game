@@ -32,31 +32,68 @@ public class PlayerActionUpgrade implements PlayerAction {
      * @return true if the player can upgrade, false otherwise
      */
     public boolean validate(Player player, GameModel model, GameView view) {
-        // Check if player is at the Casting Office
+        return isAtCastingOffice(player, view) && // true if at Casting Office
+               hasNotAlreadyUpgraded(player, view) && // true if not already upgraded
+               isNotAtHighestRank(player, view) && // true if not at highest rank
+               canAffordNextRank(player, view); // true if can afford next rank
+    }
+    
+    /**
+     * Checks if the player is at the Casting Office.
+     * 
+     * @param player the player
+     * @param view the game view
+     * @return true if the player is at the Casting Office, false otherwise
+     */
+    private boolean isAtCastingOffice(Player player, GameView view) {
         if (!"Casting Office".equals(player.getLocation().getName())) {
             view.showMessage("You must be at the Casting Office to upgrade.");
             return false;
         }
-        // Check if player is at highest rank
-        if (player.getRank() == 6) {
-            view.showMessage("You are already at the highest rank.");
-            return false;
-        }
-        // Check if player has already upgraded
+        return true;
+    }
+    
+    /**
+     * Checks if the player has already upgraded.
+     * 
+     * @param player the player
+     * @param view the game view
+     * @return true if the player has not already upgraded, false otherwise
+     */
+    private boolean hasNotAlreadyUpgraded(Player player, GameView view) {
         if (player.getHasUpgraded()) {
             view.showMessage("You have already upgraded this turn.");
             return false;
         }
-        // Check if player has at least 4 dollars or 5 credits
-        if (player.getMoney() < 4 && player.getCredits() < 5) {
-            view.showMessage("You do not have enough money or credits to upgrade.");
+        return true;
+    }
+
+    /**
+     * Checks if the player is at the highest rank.
+     * 
+     * @param player the player
+     * @param view the game view
+     * @return true if the player is at the highest rank, false otherwise
+     */
+    private boolean isNotAtHighestRank(Player player, GameView view) {
+        if (player.getRank() == 6) {
+            view.showMessage("You are already at the highest rank.");
             return false;
         }
-        // Determine the cost for the next possible rank
+        return true;
+    }
+    
+    /**
+     * Checks if the player can afford the next rank.
+     * 
+     * @param player the player
+     * @param view the game view
+     * @return true if the player can afford the next rank, false otherwise
+     */
+    private boolean canAffordNextRank(Player player, GameView view) {
         int nextRank = player.getRank() + 1;
         int dollarCostForNextRank = dollarCosts.getOrDefault(nextRank, Integer.MAX_VALUE);
         int creditCostForNextRank = creditCosts.getOrDefault(nextRank, Integer.MAX_VALUE);
-        // Check if player has enough money or credits to upgrade to the next rank
         if (player.getMoney() < dollarCostForNextRank && player.getCredits() < creditCostForNextRank) {
             view.showMessage("You do not have enough money or credits to upgrade to a higher rank.");
             return false;
