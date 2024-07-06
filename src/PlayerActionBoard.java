@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /*
  * Represents the board action for the player.
@@ -55,8 +57,26 @@ public class PlayerActionBoard implements PlayerAction {
      */
     private void displayBoard(List<Player> players, GameView view) {
         view.showMessage("Board:");
+        displayWrappedLocations(players, view);
         for (Player p : players) {
             displayPlayerInfo(p, view);
+        }
+    }
+
+    /**
+     * Displays the wrapped locations on the board.
+     * 
+     * @param players the players
+     * @param view the game view
+     */
+    private void displayWrappedLocations(List<Player> players, GameView view) {
+        Set<String> wrappedLocations = players.stream()
+                                            .map(player -> player.getLocation())
+                                            .filter(location -> location.getIsWrapped())
+                                            .map(location -> location.getName())
+                                            .collect(Collectors.toSet());
+        if (!wrappedLocations.isEmpty()) {
+            view.showMessage("Wrapped Locations: " + String.join(", ", wrappedLocations));
         }
     }
 
