@@ -58,45 +58,111 @@ public class PlayerActionMove implements PlayerAction {
      */
     @Override
     public boolean execute(Player player, GameModel model, GameView view) {
-        // Get the list of neighbors for the players location
-        List<String> neighbors = player.getLocation().getNeighbors();
-        // Display the list of options
-        view.showMessage("Where would you like to move?");
-        for (String neighbor : neighbors) {
-            if ("trailer".equals(neighbor)) {
-                view.showMessage("Trailer");
-            } else if ("office".equals(neighbor)) {
-                view.showMessage("Casting Office");
-            } else {
-                view.showMessage(neighbor);
-            }
-        }
-        // Get the location from the player
-        String location = view.getPlayerInput();
-        String locationLower = location;
-        // handle the XML file referencing office and trailer in lower case
-        if ("Trailer".equals(locationLower)) {
-            locationLower = "trailer";
-        } else if ("Casting Office".equals(locationLower)) {
-            locationLower = "office";
-        }
-        if (!neighbors.contains(locationLower)) {
+        List<String> neighbors = getNeighbors(player);
+        displayMoveOptions(neighbors, view);
+        String location = getPlayerLocationChoice(view);
+        String locationFormatted = formatLocationForModel(location);
+        if (!isValidMove(neighbors, locationFormatted)) {
             view.showMessage("Invalid location.");
             return false;
         }
-        // Save the start location
-        String startLocation = player.getLocation().getName();
-        // Move the player to the new location and add them to the Location's player list
-        player.setLocation(model.getBoard().getLocations().get(location));
-        player.getLocation().addPlayer(player);
-        // Save the end location
-        String endLocation = player.getLocation().getName();
-        // Show the player has moved
-        view.showMessage(startLocation + " -> " + endLocation);
-        // set player has moved
+        movePlayerToLocation(player, model, view, locationFormatted);
         player.setHasMoved(true);
-        // End the turn if the player has already upgraded
         return player.getHasUpgraded();
+    }
+
+    /**
+     * Gets the neighbors of the player's current location.
+     *
+     * @param player the player
+     * @return the neighbors of the player's current location
+     */
+    private List<String> getNeighbors(Player player) {
+        return player.getLocation().getNeighbors();
+    }
+
+    /**
+     * Displays the move options for the player.
+     *
+     * @param neighbors the neighbors of the player's current location
+     * @param view the game view
+     */
+    private void displayMoveOptions(List<String> neighbors, GameView view) {
+        view.showMessage("Where would you like to move?");
+        for (String neighbor : neighbors) {
+            view.showMessage(formatLocationForDisplay(neighbor));
+        }
+    }
+
+    /**
+     * Gets the player's location choice.
+     *
+     * @param view the game view
+     * @return the player's location choice
+     */
+    private String getPlayerLocationChoice(GameView view) {
+        return view.getPlayerInput();
+    }
+
+    /**
+     * Formats the location for the model.
+     *
+     * @param location the location
+     * @return the formatted location
+     */
+    private String formatLocationForModel(String location) {
+        switch (location) {
+            case "Trailer":
+                return "trailer";
+            case "Casting Office":
+                return "office";
+            default:
+                return location;
+        }
+    }
+
+    /**
+     * Checks if the move is valid.
+     *
+     * @param neighbors the neighbors of the player's current location
+     * @param locationFormatted the formatted location to move to
+     * @return true if the move is valid, false otherwise
+     */
+    private boolean isValidMove(List<String> neighbors, String locationFormatted) {
+        return neighbors.contains(locationFormatted);
+    }
+
+    /**
+     * Moves the player to the location.
+     *
+     * @param player the player
+     * @param model the game model
+     * @param view the game view
+     * @param locationFormatted the formatted location to move to
+     */
+    private void movePlayerToLocation(Player player, GameModel model, GameView view, String locationFormatted) {
+        String startLocation = player.getLocation().getName();
+        player.setLocation(model.getBoard().getLocations().get(locationFormatted));
+        player.getLocation().addPlayer(player);
+        String endLocation = player.getLocation().getName();
+        view.showMessage(startLocation + " -> " + endLocation);
+    }
+
+    /**
+     * Formats the location for display.
+     *
+     * @param location the location
+     * @return the formatted location
+     */
+    private String formatLocationForDisplay(String location) {
+        switch (location) {
+            case "trailer":
+                return "Trailer";
+            case "office":
+                return "Casting Office";
+            default:
+                return location;
+        }
     }
 
 }
