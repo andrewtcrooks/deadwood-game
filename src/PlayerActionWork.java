@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /*
  * Represents the work action for the player.
@@ -100,58 +102,76 @@ public class PlayerActionWork implements PlayerAction {
      */
     @Override
     public boolean execute(Player player, GameModel model, GameView view) {
-        // Make a list of roles the player can work
-        List<Role> allRoles = new ArrayList<>();
-        for (Role role : player.getLocation().getRoles()) {
-            if (role.getRank() <= player.getRank() && !role.isOccupied()) {
-                allRoles.add(role);
-            }
-        }
-        // return false if there are no roles to work
+        List<Role> allRoles = listAvailableRoles(player);
         if (allRoles.isEmpty()) {
             view.showMessage("There are no roles available for you to work.");
             return false;
-        } else {
-            view.showMessage("You can work the following roles:");
         }
-        // Sort roles by rank, then by "for scale"
-        allRoles.sort((role1, role2) -> {
-            int rankCompare = Integer.compare(role1.getRank(), role2.getRank());
-            if (rankCompare == 0) {
-                // If ranks are equal, sort by "for scale" (false first)
-                return Boolean.compare(role1.getOnCard(), role2.getOnCard());
-            }
-            return rankCompare;
-        });
-        // Print roles with rank and "for scale" tag as needed
-        for (Role role : allRoles) {
-            System.out.print(role.getName());
-            if (!role.getOnCard()) {
-                System.out.print(" (for scale)");
-            }
-            System.out.println(" -> Rank " + role.getRank());
-        }
-        // Get player input
-        String roleString = view.getPlayerInput();
-        // Find the role the player wants to work
-        Role role = allRoles.stream()
-                    .filter(r -> r.getName().equals(roleString))
-                    .findFirst()
-                    .orElse(null);
-        // process the role input
-        if (role == null) {
+        displayAvailableRoles(allRoles, view);
+        Role selectedRole = getPlayerSelectedRole(allRoles, view);
+        if (selectedRole == null) {
             view.showMessage("Invalid role.");
-        }else{
-            // Set the player's role
-            player.takeRole(role);
-            // Set the role's player
-            role.assignPlayer(player);
-            view.showMessage("You are now working the role of " + role.getName());
-            // set player has worked
-            player.setHasWorked(true);
+            return false;
         }
-        // End the turn if the player has already moved
+        assignRoleToPlayer(player, selectedRole, view);
         return player.getHasMoved();
+    }
+
+    /**
+     * Lists the available roles for the player.
+     *
+     * @param player the player
+     * @return the available roles for the player
+     */
+    private List<Role> listAvailableRoles(Player player) {
+        return player.getLocation().getRoles().stream()
+                .filter(role -> role.getRank() <= player.getRank() && !role.isOccupied())
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Displays the available roles for the player.
+     *
+     * @param roles the available roles for the player
+     * @param view the game view
+     */
+    private void displayAvailableRoles(List<Role> roles, GameView view) {
+        view.showMessage("You can work the following roles:");
+        roles.sort(Comparator.comparingInt(Role::getRank)
+                .thenComparing(Role::getOnCard));
+        roles.forEach(role -> {
+            String message = role.getName() + (role.getOnCard() ? "" : " (for scale)") + " -> Rank " + role.getRank();
+            view.showMessage(message);
+        });
+    }
+
+    /**
+     * Gets the role selected by the player.
+     *
+     * @param roles the available roles for the player
+     * @param view the game view
+     * @return the role selected by the player
+     */
+    private Role getPlayerSelectedRole(List<Role> roles, GameView view) {
+        String roleString = view.getPlayerInput();
+        return roles.stream()
+                .filter(r -> r.getName().equals(roleString))
+                .findFirst()
+                .orElse(null);
+    }
+
+    /**
+     * Assigns the role to the player.
+     *
+     * @param player the player
+     * @param role the role
+     * @param view the game view
+     */
+    private void assignRoleToPlayer(Player player, Role role, GameView view) {
+        player.takeRole(role);
+        role.assignPlayer(player);
+        view.showMessage("You are now working the role of " + role.getName());
+        player.setHasWorked(true);
     }
 
 }
