@@ -64,7 +64,7 @@ public class GameController{
     /**
      * Starts the game and manages the game flow after the game is initialized.
      */
-    private void playGame() {
+    public void playGame() {
         // start the game
         this.view.showMessage("Day 1 has begun.");
         int numDays = this.model.getNumDays();
@@ -138,7 +138,7 @@ public class GameController{
     /**
      * Ends the game and displays the final results.
      */
-    private void endGame() {
+    public void endGame() {
         // Example list of players. Replace with actual player list.
         List<Player> players = model.getPlayers();
         // Sort players by score and then by ID if scores are tied
