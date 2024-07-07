@@ -61,12 +61,12 @@ public class PlayerActionMove implements PlayerAction {
         List<String> neighbors = getNeighbors(player);
         displayMoveOptions(neighbors, view);
         String location = getPlayerLocationChoice(view);
-        String locationFormatted = formatLocationForModel(location);
+        String locationFormatted = formatLocationForNeighbors(location);
         if (!isValidMove(neighbors, locationFormatted)) {
             view.showMessage("Invalid location.");
             return false;
         }
-        movePlayerToLocation(player, model, view, locationFormatted);
+        movePlayerToLocation(player, model, view, location);
         player.setHasMoved(true);
         return player.getHasUpgraded();
     }
@@ -110,7 +110,7 @@ public class PlayerActionMove implements PlayerAction {
      * @param location the location
      * @return the formatted location
      */
-    private String formatLocationForModel(String location) {
+    private String formatLocationForNeighbors(String location) {
         switch (location) {
             case "Trailer":
                 return "trailer";
@@ -140,9 +140,9 @@ public class PlayerActionMove implements PlayerAction {
      * @param view the game view
      * @param locationFormatted the formatted location to move to
      */
-    private void movePlayerToLocation(Player player, GameModel model, GameView view, String locationFormatted) {
+    private void movePlayerToLocation(Player player, GameModel model, GameView view, String location) {
         String startLocation = player.getLocation().getName();
-        player.setLocation(model.getBoard().getLocations().get(locationFormatted));
+        player.setLocation(model.getBoard().getLocations().get(location));
         player.getLocation().addPlayer(player);
         String endLocation = player.getLocation().getName();
         view.showMessage(startLocation + " -> " + endLocation);
