@@ -138,7 +138,7 @@ public class PlayerActionMove implements PlayerAction {
      * @param player the player
      * @param model the game model
      * @param view the game view
-     * @param locationFormatted the formatted location to move to
+     * @param location the location to move to
      */
     private void movePlayerToLocation(Player player, GameModel model, GameView view, String location) {
         String startLocation = player.getLocation().getName();
