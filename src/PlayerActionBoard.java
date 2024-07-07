@@ -33,7 +33,7 @@ public class PlayerActionBoard implements PlayerAction {
     @Override
     public boolean execute(Player player, GameModel model, GameView view) {
         List<Player> players = getSortedPlayers(model);
-        displayBoard(players, view);
+        displayBoard(players, model, view);
         return false;
     }
 
@@ -55,9 +55,9 @@ public class PlayerActionBoard implements PlayerAction {
      * @param players the players
      * @param view the game view
      */
-    private void displayBoard(List<Player> players, GameView view) {
+    private void displayBoard(List<Player> players, GameModel model, GameView view) {
         view.showMessage("Board:");
-        displayWrappedLocations(players, view);
+        displayWrappedLocations(players, model, view);
         for (Player p : players) {
             displayPlayerInfo(p, view);
         }
@@ -69,12 +69,10 @@ public class PlayerActionBoard implements PlayerAction {
      * @param players the players
      * @param view the game view
      */
-    private void displayWrappedLocations(List<Player> players, GameView view) {
-        Set<String> wrappedLocations = players.stream()
-                                            .map(player -> player.getLocation())
-                                            .filter(location -> location.getIsWrapped())
-                                            .map(location -> location.getName())
-                                            .collect(Collectors.toSet());
+    private void displayWrappedLocations(List<Player> players, GameModel model, GameView view) {
+        Set<String> wrappedLocations = model.getBoard().getLocations().values().stream().filter(Location::getIsWrapped)
+        .map(Location::getName)
+        .collect(Collectors.toSet());
         if (!wrappedLocations.isEmpty()) {
             view.showMessage("Wrapped Locations: " + String.join(", ", wrappedLocations));
         }
