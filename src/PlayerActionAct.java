@@ -39,7 +39,7 @@ public class PlayerActionAct implements PlayerAction {
         } else {
             processFailure(player, view, roll);
         }
-        checkAndWrapScene(player, view);
+        checkAndWrapScene(player, model, view);
         return true;
     }
 
