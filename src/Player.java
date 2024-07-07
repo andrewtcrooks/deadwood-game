@@ -313,4 +313,13 @@ public class Player {
     public void setHasUpgraded(boolean hasUpgraded) {
         this.hasUpgraded = hasUpgraded;
     }
+
+    /**
+     * Returns the score of the player.
+     *
+     * @return the score of the player
+     */
+    public int getScore() {
+        return 5*this.rank + this.credits + this.money;
+    }
 }
