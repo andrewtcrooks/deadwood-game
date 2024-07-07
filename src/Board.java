@@ -44,6 +44,23 @@ public class Board {
     }
 
     /**
+     * Initialize the locations on the board.
+     * 
+     * @param boardXMLFilePath The file path to the board XML file.
+     * @throws Exception If an error occurs while parsing the board XML file.
+     */
+    private void initLocations(String boardXMLFilePath) {
+        ParseBoardXML parser = new ParseBoardXML();
+        try {
+            Document doc = parser.getDocFromFile(boardXMLFilePath);
+            parser.readData(doc);
+            this.locations = parser.getLocations();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Returns the number of days remaining in the game.
      *
      * @return The number of days remaining in the game.
@@ -112,15 +129,6 @@ public class Board {
     }
 
     /**
-     * Change all player locations on the board to "Trailer"
-     */
-    private void resetPlayerLocations() {
-        for (Player player : this.players) {
-            player.setLocation(locations.get("Trailer"));
-        }
-    }
-
-    /**
      * Returns the number of shots remaining at a location.
      *  
      * @param location The location to check.
@@ -170,6 +178,14 @@ public class Board {
     }
 
     /**
+     * Resets the board to its initial state.
+     */
+    public void resetBoard() {
+        resetPlayerLocations();
+        dealSceneCardsToLocations();
+    }
+
+    /**
      * Deals new scene card to each location on the board.
      */
     private void dealSceneCardsToLocations() {
@@ -180,29 +196,12 @@ public class Board {
     }
 
     /**
-     * Initialize the locations on the board.
-     * 
-     * @param boardXMLFilePath The file path to the board XML file.
-     * @throws Exception If an error occurs while parsing the board XML file.
+     * Change all player locations on the board to "Trailer"
      */
-    private void initLocations(String boardXMLFilePath) {
-        ParseBoardXML parser = new ParseBoardXML();
-        try {
-            Document doc = parser.getDocFromFile(boardXMLFilePath);
-            parser.readData(doc);
-            this.locations = parser.getLocations();
-        } catch (Exception e) {
-            e.printStackTrace();
+    private void resetPlayerLocations() {
+        for (Player player : this.players) {
+            player.setLocation(locations.get("Trailer"));
         }
-    }
-
-    /**
-     * Resets the board to its initial state.
-     */
-    public void resetBoard() {
-        initLocations(this.boardXMLFilePath);
-        dealSceneCardsToLocations();
-        resetPlayerLocations();
     }
 
 }
