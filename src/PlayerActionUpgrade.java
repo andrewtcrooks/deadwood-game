@@ -150,7 +150,13 @@ public class PlayerActionUpgrade implements PlayerAction {
      * @return The rank chosen by the player
      */
     private int getUserChosenRank(GameView view) {
-        return Integer.parseInt(view.getPlayerInput());
+        String input = view.getPlayerInput();
+        try {
+            return Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            // Handle invalid input
+            return -1; // or any other default value
+        }
     }
 
     /**
