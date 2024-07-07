@@ -105,7 +105,7 @@ public class PlayerActionAct implements PlayerAction {
      * @param player the player
      * @param view the game view
      */
-    private void checkAndWrapScene(Player player, GameView view) {
+    private void checkAndWrapScene(Player player, GameModel model, GameView view) {
         if (player.getLocation().getShots() == 0) {
             boolean anyPlayerOnCard = player.getLocation().getPlayers().stream()
                     .filter(Player::getHasRole) // Check if player has a role
@@ -114,6 +114,7 @@ public class PlayerActionAct implements PlayerAction {
                 view.showMessage("Bonus payout!");
             }
             player.getLocation().wrapScene();
+            model.getBoard().decrementNumScenesRemaining();
             view.showMessage("The scene is wrapped.");
         }
     }
