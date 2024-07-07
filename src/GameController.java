@@ -76,23 +76,6 @@ public class GameController{
     }
 
     /**
-     * Manages a day in the game.
-     */
-    private void playDay() {
-        // cycle through each player's turn until only 1 scene is left, then end the day
-        while (this.model.getBoard().getNumScenesRemaining() > 1) {
-            // manage the player's turn
-            playerTurn(this.currentPlayer);
-            // player starts at 1, move to the next player 2 through 8, then 1 through 8 repeatedly
-            this.currentPlayer = (this.currentPlayer % this.model.getNumPlayers()) + 1;
-        }
-        // decrement number of days by one
-        this.model.setNumDays(this.model.getNumDays() - 1);
-        // end the day
-        startNextDay();
-    }
-
-    /**
      * Manages a player's turn in the game.
      * 
      * @param ID The ID of the player whose turn it is.
@@ -126,16 +109,6 @@ public class GameController{
     }
 
     /**
-     * Ends the day and resets the board for the next day.
-     */
-    private void startNextDay() {
-        // reset the board for the next day
-        model.getBoard().resetBoard();
-        // Display the end of the day message
-        view.showMessage("Day " + (model.getNumDays() + 1) + " has begun.");
-    }
-
-    /**
      * Ends the game and displays the final results.
      */
     public void endGame() {
@@ -163,6 +136,33 @@ public class GameController{
             String winnerIndicator = player.getScore() == highestScore ? "  !Winner!" : "";
             System.out.println("Player ID: " + player.getID() + ", Score: " + player.getScore() + winnerIndicator);
         }
+    }
+
+    /**
+     * Manages a day in the game.
+     */
+    private void playDay() {
+        // cycle through each player's turn until only 1 scene is left, then end the day
+        while (this.model.getBoard().getNumScenesRemaining() > 1) {
+            // manage the player's turn
+            playerTurn(this.currentPlayer);
+            // player starts at 1, move to the next player 2 through 8, then 1 through 8 repeatedly
+            this.currentPlayer = (this.currentPlayer % this.model.getNumPlayers()) + 1;
+        }
+        // decrement number of days by one
+        this.model.setNumDays(this.model.getNumDays() - 1);
+        // end the day
+        startNextDay();
+    }
+
+    /**
+     * Ends the day and resets the board for the next day.
+     */
+    private void startNextDay() {
+        // reset the board for the next day
+        model.getBoard().resetBoard();
+        // Display the end of the day message
+        view.showMessage("Day " + (model.getNumDays() + 1) + " has begun.");
     }
 
 }
