@@ -14,7 +14,6 @@ public class Board {
     private Location trailer;
     private List<String> office_neighbors;
     private Location office;
-    private String boardXMLFilePath;
 
     /**
      * Constructs a new Board with the specified number of days and players.
@@ -30,7 +29,6 @@ public class Board {
         this.players = players;
         this.deck = new Deck(cardsXMLFilePath);
         this.locations = new HashMap<String, Location>();
-        this.boardXMLFilePath = boardXMLFilePath;
         // Initialize locations on the board
         initLocations(boardXMLFilePath);
         this.trailer_neighbors = Arrays.asList("Main Street", "Saloon", "Hotel");
