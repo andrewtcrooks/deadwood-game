@@ -64,7 +64,7 @@ public class GameController{
     /**
      * Starts the game and manages the game flow after the game is initialized.
      */
-    public void playGame() {
+    private void playGame() {
         // start the game
         this.view.showMessage("Day 1 has begun.");
         int numDays = this.model.getNumDays();
@@ -72,12 +72,13 @@ public class GameController{
             playDay();
             this.model.setNumDays(numDays--);
         }
+        endGame();
     }
 
     /**
      * Manages a day in the game.
      */
-    public void playDay() {
+    private void playDay() {
         // cycle through each player's turn until only 1 scene is left, then end the day
         while (this.model.getBoard().getNumScenesRemaining() > 1) {
             // manage the player's turn
@@ -85,8 +86,10 @@ public class GameController{
             // player starts at 1, move to the next player 2 through 8, then 1 through 8 repeatedly
             this.currentPlayer = (this.currentPlayer % this.model.getNumPlayers()) + 1;
         }
+        // decrement number of days by one
+        this.model.setNumDays(this.model.getNumDays() - 1);
         // end the day
-        endDay();
+        startNextDay();
     }
 
     /**
@@ -125,18 +128,41 @@ public class GameController{
     /**
      * Ends the day and resets the board for the next day.
      */
-    void endDay() {
-        // Display the end of the day message
-        view.showMessage("Day " + (model.getNumDays() + 1) + " has begun.");
+    private void startNextDay() {
         // reset the board for the next day
         model.getBoard().resetBoard();
+        // Display the end of the day message
+        view.showMessage("Day " + (model.getNumDays() + 1) + " has begun.");
     }
 
     /**
      * Ends the game and displays the final results.
      */
-    void endGame() {
-        // TODO: Implement game end logic
+    private void endGame() {
+        // Example list of players. Replace with actual player list.
+        List<Player> players = model.getPlayers();
+        // Sort players by score and then by ID if scores are tied
+        players.sort(Comparator.comparingInt(Player::getScore).reversed().thenComparingInt(player -> player.getID()));
+    
+        // Print game over screen
+        view.showMessage("Game over!");
+
+        // declare player(s) with the highest score the winner
+        int highestScore = players.get(0).getScore();
+        List<Player> winners = new ArrayList<>();
+        for (Player player : players) {
+            if (player.getScore() == highestScore) {
+                winners.add(player);
+            } else {
+                break;
+            }
+        }
+
+        // Print scores and indicate the winner(s)
+        for (Player player : players) {
+            String winnerIndicator = player.getScore() == highestScore ? "  !Winner!" : "";
+            System.out.println("Player ID: " + player.getID() + ", Score: " + player.getScore() + winnerIndicator);
+        }
     }
 
 }
