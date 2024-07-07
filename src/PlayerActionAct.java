@@ -108,6 +108,7 @@ public class PlayerActionAct implements PlayerAction {
     private void checkAndWrapScene(Player player, GameView view) {
         if (player.getLocation().getShots() == 0) {
             boolean anyPlayerOnCard = player.getLocation().getPlayers().stream()
+                    .filter(Player::getHasRole) // Check if player has a role
                     .anyMatch(p -> p.getRole().getOnCard());
             if (anyPlayerOnCard) {
                 view.showMessage("Bonus payout!");
