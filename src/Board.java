@@ -44,23 +44,6 @@ public class Board {
     }
 
     /**
-     * Initialize the locations on the board.
-     * 
-     * @param boardXMLFilePath The file path to the board XML file.
-     * @throws Exception If an error occurs while parsing the board XML file.
-     */
-    private void initLocations(String boardXMLFilePath) {
-        ParseBoardXML parser = new ParseBoardXML();
-        try {
-            Document doc = parser.getDocFromFile(boardXMLFilePath);
-            parser.readData(doc);
-            this.locations = parser.getLocations();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Returns the number of days remaining in the game.
      *
      * @return The number of days remaining in the game.
@@ -104,15 +87,6 @@ public class Board {
     }
 
     /**
-     * Returns the locations on the board.
-     * 
-     * @return The locations on the board.
-     */
-    public Map<String, Location> getLocations() {
-        return this.locations;
-    }
-
-    /**
      * Returns the player with the given ID.
      * 
      * @param ID The ID of the player.
@@ -126,6 +100,15 @@ public class Board {
             }
         }
         throw new IllegalArgumentException("No Player " + ID);
+    }
+
+    /**
+     * Returns the locations on the board.
+     * 
+     * @return The locations on the board.
+     */
+    public Map<String, Location> getLocations() {
+        return this.locations;
     }
 
     /**
@@ -186,6 +169,23 @@ public class Board {
     }
 
     /**
+     * Initialize the locations on the board.
+     * 
+     * @param boardXMLFilePath The file path to the board XML file.
+     * @throws Exception If an error occurs while parsing the board XML file.
+     */
+    private void initLocations(String boardXMLFilePath) {
+        ParseBoardXML parser = new ParseBoardXML();
+        try {
+            Document doc = parser.getDocFromFile(boardXMLFilePath);
+            parser.readData(doc);
+            this.locations = parser.getLocations();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Deals new scene card to each location on the board.
      */
     private void dealSceneCardsToLocations() {
@@ -203,5 +203,4 @@ public class Board {
             player.setLocation(locations.get("Trailer"));
         }
     }
-
 }
