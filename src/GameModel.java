@@ -235,13 +235,4 @@ public class GameModel implements Subject {
         return this.day;
     }
 
-    /**
-     * Sets the current day.
-     *
-     * @param day The current day.
-     */
-    private void setDay(int day) {
-        this.day = day;
-    }
-
 }
