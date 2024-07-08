@@ -12,6 +12,7 @@ public class GameModel implements Subject {
     private List<Observer> observers = new ArrayList<>();
     static private int numPlayers = 0;
     private int numDays;
+    private int day;
     private List<Player> players;
     private Board board;
     private Map<String, Location> locations;
@@ -159,6 +160,15 @@ public class GameModel implements Subject {
     }
 
     /**
+     * Returns the current day.
+     *
+     * @return The current day.
+     */
+    public int getDay() {
+        return this.day;
+    }
+
+    /**
      * Returns the list of players.
      *
      * @return The list of players.
@@ -215,6 +225,14 @@ public class GameModel implements Subject {
         this.numDays = numDays;
     }
 
+    /**
+     * Sets the current day.
+     *
+     * @param day The current day.
+     */
+    public void setDay(int day) {
+        this.day = day;
+    }
 
     /**
      * Sets the model to the given model. Used for loading saved game state.
