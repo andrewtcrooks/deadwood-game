@@ -140,12 +140,20 @@ public class PlayerActionMove implements PlayerAction {
      * @param view the game view
      * @param location the location to move to
      */
-    private void movePlayerToLocation(Player player, GameModel model, GameView view, String location) {
-        String startLocation = player.getLocation().getName();
-        player.setLocation(model.getBoard().getLocations().get(location));
-        player.getLocation().addPlayer(player);
-        String endLocation = player.getLocation().getName();
-        view.showMessage(startLocation + " -> " + endLocation);
+    private void movePlayerToLocation(Player player, GameModel model, GameView view, String endLocationString) {
+        // Get String representation of start location
+        String startLocationString = player.getLocation().getName();
+        // Get startLocation location
+        Location startLocation = model.getBoard().getLocations().get(startLocationString);
+        // Remove player from startLocation
+        startLocation.removePlayer(player);
+        // get endLocation location
+        Location endLocation = model.getBoard().getLocations().get(endLocationString);
+        // Add selected location to the player
+        player.setLocation(endLocation);
+        // Add player to the new location
+        endLocation.addPlayer(player);
+        view.showMessage(startLocationString + " -> " + endLocationString);
     }
 
     /**
