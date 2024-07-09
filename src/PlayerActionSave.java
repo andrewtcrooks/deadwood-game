@@ -48,7 +48,8 @@ public class PlayerActionSave implements PlayerAction {
      */
     private void displaySavedGames(GameView view) {
         view.showMessage("Current saved games:");
-        try (Stream<Path> paths = Files.walk(Paths.get("./saved"))) {
+        System.out.println(System.getProperty("user.dir"));
+        try (Stream<Path> paths = Files.walk(Paths.get("saved/"))) {
             paths.filter(Files::isRegularFile)
                  .map(Path::toFile)
                  .filter(file -> file.getName().endsWith(".deadwood"))
