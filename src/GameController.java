@@ -66,12 +66,15 @@ public class GameController{
      */
     public void playGame() {
         // start the game
-        this.view.showMessage("Day 1 has begun.");
         int numDays = this.model.getNumDays();
         int day = this.model.getDay();
         while (day <= numDays) {
+            // play day
             playDay();
-            // this.model.setNumDays(day++);
+            // end day
+            endDay();
+            // increment day by one
+            this.model.incrementDay();
         }
         endGame();
     }
@@ -145,23 +148,19 @@ public class GameController{
     private void playDay() {
         // Display the beginning of the day message
         view.showMessage("Day " + (model.getDay()) + " has begun.");
-        // cycle through each player's turn until only 1 scene is left, then end the day
+        // cycle through each player's turn until only 1 scene is left
         while (this.model.getBoard().getNumScenesRemaining() > 1) {
             // manage the player's turn
             playerTurn(this.currentPlayer);
             // player starts at 1, move to the next player 2 through 8, then 1 through 8 repeatedly
             this.currentPlayer = (this.currentPlayer % this.model.getNumPlayers()) + 1;
         }
-        // decrement number of days by one
-        this.model.incrementDay();
-        // end the day
-        startNextDay();
     }
 
     /**
-     * Ends the day and resets the board for the next day.
+     * Ends the day by resetting the board for the next day.
      */
-    private void startNextDay() {
+    private void endDay() {
         // reset the board for the next day
         model.getBoard().resetBoard();
     }
