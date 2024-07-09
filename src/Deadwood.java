@@ -18,7 +18,7 @@ public class Deadwood {
             GameView view = initializeView();
             GameModel model = initializeModel(view);
             GameController controller = initializeController(model, view);
-            startGame(controller);
+            play(controller);
         } catch (Exception e) {
             System.err.println("An error occurred during initialization: " + e.getMessage());
             e.printStackTrace();
@@ -72,9 +72,9 @@ public class Deadwood {
     }
 
     /**
-     * Start the game.
+     * Plays a game of Deadwood.
      */
-    private static void startGame(GameController controller) {
+    private static void play(GameController controller) {
         controller.playGame();
         controller.endGame();
     }
