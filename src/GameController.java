@@ -8,6 +8,7 @@ public class GameController{
     private GameModel model;
     private GameView view;
     private int currentPlayer;
+    private int numPlayers;
     private static final HashMap<String, PlayerAction> actionMap = new HashMap<>();
     static {
         actionMap.put("who", new PlayerActionWho());
@@ -52,7 +53,7 @@ public class GameController{
         boolean initializationSuccessful = false;
         while (!initializationSuccessful) {
             try {
-                int numPlayers = this.view.getNumPlayers();
+                this.numPlayers = this.view.getNumPlayers();
                 this.model.initModel(numPlayers, boardXMLFilePath, cardsXMLFilePath);
                 initializationSuccessful = true; // If this line is reached, no exception was thrown
             } catch (IllegalArgumentException e) {
@@ -152,7 +153,7 @@ public class GameController{
             // manage the player's turn
             playerTurn(this.currentPlayer);
             // player starts at 1, move to the next player 2 through 8, then 1 through 8 repeatedly
-            this.currentPlayer = (this.currentPlayer % this.model.getNumPlayers()) + 1;
+            this.currentPlayer = (this.currentPlayer % this.numPlayers) + 1;
         }
     }
 
