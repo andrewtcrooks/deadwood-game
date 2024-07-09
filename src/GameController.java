@@ -64,7 +64,7 @@ public class GameController{
     /**
      * Starts the game and manages the game flow after the game is initialized.
      */
-    public void playGame() {
+    public void playDays() {
         // start the game
         int numDays = this.model.getNumDays();
         int day = this.model.getDay();
@@ -76,7 +76,6 @@ public class GameController{
             // increment day by one
             this.model.incrementDay();
         }
-        endGame();
     }
 
     /**
@@ -97,26 +96,26 @@ public class GameController{
             String command = this.view.getPlayerInput();
             // Get the action associated with the command
             PlayerAction action = actionMap.get(command);
-            // continue if input command not recognized
+            // Continue if input command not recognized
             if (action == null) {
                 this.view.showMessage("Command not recognized. Please try again.");
                 continue; // Skip the rest of the loop iteration if action is null
             }
-            // validate and potentially execute the action
+            // Validate and potentially execute the action
             if (action.validate(player, model, view)) {
                 // Execute the command if it is not prohibited by turn logic
                 endTurn = action.execute(player, model, view); // If execute returns true, the turn ends
             }
         }
-
+        // Set player to inactive
         player.setActive(false);
     }
 
     /**
-     * Ends the game and displays the final results.
+     * Scores the game and displays the final results.
      */
-    public void endGame() {
-        // Example list of players. Replace with actual player list.
+    public void scoreGame() {
+        // Get the players
         List<Player> players = model.getPlayers();
         // Sort players by score and then by ID if scores are tied
         players.sort(Comparator.comparingInt(Player::getScore).reversed().thenComparingInt(player -> player.getID()));
