@@ -188,6 +188,9 @@ public class Board {
      */
     private void dealSceneCardsToLocations() {
         for (Location location : this.locations.values()) {
+            if (location.getName().equals("Trailer") || location.getName().equals("Casting Office")) {
+                continue; // Skip the current iteration for these locations
+            }
             SceneCard card = this.deck.drawCard();
             location.setSceneCard(card);
         }
@@ -198,7 +201,13 @@ public class Board {
      */
     private void resetPlayerLocations() {
         for (Player player : this.players) {
+            // remove player from current location
+            Location currentLocation = player.getLocation();
+            currentLocation.removePlayer(player);
+            // add trailer to player
             player.setLocation(locations.get("Trailer"));
+            // add player to trailer
+            locations.get("Trailer").addPlayer(player);
         }
     }
 }
