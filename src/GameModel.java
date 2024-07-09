@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -6,11 +7,11 @@ import java.util.*;
  * It initializes the game board, locations, deck, and players.
  * It also provides global access to the game state and data.
  */
-public class GameModel implements Subject {
+public class GameModel implements Subject, Serializable {
 
     private static GameModel instance = null;
     private List<Observer> observers = new ArrayList<>();
-    static private int numPlayers = 0;
+    // private int numPlayers = 0;
     private int numDays;
     private int day = 1;
     private List<Player> players;
@@ -67,7 +68,7 @@ public class GameModel implements Subject {
             throw new IllegalArgumentException("Number of players must be between 2 and 8");
         }
         // Set the number of players
-        GameModel.numPlayers = numPlayers;
+        // this.numPlayers = numPlayers;
         int playerRank = numPlayers < 7 ? 1 : 2; // 1 if numPlayers are less than 7, otherwise 2
         int playerCredits = (numPlayers == 5) ? 2 : (numPlayers == 6) ? 4 : 0; // 2 if numPlayers are 5, 
                                                                                 // 4 if numPlayers are 6,
@@ -141,14 +142,14 @@ public class GameModel implements Subject {
         return board;
     }
 
-    /**
-     * Returns the number of players.
-     *
-     * @return The number of players.
-     */
-    public int getNumPlayers() {
-        return GameModel.numPlayers;
-    }
+    // /**
+    //  * Returns the number of players.
+    //  *
+    //  * @return The number of players.
+    //  */
+    // public int getNumPlayers() {
+    //     return this.numPlayers;
+    // }
 
     /**
      * Returns the number of days.
@@ -198,14 +199,14 @@ public class GameModel implements Subject {
         throw new IllegalArgumentException("No location " + name);
     }
 
-    /**
-     * Sets the number of players.
-     * 
-     * @param numPlayers The number of players.
-     */
-    public void setNumPlayers(int numPlayers) {
-        GameModel.numPlayers = numPlayers;
-    }
+    // /**
+    //  * Sets the number of players.
+    //  * 
+    //  * @param numPlayers The number of players.
+    //  */
+    // public void setNumPlayers(int numPlayers) {
+    //     this.numPlayers = numPlayers;
+    // }
     
     /**
      * Sets the model to the given model. Used for loading saved game state.
