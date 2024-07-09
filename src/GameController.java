@@ -2,7 +2,7 @@ import java.util.*;
 
 /**
  * This class represents the game controller for the game.
- * It manages the game flow and player turns.
+ * It manages the game flow.
  */
 public class GameController{
     private GameModel model;
@@ -24,6 +24,7 @@ public class GameController{
         actionMap.put("load", new PlayerActionLoad());
         actionMap.put("help", new PlayerActionHelp());
     }
+
     /**
      * Constructs a new GameController.
      */
@@ -99,11 +100,10 @@ public class GameController{
             // Continue if input command not recognized
             if (action == null) {
                 this.view.showMessage("Command not recognized. Please try again.");
-                continue; // Skip the rest of the loop iteration if action is null
+                continue;
             }
             // Validate and potentially execute the action
             if (action.validate(player, model, view)) {
-                // Execute the command if it is not prohibited by turn logic
                 endTurn = action.execute(player, model, view); // If execute returns true, the turn ends
             }
         }
