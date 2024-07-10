@@ -17,9 +17,10 @@ public class PlayerActionWork implements PlayerAction {
      */
     @Override
     public boolean validate(Player player, GameModel model, GameView view) {
-        return isNotInCastingOffice(player, view) && // true if not in Casting Office
-               isNotInTrailer(player, view) && // true if not in Trailer
-               isAtUnwrappedLocation(player, view) && // true if location is not wrapped
+        Board board = model.getBoard();
+        return isNotInCastingOffice(player, board, view) && // true if not in Casting Office
+               isNotInTrailer(player, board, view) && // true if not in Trailer
+               isAtUnwrappedLocation(player, board, view) && // true if location is not wrapped
                playerHasNoRole(player, view); // true if player has no role
     }
     
@@ -30,8 +31,8 @@ public class PlayerActionWork implements PlayerAction {
      * @param view the game view
      * @return true if the player is not in the Casting Office, false otherwise
      */
-    private boolean isNotInCastingOffice(Player player, GameView view) {
-        if (player.getLocation().getName().equals("Casting Office")) {
+    private boolean isNotInCastingOffice(Player player, Board board, GameView view) {
+        if (board.getPlayerLocationName(player).equals("Casting Office")) {
             view.showMessage("There is no work in the Casting Office.");
             return false;
         }
@@ -45,8 +46,8 @@ public class PlayerActionWork implements PlayerAction {
      * @param view the game view
      * @return true if the player is not in the Trailer, false otherwise
      */
-    private boolean isNotInTrailer(Player player, GameView view) {
-        if (player.getLocation().getName().equals("Trailer")) {
+    private boolean isNotInTrailer(Player player, Board board, GameView view) {
+        if (board.getPlayerLocationName(player).equals("Trailer")) {
             view.showMessage("There is no work in your Trailer.");
             return false;
         }
@@ -60,8 +61,8 @@ public class PlayerActionWork implements PlayerAction {
      * @param view the game view
      * @return true if the location is not wrapped, false otherwise
      */
-    private boolean isAtUnwrappedLocation(Player player, GameView view) {
-        if (player.getLocation().getIsWrapped()) {
+    private boolean isAtUnwrappedLocation(Player player, Board board, GameView view) {
+        if (board.getPlayerLocation(player).getIsWrapped()) {
             view.showMessage("Location is wrapped. No more work available until tomorrow.");
             return false;
         }
@@ -101,7 +102,8 @@ public class PlayerActionWork implements PlayerAction {
      */
     @Override
     public boolean execute(Player player, GameModel model, GameView view) {
-        List<Role> allRoles = listAvailableRoles(player);
+        Board board = model.getBoard();
+        List<Role> allRoles = listAvailableRoles(player, board);
         if (allRoles.isEmpty()) {
             view.showMessage("There are no roles available for you to work.");
             return false;
@@ -122,8 +124,8 @@ public class PlayerActionWork implements PlayerAction {
      * @param player the player
      * @return the available roles for the player
      */
-    private List<Role> listAvailableRoles(Player player) {
-        return player.getLocation().getRoles().stream()
+    private List<Role> listAvailableRoles(Player player, Board board) {
+        return board.getPlayerLocation(player).getRoles().stream()
                 .filter(role -> role.getRank() <= player.getRank() && !role.isOccupied())
                 .collect(Collectors.toList());
     }

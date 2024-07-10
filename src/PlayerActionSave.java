@@ -1,11 +1,12 @@
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
+
+import com.google.gson.Gson;
+import java.io.FileWriter;
+import java.io.Writer;
 
 /*
  * Represents the save action for the player.
@@ -75,46 +76,20 @@ public class PlayerActionSave implements PlayerAction {
     }
 
     /**
-     * Saves the game to a file.
+     * Saves the game to a file as JSON.
      * 
      * @param filename the name of the file
      * @param model the game model
      * @param view the game view
-     * @return true if the game was saved successfully, false otherwise
      */
     private void saveGameToFile(String filename, GameModel model, GameView view) {
-        // Validate filename: only allow alphanumeric characters and dashes/underscores
-        if (!filename.matches("^[a-zA-Z0-9_-]+$")) {
-            view.showMessage("Invalid filename. Only alphanumeric characters, dashes, and underscores are allowed.");
-            return;
+        Gson gson = new Gson();
+        try (Writer writer = new FileWriter("saved/" + filename + ".json")) {
+            gson.toJson(model, writer);
+            view.showMessage("Game saved successfully as " + filename + ".json");
+        } catch (IOException e) {
+            view.showMessage("Failed to save the game.");
+            e.printStackTrace();
         }
-        // construct the full path to the saved game file
-        String directoryPath = "./saved/";
-        filename = directoryPath + filename + ".deadwood";
-        // create the directory if it does not exist
-        File directory = new File(directoryPath);
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
-        // check if the file exists
-        File file = new File(filename);
-        if (file.exists()) {
-            view.showMessage("File exists. Overwrite? (y/n): ");
-            String overwrite = view.getPlayerInput();
-            if (!overwrite.equalsIgnoreCase("y")) {
-                view.showMessage("Save operation cancelled.");
-                return;
-            }
-        }
-        // save the game to the file
-        try (FileOutputStream fileOut = new FileOutputStream(file);
-             ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
-            out.writeObject(model);
-            view.showMessage("Game saved successfully.");
-        } catch (IOException i) {
-            i.printStackTrace();
-            view.showMessage("Error saving game.");
-        }
-        return;
     }
 }

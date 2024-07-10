@@ -33,7 +33,8 @@ public class PlayerActionUpgrade implements PlayerAction {
      */
     @Override
     public boolean validate(Player player, GameModel model, GameView view) {
-        return isAtCastingOffice(player, view) && // true if at Casting Office
+        Board board = model.getBoard();
+        return isAtCastingOffice(player, board, view) && // true if at Casting Office
                hasNotAlreadyUpgraded(player, view) && // true if not already upgraded
                isNotAtHighestRank(player, view) && // true if not at highest rank
                canAffordNextRank(player, view); // true if can afford next rank
@@ -46,8 +47,8 @@ public class PlayerActionUpgrade implements PlayerAction {
      * @param view the game view
      * @return true if the player is at the Casting Office, false otherwise
      */
-    private boolean isAtCastingOffice(Player player, GameView view) {
-        if (!"Casting Office".equals(player.getLocation().getName())) {
+    private boolean isAtCastingOffice(Player player, Board board, GameView view) {
+        if (!"Casting Office".equals(board.getPlayerLocationName(player))) {
             view.showMessage("You must be at the Casting Office to upgrade.");
             return false;
         }

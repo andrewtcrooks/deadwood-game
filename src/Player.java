@@ -14,7 +14,6 @@ public class Player {
     private int rank;
     private int money;
     private int credits;
-    private Location location;
     private int rehearsalTokens;
     private boolean hasRole;
     private Role role;
@@ -35,7 +34,7 @@ public class Player {
         this.rank = rank;
         this.money = 0;
         this.credits = credits;
-        this.location = null;
+        // this.location = null;
         this.rehearsalTokens = 0;
         this.hasRole = false;
         this.role = null;
@@ -79,15 +78,6 @@ public class Player {
      */
     public int getCredits() {
         return this.credits;
-    }
-
-    /**
-     * Returns the location of the player.
-     *
-     * @return the location of the player
-     */
-    public Location getLocation() {
-        return this.location;
     }
 
     /**
@@ -211,15 +201,6 @@ public class Player {
      */
     public void setCredits(int credits) {
         this.credits = credits;
-    }
-
-    /**
-     * Sets the location of the player.
-     *
-     * @param locationName the new location of the player
-     */
-    public void setLocation(Location location) {
-        this.location = location;
     }
 
     /**

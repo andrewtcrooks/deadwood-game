@@ -58,7 +58,8 @@ public class PlayerActionMove implements PlayerAction {
      */
     @Override
     public boolean execute(Player player, GameModel model, GameView view) {
-        List<String> neighbors = getNeighbors(player);
+        Board board = model.getBoard();
+        List<String> neighbors = getNeighbors(player, board);
         displayMoveOptions(neighbors, view);
         String location = getPlayerLocationChoice(view);
         String locationFormatted = formatLocationForNeighbors(location);
@@ -66,7 +67,7 @@ public class PlayerActionMove implements PlayerAction {
             view.showMessage("Invalid location.");
             return false;
         }
-        movePlayerToLocation(player, model, view, location);
+        movePlayerToLocation(player, board, view, location);
         player.setHasMoved(true);
         return player.getHasUpgraded();
     }
@@ -77,8 +78,8 @@ public class PlayerActionMove implements PlayerAction {
      * @param player the player
      * @return the neighbors of the player's current location
      */
-    private List<String> getNeighbors(Player player) {
-        return player.getLocation().getNeighbors();
+    private List<String> getNeighbors(Player player, Board board) {
+        return board.getPlayerLocation(player).getNeighbors();
     }
 
     /**
@@ -140,19 +141,11 @@ public class PlayerActionMove implements PlayerAction {
      * @param view the game view
      * @param location the location to move to
      */
-    private void movePlayerToLocation(Player player, GameModel model, GameView view, String endLocationString) {
+    private void movePlayerToLocation(Player player, Board board, GameView view, String endLocationString) {
         // Get String representation of start location
-        String startLocationString = player.getLocation().getName();
-        // Get startLocation location
-        Location startLocation = model.getBoard().getLocations().get(startLocationString);
-        // Remove player from startLocation
-        startLocation.removePlayer(player);
-        // get endLocation location
-        Location endLocation = model.getBoard().getLocations().get(endLocationString);
-        // Add selected location to the player
-        player.setLocation(endLocation);
-        // Add player to the new location
-        endLocation.addPlayer(player);
+        String startLocationString = board.getPlayerLocationName(player);
+        // Add selected player to the location
+        board.setPlayerLocation(player, endLocationString);
         view.showMessage(startLocationString + " -> " + endLocationString);
     }
 

@@ -1,12 +1,10 @@
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Represents a Location in the game.
  */
 public class Location {
     private String name;
-    private List<Player> players;
     private List<String> neighbors;
     private Area area;
     private List<Take> takes;
@@ -26,7 +24,6 @@ public class Location {
      */
     public Location(String name, List<String> neighbors, Area area, List<Take> takes, List<Role> roles) {
         this.name = name;
-        this.players = new ArrayList<Player>();
         this.neighbors = neighbors;
         this.area = area;
         this.takes = takes;
@@ -43,15 +40,6 @@ public class Location {
      */
     public String getName() {
         return name;
-    }
-
-    /**
-     * Returns the players at the Location.
-     *
-     * @return the players at the Location
-     */
-    public List<Player> getPlayers() {
-        return players;
     }
 
     /**
@@ -124,6 +112,12 @@ public class Location {
     }
 
     /**
+     * Wraps the Location.
+     */
+    public void setSceneWrapped() {
+        this.wrapped = true;
+    }
+    /**
      * Sets a new scene card for the Location and redefines the roles list.
      *
      * @param scene the new scene card for the Location
@@ -133,24 +127,6 @@ public class Location {
         this.allRoles = new ArrayList<Role>(this.locationRoles); // Copy the roles from the location
         this.allRoles.addAll(scene.getRoles()); // Add all roles from the new scene
         this.wrapped = false;
-    }
-
-    /**
-     * Adds a player to the Location.
-     *
-     * @param player the player to add
-     */
-    public void addPlayer(Player player) {
-        players.add(player);
-    }
-
-    /**
-     * Removes a player from the Location.
-     *
-     * @param player the player to remove
-     */
-    public void removePlayer(Player player) {
-        players.remove(player);
     }
 
     /**
@@ -191,62 +167,11 @@ public class Location {
             lowestTake.wrap();
         }
     }
-
-    /**
-     * Wraps the scene in the Location.
-     */
-    public void wrapScene() {
-        // Check for any player working a role on a card
-        List<Player> playersAtLocation = getPlayers();
-        boolean anyPlayerOnCard = playersAtLocation.stream()
-            .anyMatch(player -> player.getRole() != null && player.getRole().getOnCard());
-        // Pay out bonus if any player was on a card
-        if (anyPlayerOnCard) {
-            payOutBonus();
-        }
-        // Remove all players from their roles and reset rehearsal tokens
-        playersAtLocation.forEach(player -> {
-            player.leaveRole();
-            player.resetRehearsalTokens();
-        });
-        // Reset takes
-        resetTakes();
-        // Clear the scene card
-        clearSceneCard();
-        // set wrapped to true
-        this.wrapped = true;
-    }
-
-    /**
-     * Pays out the bonus to all players at the Location.
-     */
-    private void payOutBonus() {
-        int movieBudget = getSceneCard().getBudget(); // Get the movie budget
-        List<Integer> diceRolls = rollDice(movieBudget); // Roll dice equal to the budget
-        Collections.sort(diceRolls, Collections.reverseOrder()); // Sort dice rolls in descending order
-
-        // Get all players on the card, sorted by their role rank in descending order
-        List<Player> playersOnCard = getPlayers().stream()
-            .filter(player -> player.getRole() != null && player.getRole().getOnCard())
-            .sorted(Comparator.comparingInt(Player::getRoleRank).reversed())
-            .collect(Collectors.toList());
-        // Distribute dice rolls in a round-robin fashion
-        for (int i = 0; i < diceRolls.size(); i++) {
-            Player player = playersOnCard.get(i % playersOnCard.size()); // Wrap around if more dice than players
-            player.addMoney(diceRolls.get(i)); // Add the dice roll as a bonus
-        }
-        // Players leave their roles after receiving bonuses
-        playersOnCard.forEach(Player::leaveRole);
-        // Pay each player who has a role but is not on the card an amount equal to the rank of the role they are in
-        getPlayers().stream()
-        .filter(player -> player.getRole() != null && !player.getRole().getOnCard())
-        .forEach(player -> player.addMoney(player.getRole().getRank()));
-    }
     
     /**
      * Resets all takes in the Location.
      */
-    private void resetTakes() {
+    public void resetTakes() {
         for (Take take : this.takes) {
             take.reset();
         }
@@ -255,24 +180,9 @@ public class Location {
     /**
      * Clears the scene card from the Location and redefines the roles list.
      */
-    private void clearSceneCard() {
+    public void clearSceneCard() {
         this.scene = null;
         this.allRoles = new ArrayList<Role>(this.locationRoles);
-    }
-
-    /**
-     * Rolls a number of dice and returns the results.
-     *
-     * @param numDice the number of dice to roll
-     * @return the results of the dice rolls
-     */
-    private List<Integer> rollDice(int numDice) {
-        List<Integer> rolls = new ArrayList<>();
-        for (int i = 0; i < numDice; i++) {
-            Dice dice = new Dice(); // Use the Dice class to roll the dice
-            rolls.add(dice.getValue()); // Get the value of the roll
-        }
-        return rolls;
     }
 
 }

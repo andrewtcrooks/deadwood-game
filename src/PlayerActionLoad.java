@@ -1,11 +1,12 @@
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
+
+import com.google.gson.Gson;
 
 /*
  * Represents the load action for the player.
@@ -51,7 +52,7 @@ public class PlayerActionLoad implements PlayerAction {
         try (Stream<Path> paths = Files.walk(Paths.get("./saved"))) {
             paths.filter(Files::isRegularFile)
                  .map(Path::toFile)
-                 .filter(file -> file.getName().endsWith(".deadwood"))
+                 .filter(file -> file.getName().endsWith(".json"))
                  .forEach(file -> {
                      String filename = file.getName();
                      String trimmedFilename = filename.substring(0, filename.length() - ".deadwood".length());
@@ -88,24 +89,23 @@ public class PlayerActionLoad implements PlayerAction {
             return;
         }
         // construct the full path to the saved game file
-        String fullPath = "./saved/" + filename + ".deadwood";
+        String fullPath = "./saved/" + filename + ".json";
         // check if the file exists
         File file = new File(fullPath);
         if (!file.exists()) {
             view.showMessage("Saved game not found.");
             return;
         }
-        // load the game from the file
-        try (FileInputStream fileIn = new FileInputStream(file);
-             ObjectInputStream in = new ObjectInputStream(fileIn)) {
-            GameModel loadedModel = (GameModel) in.readObject();
+        // load the game from the JSON file
+        try (FileReader reader = new FileReader(file)) {
+            Gson gson = new Gson();
+            GameModel loadedModel = gson.fromJson(reader, GameModel.class);
             model.setModel(loadedModel);
             view.showMessage("Game loaded successfully.");
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             view.showMessage("Failed to load the game.");
         }
-        return;
     }
 
 }

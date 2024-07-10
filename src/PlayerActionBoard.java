@@ -32,8 +32,9 @@ public class PlayerActionBoard implements PlayerAction {
      */
     @Override
     public boolean execute(Player player, GameModel model, GameView view) {
+        Board board = model.getBoard();
         List<Player> players = getSortedPlayers(model);
-        displayBoard(players, model, view);
+        displayBoard(players, board, view);
         return false;
     }
 
@@ -55,11 +56,11 @@ public class PlayerActionBoard implements PlayerAction {
      * @param players the players
      * @param view the game view
      */
-    private void displayBoard(List<Player> players, GameModel model, GameView view) {
+    private void displayBoard(List<Player> players, Board board, GameView view) {
         view.showMessage("Board:");
-        displayWrappedLocations(players, model, view);
+        displayWrappedLocations(players, board, view);
         for (Player p : players) {
-            displayPlayerInfo(p, view);
+            displayPlayerInfo(p, board, view);
         }
     }
 
@@ -69,8 +70,8 @@ public class PlayerActionBoard implements PlayerAction {
      * @param players the players
      * @param view the game view
      */
-    private void displayWrappedLocations(List<Player> players, GameModel model, GameView view) {
-        Set<String> wrappedLocations = model.getBoard().getLocations().values().stream().filter(Location::getIsWrapped)
+    private void displayWrappedLocations(List<Player> players, Board board, GameView view) {
+        Set<String> wrappedLocations = board.getLocations().values().stream().filter(Location::getIsWrapped)
         .map(Location::getName)
         .collect(Collectors.toSet());
         if (!wrappedLocations.isEmpty()) {
@@ -84,8 +85,8 @@ public class PlayerActionBoard implements PlayerAction {
      * @param player the player
      * @param view the game view
      */
-    private void displayPlayerInfo(Player player, GameView view) {
-        String playerInfo = constructPlayerInfo(player);
+    private void displayPlayerInfo(Player player, Board board, GameView view) {
+        String playerInfo = constructPlayerInfo(player, board);
         if (player.getActive()) {
             view.showMessage("* " + playerInfo);
         } else {
@@ -99,8 +100,8 @@ public class PlayerActionBoard implements PlayerAction {
      * @param player the player
      * @return the player information
      */
-    private String constructPlayerInfo(Player player) {
-        String locationName = player.getLocation().getName();
+    private String constructPlayerInfo(Player player, Board board) {
+        String locationName = board.getPlayerLocationName(player);
         String playerInfo = String.format("Player %d (rank %d, $%4d, %4dcr, %drt) - %14s", 
                                           player.getID(), 
                                           player.getRank(), 
@@ -110,7 +111,7 @@ public class PlayerActionBoard implements PlayerAction {
                                           locationName);
 
         if (!locationName.equals("Trailer") && !locationName.equals("Casting Office")) {
-            playerInfo += getLocationStatus(player);
+            playerInfo += getLocationStatus(player, board);
         }
 
         return playerInfo;
@@ -122,9 +123,10 @@ public class PlayerActionBoard implements PlayerAction {
      * @param player the player
      * @return the status of the player's location
      */
-    private String getLocationStatus(Player player) {
-        if (!player.getLocation().getIsWrapped()) {
-            int shotsRemaining = player.getLocation().getShots();
+    private String getLocationStatus(Player player, Board board) {
+        Location location = board.getPlayerLocation(player);
+        if (!location.getIsWrapped()) {
+            int shotsRemaining = location.getShots();
             return " - Shots remaining: " + shotsRemaining;
         } else {
             return " - Scene wrapped";

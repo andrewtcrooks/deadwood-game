@@ -1,5 +1,5 @@
-import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.w3c.dom.Document;
 
@@ -9,10 +9,10 @@ import org.w3c.dom.Document;
  * It initializes the game board, locations, deck, and players.
  * It also provides global access to the game state and data.
  */
-public class GameModel implements Subject, Serializable {
+public class GameModel implements Subject {
 
-    private static GameModel instance = null;
-    private List<Observer> observers = new ArrayList<>();
+    private static transient GameModel instance = null;
+    private transient List<Observer> observers = new ArrayList<>();
     private int numDays;
     private int day = 1;
     private List<Player> players;
@@ -99,7 +99,7 @@ public class GameModel implements Subject, Serializable {
         List<Player> players = new ArrayList<>();
         for (int i = 0; i < numPlayers; i++) {
             Player newPlayer = new Player(i + 1, playerRank, playerCredits);
-            newPlayer.setLocation(null); //placeholder until initBoard is run
+            // newPlayer.setLocation(null); //placeholder until initBoard is run
             players.add(newPlayer);
         }
         return players;
@@ -150,10 +150,7 @@ public class GameModel implements Subject, Serializable {
         this.board = new Board(deck, locations);
         // Set all player locations to Trailer
         for (Player player : players) {
-            // add trailer to player
-            player.setLocation(locations.get("Trailer"));
-            // add player to trailer
-            locations.get("Trailer").addPlayer(player);
+            board.setPlayerLocation(player, "Trailer");
         }
     }
 
@@ -232,13 +229,8 @@ public class GameModel implements Subject, Serializable {
      */
     public void resetPlayerLocations() {
         for (Player player : this.players) {
-            // remove player from current location
-            Location currentLocation = player.getLocation();
-            currentLocation.removePlayer(player);
-            // add trailer to player
-            player.setLocation(locations.get("Trailer"));
-            // add player to trailer
-            locations.get("Trailer").addPlayer(player);
+            // move player to trailer
+            this.board.setPlayerLocation(player, "Trailer");
         }
     }
 
@@ -282,6 +274,72 @@ public class GameModel implements Subject, Serializable {
      */
     public int getDay() {
         return this.day;
+    }
+
+    /**
+     * Wraps the scene in the Location.
+     */
+    public void wrapScene(Location location) {
+        // Check for any player working a role on a card
+        List<Player> playersAtLocation = getPlayers();
+        boolean anyPlayerOnCard = playersAtLocation.stream()
+            .anyMatch(player -> player.getRole() != null && player.getRole().getOnCard());
+        // Pay out bonus if any player was on a card
+        if (anyPlayerOnCard) {
+            payOutBonus(location);
+        }
+        // Remove all players from their roles and reset rehearsal tokens
+        playersAtLocation.forEach(player -> {
+            player.leaveRole();
+            player.resetRehearsalTokens();
+        });
+        // Reset takes
+        location.resetTakes();
+        // Clear the scene card
+        location.clearSceneCard();
+        // set wrapped to true
+        location.setSceneWrapped();
+    }
+
+    /**
+     * Pays out the bonus to all players at the Location.
+     */
+    private void payOutBonus(Location location) {
+        int movieBudget = location.getSceneCard().getBudget(); // Get the movie budget
+        List<Integer> diceRolls = rollDice(movieBudget); // Roll dice equal to the budget
+        Collections.sort(diceRolls, Collections.reverseOrder()); // Sort dice rolls in descending order
+
+        // Get all players on the card, sorted by their role rank in descending order
+        List<Player> playersOnCard = getPlayers().stream()
+            .filter(player -> player.getRole() != null && player.getRole().getOnCard())
+            .sorted(Comparator.comparingInt(Player::getRoleRank).reversed())
+            .collect(Collectors.toList());
+        // Distribute dice rolls in a round-robin fashion
+        for (int i = 0; i < diceRolls.size(); i++) {
+            Player player = playersOnCard.get(i % playersOnCard.size()); // Wrap around if more dice than players
+            player.addMoney(diceRolls.get(i)); // Add the dice roll as a bonus
+        }
+        // Players leave their roles after receiving bonuses
+        playersOnCard.forEach(Player::leaveRole);
+        // Pay each player who has a role but is not on the card an amount equal to the rank of the role they are in
+        getPlayers().stream()
+        .filter(player -> player.getRole() != null && !player.getRole().getOnCard())
+        .forEach(player -> player.addMoney(player.getRole().getRank()));
+    }
+
+    /**
+     * Rolls a number of dice and returns the results.
+     *
+     * @param numDice the number of dice to roll
+     * @return the results of the dice rolls
+     */
+    private List<Integer> rollDice(int numDice) {
+        List<Integer> rolls = new ArrayList<>();
+        for (int i = 0; i < numDice; i++) {
+            Dice dice = new Dice(); // Use the Dice class to roll the dice
+            rolls.add(dice.getValue()); // Get the value of the roll
+        }
+        return rolls;
     }
 
 }

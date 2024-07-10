@@ -7,6 +7,7 @@ public class Board {
     private int numScenesRemaining;
     private Deck deck;
     private Map<String, Location> locations;
+    private Map<Player, String> playerLocations;
 
     /**
      * Constructs a new Board with the given deck and locations.
@@ -17,7 +18,10 @@ public class Board {
     public Board(Deck deck, Map<String, Location> locations) {
         this.deck = deck;
         this.locations = locations;
+        // Initialize number of scenes remaining
         this.numScenesRemaining = 10;
+        // Initialize player locations map
+        this.playerLocations = new HashMap<>();
         // Deal scene cards to locations
         dealSceneCardsToLocations();
     }
@@ -106,6 +110,22 @@ public class Board {
     }
 
     /**
+     * Returns the players at a location.
+     * 
+     * @param location The location to check.
+     * @return The players at the location.
+     */
+    public List<Player> getPlayersAtLocation(Location location) {
+        List<Player> players = new ArrayList<>();
+        for (Player player : playerLocations.keySet()) {
+            if (playerLocations.get(player).equals(location.getName())) {
+                players.add(player);
+            }
+        }
+        return players;
+    }
+
+    /**
      * Resets the board to its initial state.
      */
     public void resetBoard() {
@@ -123,6 +143,37 @@ public class Board {
             SceneCard card = this.deck.drawCard();
             location.setSceneCard(card);
         }
+    }
+
+    /**
+     * Sets a player's location on the board.
+     * 
+     * @param player The player to set the location for.
+     * @param locationName The name of the location to set.
+     */
+    public void setPlayerLocation(Player player, String locationName) {
+        playerLocations.put(player, locationName);
+    }
+
+    /**
+     * Returns the name of the location a player is at.
+     * 
+     * @param player The player to check.
+     * @return The name of the location the player is at.
+     */
+    public String getPlayerLocationName(Player player) {
+        return playerLocations.get(player);
+    }
+
+    /**
+     * Returns the location a player is at.
+     * 
+     * @param player The player to check.
+     * @return The location the player is at.
+     */
+    public Location getPlayerLocation(Player player) {
+        String locationName = playerLocations.get(player);
+        return locations.get(locationName);
     }
 
 }
