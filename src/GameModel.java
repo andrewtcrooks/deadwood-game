@@ -18,10 +18,6 @@ public class GameModel implements Subject {
     private List<Player> players;
     private Deck deck;
     private Map<String, Location> locations;
-    private List<String> trailer_neighbors;
-    private Location trailer;
-    private List<String> office_neighbors;
-    private Location office;
     private Board board;
 
     /**
@@ -129,12 +125,12 @@ public class GameModel implements Subject {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        this.trailer_neighbors = Arrays.asList("Main Street", "Saloon", "Hotel");
-        this.trailer = new Location("Trailer", this.trailer_neighbors, new Area(0,0,0,0), Arrays.asList(), Arrays.asList());
-        this.office_neighbors = Arrays.asList("Train Station", "Ranch", "Secret Hideout");
-        this.office = new Location("Casting Office", this.office_neighbors, new Area(0,0,0,0), Arrays.asList(), Arrays.asList());
-        this.locations.put("Trailer", this.trailer);
-        this.locations.put("Casting Office", this.office);
+        List<String> trailer_neighbors = Arrays.asList("Main Street", "Saloon", "Hotel");
+        Location trailer = new Location("Trailer", trailer_neighbors, new Area(0,0,0,0), Arrays.asList(), Arrays.asList());
+        List<String> office_neighbors = Arrays.asList("Train Station", "Ranch", "Secret Hideout");
+        Location office = new Location("Casting Office", office_neighbors, new Area(0,0,0,0), Arrays.asList(), Arrays.asList());
+        this.locations.put("Trailer", trailer);
+        this.locations.put("Casting Office", office);
     }
 
     /**
