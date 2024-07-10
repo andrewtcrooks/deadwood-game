@@ -161,6 +161,8 @@ public class GameController{
      * Ends the day by resetting the board for the next day.
      */
     private void endDay() {
+        // reset player locations
+        model.resetPlayerLocations();
         // reset the board for the next day
         model.getBoard().resetBoard();
     }
