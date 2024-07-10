@@ -1,18 +1,13 @@
 import java.util.*;
-import org.w3c.dom.Document;
 
 /**
  * Represents the game board for the Deadwood game.
  */
 public class Board {
-    private int numDays;
+    // private int numDays;
     private int numScenesRemaining;
     private Deck deck;
     private Map<String, Location> locations;
-    private List<String> trailer_neighbors;
-    private Location trailer;
-    private List<String> office_neighbors;
-    private Location office;
 
     /**
      * Constructs a new Board with the specified number of days and players.
@@ -22,40 +17,13 @@ public class Board {
      * @param boardXMLFilePath the file path to the board XML file
      * @param cardsXMLFilePath the file path to the cards XML file
      */
-    public Board(int numDays, List<Player> players, String boardXMLFilePath, String cardsXMLFilePath) {
-        this.numDays = numDays;
+    public Board(Deck deck, Map<String, Location> locations) {
+        this.deck = deck;
+        this.locations = locations;
         this.numScenesRemaining = 10;
-        this.deck = new Deck(cardsXMLFilePath);
-        this.locations = new HashMap<String, Location>();
-        // Initialize locations on the board
-        initLocations(boardXMLFilePath);
-        this.trailer_neighbors = Arrays.asList("Main Street", "Saloon", "Hotel");
-        this.trailer = new Location("Trailer", this.trailer_neighbors, new Area(0,0,0,0), Arrays.asList(), Arrays.asList());
-        this.office_neighbors = Arrays.asList("Train Station", "Ranch", "Secret Hideout");
-        this.office = new Location("Casting Office", this.office_neighbors, new Area(0,0,0,0), Arrays.asList(), Arrays.asList());
-        this.locations.put("Trailer", this.trailer);
-        this.locations.put("Casting Office", this.office);
         // Deal scene cards to locations
         dealSceneCardsToLocations();
     }
-
-    /**
-     * Returns the number of days remaining in the game.
-     *
-     * @return The number of days remaining in the game.
-     */
-    public int getNumDays() {
-        return this.numDays;
-    }
-
-    /**
-     * Decrements the number of days remaining in the game by 1.
-     *
-     * @return The new number of days remaining in the game.
-     */
-    public int decrementNumDays() {
-        return --this.numDays;
-    } 
 
     /**
      * Returns the number of scenes remaining in the game.
@@ -145,23 +113,6 @@ public class Board {
      */
     public void resetBoard() {
         dealSceneCardsToLocations();
-    }
-
-    /**
-     * Initialize the locations on the board.
-     * 
-     * @param boardXMLFilePath The file path to the board XML file.
-     * @throws Exception If an error occurs while parsing the board XML file.
-     */
-    private void initLocations(String boardXMLFilePath) {
-        ParseBoardXML parser = new ParseBoardXML();
-        try {
-            Document doc = parser.getDocFromFile(boardXMLFilePath);
-            parser.readData(doc);
-            this.locations = parser.getLocations();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     /**

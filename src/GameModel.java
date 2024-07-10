@@ -1,6 +1,8 @@
 import java.io.Serializable;
 import java.util.*;
 
+import org.w3c.dom.Document;
+
 /**
  * Represents the model of the game.
  * It manages the game state and data.
@@ -14,14 +16,22 @@ public class GameModel implements Subject, Serializable {
     private int numDays;
     private int day = 1;
     private List<Player> players;
-    private Board board;
+    private Deck deck;
     private Map<String, Location> locations;
+    private List<String> trailer_neighbors;
+    private Location trailer;
+    private List<String> office_neighbors;
+    private Location office;
+    private Board board;
 
     /**
      * Initializes a new Model.
      */
     private GameModel() {
         this.players = null;
+        this.deck = null;
+        this.locations = null;
+        this.board = null;
     }
 
     /**
@@ -52,7 +62,9 @@ public class GameModel implements Subject, Serializable {
      */
     public void initModel(int numPlayers, String boardXMLFilePath, String cardsXMLFilePath) {
         initPlayers(numPlayers);
-        initBoard(numPlayers, this.players, boardXMLFilePath, cardsXMLFilePath);
+        initDeck(cardsXMLFilePath);
+        initLocations(boardXMLFilePath);
+        initBoard(this.players, this.deck, this.locations);
     }
 
     /**
@@ -66,8 +78,6 @@ public class GameModel implements Subject, Serializable {
         if (numPlayers < 2 || numPlayers > 8) {
             throw new IllegalArgumentException("Number of players must be between 2 and 8");
         }
-        // Set the number of players
-        // this.numPlayers = numPlayers;
         int playerRank = numPlayers < 7 ? 1 : 2; // 1 if numPlayers are less than 7, otherwise 2
         int playerCredits = (numPlayers == 5) ? 2 : (numPlayers == 6) ? 4 : 0; // 2 if numPlayers are 5, 
                                                                                 // 4 if numPlayers are 6,
@@ -96,21 +106,55 @@ public class GameModel implements Subject, Serializable {
     }
 
     /**
+     * Initializes the deck.
+     *
+     * @param cardsXMLFilePath The XML file path for the cards.
+     */
+    private void initDeck(String cardsXMLFilePath) {
+        this.deck = new Deck(cardsXMLFilePath);
+    }
+
+    /**
+     * Initialize the locations on the board.
+     * 
+     * @param boardXMLFilePath The file path to the board XML file.
+     * @throws Exception If an error occurs while parsing the board XML file.
+     */
+    private void initLocations(String boardXMLFilePath) {
+        ParseBoardXML parser = new ParseBoardXML();
+        try {
+            Document doc = parser.getDocFromFile(boardXMLFilePath);
+            parser.readData(doc);
+            this.locations = parser.getLocations();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        this.trailer_neighbors = Arrays.asList("Main Street", "Saloon", "Hotel");
+        this.trailer = new Location("Trailer", this.trailer_neighbors, new Area(0,0,0,0), Arrays.asList(), Arrays.asList());
+        this.office_neighbors = Arrays.asList("Train Station", "Ranch", "Secret Hideout");
+        this.office = new Location("Casting Office", this.office_neighbors, new Area(0,0,0,0), Arrays.asList(), Arrays.asList());
+        this.locations.put("Trailer", this.trailer);
+        this.locations.put("Casting Office", this.office);
+    }
+
+    /**
      * Initializes the board.
      *
      * @param numPlayers The number of players.
      * @param players The list of players.
-     * @param boardXMLFilePath The XML file path for the board.
-     * @param cardsXMLFilePath The XML file path for the cards.
+     * @param deck The deck of cards.
+     * @param locations The map of locations.
      */
-    private void initBoard(int numPlayers, List<Player> players, String boardXMLFilePath, String cardsXMLFilePath) {
+    private void initBoard(List<Player> players, Deck deck, Map<String, Location> locations) {
         // Create a new board
-        this.board = new Board(numPlayers, players, boardXMLFilePath, cardsXMLFilePath);
+        this.board = new Board(deck, locations);
         // Set all player locations to Trailer
         for (Player player : players) {
-            player.setLocation(board.getLocations().get("Trailer"));
+            // add trailer to player
+            player.setLocation(locations.get("Trailer"));
+            // add player to trailer
+            locations.get("Trailer").addPlayer(player);
         }
-        this.locations = board.getLocations();
     }
 
     /**
