@@ -101,6 +101,15 @@ public class Board {
     }
 
     /**
+     * Returns the players on the board.
+     * 
+     * @return The players on the board.
+     */
+    public List<Player> getPlayers() {
+        return this.players;
+    }
+
+    /**
      * Returns the locations on the board.
      * 
      * @return The locations on the board.

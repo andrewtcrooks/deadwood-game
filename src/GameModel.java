@@ -14,7 +14,6 @@ public class GameModel implements Subject, Serializable {
     // private int numPlayers = 0;
     private int numDays;
     private int day = 1;
-    private List<Player> players;
     private Board board;
     private Map<String, Location> locations;
 
@@ -22,7 +21,6 @@ public class GameModel implements Subject, Serializable {
      * Initializes a new Model.
      */
     private GameModel() {
-        this.players = null;
     }
 
     /**
@@ -52,8 +50,8 @@ public class GameModel implements Subject, Serializable {
      * @param xmlFilePath The XML file path.
      */
     public void initModel(int numPlayers, String boardXMLFilePath, String cardsXMLFilePath) {
-        initPlayers(numPlayers);
-        initBoard(numPlayers, this.players, boardXMLFilePath, cardsXMLFilePath);
+        List <Player> players = initPlayers(numPlayers);
+        initBoard(numPlayers, players, boardXMLFilePath, cardsXMLFilePath);
     }
 
     /**
@@ -62,7 +60,7 @@ public class GameModel implements Subject, Serializable {
      * @param numPlayers The number of players.
      * @throws IllegalArgumentException If the number of players is not between 2 and 8.
      */
-    private void initPlayers(int numPlayers) {
+    private List<Player> initPlayers(int numPlayers) {
         // Check if the number of players is between 2 and 8
         if (numPlayers < 2 || numPlayers > 8) {
             throw new IllegalArgumentException("Number of players must be between 2 and 8");
@@ -74,8 +72,8 @@ public class GameModel implements Subject, Serializable {
                                                                                 // 4 if numPlayers are 6,
                                                                                 // otherwise 0
         this.numDays = numPlayers < 4 ? 3 : 4; // 3 if numPlayers are less than 4, otherwise 4
-        // Initialize the players
-        this.players = initPlayersList(numPlayers, playerRank, playerCredits);
+        // return the initialized players
+        return initPlayersList(numPlayers, playerRank, playerCredits);
     }
 
     /**
@@ -96,6 +94,14 @@ public class GameModel implements Subject, Serializable {
         return players;
     }
 
+    /**
+     * Initializes the board.
+     *
+     * @param numPlayers The number of players.
+     * @param players The list of players.
+     * @param boardXMLFilePath The XML file path for the board.
+     * @param cardsXMLFilePath The XML file path for the cards.
+     */
     private void initBoard(int numPlayers, List<Player> players, String boardXMLFilePath, String cardsXMLFilePath) {
         // Create a new board
         this.board = new Board(numPlayers, players, boardXMLFilePath, cardsXMLFilePath);
@@ -142,15 +148,6 @@ public class GameModel implements Subject, Serializable {
         return board;
     }
 
-    // /**
-    //  * Returns the number of players.
-    //  *
-    //  * @return The number of players.
-    //  */
-    // public int getNumPlayers() {
-    //     return this.numPlayers;
-    // }
-
     /**
      * Returns the number of days.
      *
@@ -158,31 +155,6 @@ public class GameModel implements Subject, Serializable {
      */
     public int getNumDays() {
         return this.numDays;
-    }
-
-    /**
-     * Returns the list of players.
-     *
-     * @return The list of players.
-     */
-    public List<Player> getPlayers() {
-        return players;
-    }
-
-    /**
-     * Returns the player with the given ID.
-     *
-     * @param ID The ID of the player.
-     * @return The player with the given ID.
-     * @throws IllegalArgumentException If no player with the given ID is found.
-     */
-    Player getPlayer(int ID) {
-        for (Player player : players) {
-            if (Integer.valueOf(player.getID()).equals(ID)) {
-                return player;
-            }
-        }
-        throw new IllegalArgumentException("No player " + ID);
     }
 
     /**
@@ -198,15 +170,6 @@ public class GameModel implements Subject, Serializable {
         }
         throw new IllegalArgumentException("No location " + name);
     }
-
-    // /**
-    //  * Sets the number of players.
-    //  * 
-    //  * @param numPlayers The number of players.
-    //  */
-    // public void setNumPlayers(int numPlayers) {
-    //     this.numPlayers = numPlayers;
-    // }
     
     /**
      * Sets the model to the given model. Used for loading saved game state.
