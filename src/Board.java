@@ -7,7 +7,6 @@ import org.w3c.dom.Document;
 public class Board {
     private int numDays;
     private int numScenesRemaining;
-    private List<Player> players;
     private Deck deck;
     private Map<String, Location> locations;
     private List<String> trailer_neighbors;
@@ -26,7 +25,6 @@ public class Board {
     public Board(int numDays, List<Player> players, String boardXMLFilePath, String cardsXMLFilePath) {
         this.numDays = numDays;
         this.numScenesRemaining = 10;
-        this.players = players;
         this.deck = new Deck(cardsXMLFilePath);
         this.locations = new HashMap<String, Location>();
         // Initialize locations on the board
@@ -82,31 +80,6 @@ public class Board {
      */
     public void resetNumScenesRemaining() {
         this.numScenesRemaining = 10;
-    }
-
-    /**
-     * Returns the player with the given ID.
-     * 
-     * @param ID The ID of the player.
-     * @throws IllegalArgumentException If no player with the given ID is found.
-     * @return The player with the given ID.
-     */
-    public Player getPlayer(int ID) {
-        for (Player player : this.players) {
-            if (Integer.valueOf(player.getID()).equals(ID)) {
-                return player;
-            }
-        }
-        throw new IllegalArgumentException("No Player " + ID);
-    }
-
-    /**
-     * Returns the players on the board.
-     * 
-     * @return The players on the board.
-     */
-    public List<Player> getPlayers() {
-        return this.players;
     }
 
     /**
@@ -171,7 +144,6 @@ public class Board {
      * Resets the board to its initial state.
      */
     public void resetBoard() {
-        resetPlayerLocations();
         dealSceneCardsToLocations();
     }
 
@@ -205,18 +177,4 @@ public class Board {
         }
     }
 
-    /**
-     * Change all player locations on the board to "Trailer"
-     */
-    private void resetPlayerLocations() {
-        for (Player player : this.players) {
-            // remove player from current location
-            Location currentLocation = player.getLocation();
-            currentLocation.removePlayer(player);
-            // add trailer to player
-            player.setLocation(locations.get("Trailer"));
-            // add player to trailer
-            locations.get("Trailer").addPlayer(player);
-        }
-    }
 }
