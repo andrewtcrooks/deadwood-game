@@ -4,18 +4,15 @@ import java.util.*;
  * Represents the game board for the Deadwood game.
  */
 public class Board {
-    // private int numDays;
     private int numScenesRemaining;
     private Deck deck;
     private Map<String, Location> locations;
 
     /**
-     * Constructs a new Board with the specified number of days and players.
+     * Constructs a new Board with the given deck and locations.
      *
-     * @param numDays the number of days for the game
-     * @param players the list of players in the game
-     * @param boardXMLFilePath the file path to the board XML file
-     * @param cardsXMLFilePath the file path to the cards XML file
+     * @param deck The deck of cards to use.
+     * @param locations The locations on the board.
      */
     public Board(Deck deck, Map<String, Location> locations) {
         this.deck = deck;
@@ -44,7 +41,7 @@ public class Board {
     }
 
     /**
-     * Resets the number of scenes remaining in the game to 10.
+     * Resets the number of scenes remaining in the game.
      */
     public void resetNumScenesRemaining() {
         this.numScenesRemaining = 10;
@@ -67,15 +64,6 @@ public class Board {
      */
     public int getLocationShotsRemaining(Location location) {
         return location.getShots();
-    }
-
-    /**
-     * Wraps a shot at a location.
-     * 
-     * @param location The location to wrap a shot at.
-     */
-    public void wrapLocationShot(Location location) {
-        location.wrapShot();
     }
 
     /**
@@ -106,6 +94,15 @@ public class Board {
      */
     public SceneCard getLocationScene(Location location) {
         return location.getSceneCard();
+    }
+
+    /**
+     * Wraps a shot at a location.
+     * 
+     * @param location The location to wrap a shot at.
+     */
+    public void wrapLocationShot(Location location) {
+        location.wrapShot();
     }
 
     /**
