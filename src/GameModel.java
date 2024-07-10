@@ -11,7 +11,6 @@ public class GameModel implements Subject, Serializable {
 
     private static GameModel instance = null;
     private List<Observer> observers = new ArrayList<>();
-    // private int numPlayers = 0;
     private int numDays;
     private int day = 1;
     private List<Player> players;
@@ -149,8 +148,6 @@ public class GameModel implements Subject, Serializable {
     public Board getBoard() {
         return board;
     }
-
-
 
     /**
      * Returns the number of days.
