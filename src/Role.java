@@ -1,4 +1,3 @@
-
 /**
  * Represents a Role with a name, rank, line, and indicator if it is on a Scene Card or at a Location.
  */
@@ -9,7 +8,6 @@ public class Role {
     private String line;
     private boolean onCard;
     private boolean occupied;
-    private Player player;
 
     /**
      * Initializes a new Role with the given name, rank, line, and onCard indicator.
@@ -27,7 +25,6 @@ public class Role {
         this.line = line;
         this.onCard = onCard;
         this.occupied = false;
-        this.player=null;
     }
 
     /**
@@ -35,7 +32,7 @@ public class Role {
      *
      * @return The name of the Role.
      */
-    String getName() { 
+    public String getName() { 
         return this.name; 
     }
 
@@ -44,7 +41,7 @@ public class Role {
      *
      * @return The rank of the Role.
      */
-    int getRank() { 
+    public int getRank() { 
         return this.rank; 
     }
 
@@ -53,7 +50,7 @@ public class Role {
      *
      * @return The area of the Role.
      */
-    Area getArea() {
+    public Area getArea() {
         return this.area;
     }
 
@@ -62,17 +59,8 @@ public class Role {
      *
      * @return The line for the Role.
      */
-    String getLine() { 
+    public String getLine() { 
         return this.line; 
-    }
-
-    /**
-     * Returns the player assigned to the Role.
-     *
-     * @return The player assigned to the Role.
-     */
-    Player getPlayer() {
-        return this.player;
     }
 
     /**
@@ -80,12 +68,8 @@ public class Role {
      *
      * @return true if the Role is from a SceneCard, false if Role is from a Location.
      */
-    boolean getOnCard() { 
+    public boolean getOnCard() { 
         return this.onCard; 
-    }
-
-    public void setOnCard(boolean onCard) {
-        this.onCard = onCard;
     }
 
     /**
@@ -93,7 +77,7 @@ public class Role {
      *
      * @return True if the Role is occupied, false otherwise.
      */
-    boolean isOccupied() {
+    public boolean isOccupied() {
         return this.occupied;
     }
 
@@ -102,26 +86,8 @@ public class Role {
      * 
      * @param occupied The new value of the occupied attribute.
      */
-    private void setOccupied(boolean occupied) {
+    public void setOccupied(boolean occupied) {
         this.occupied = occupied;
-    }
-
-    /** 
-     * Assigns a player to the Role.
-     *
-     * @param player The player to assign to the Role
-     */
-    void assignPlayer(Player player) {
-        this.player = player;
-        setOccupied(true);
-    }
-
-    /**
-     * Removes the player from the Role.
-     */
-    void removePlayer() {
-        this.player = null;
-        setOccupied(false);
     }
 
 }

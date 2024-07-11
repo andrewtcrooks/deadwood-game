@@ -140,7 +140,6 @@ public class ParseBoardXML extends AbstractParseXML {
         for (int j = 0; j < partsList.getLength(); j++) {
             Node partNode = partsList.item(j);
             Role role = parseRole((Element) partNode);
-            role.setOnCard(false);
             roles.add(role);
         }
         return roles;
@@ -165,7 +164,7 @@ public class ParseBoardXML extends AbstractParseXML {
         String lineText = lineElement.getTextContent().trim();
     
         // Create Role object
-        return new Role(roleName, roleLevel, roleArea, lineText, true);
+        return new Role(roleName, roleLevel, roleArea, lineText, false);
     }
 
     /**
