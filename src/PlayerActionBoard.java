@@ -75,7 +75,7 @@ public class PlayerActionBoard implements PlayerAction {
         .map(Location::getName)
         .collect(Collectors.toSet());
         if (!wrappedLocations.isEmpty()) {
-            view.showMessage("Wrapped Locations: " + String.join(", ", wrappedLocations));
+            view.showMessage("  Wrapped Locations: " + String.join(", ", wrappedLocations));
         }
     }
 
