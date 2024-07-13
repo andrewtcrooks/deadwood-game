@@ -102,14 +102,13 @@ public class PlayerActionBoard implements PlayerAction {
      */
     private String constructPlayerInfo(Player player, Board board) {
         String locationName = board.getPlayerLocationName(player);
-        String playerInfo = String.format("Player %d (rank %d, $%4d, %4dcr, %drt) - %14s", 
+        String playerInfo = String.format("Player %d (rank %d, $%4d, %4dcr, %drt) - %-14s", 
                                           player.getID(), 
                                           player.getRank(), 
                                           player.getMoney(), 
                                           player.getCredits(), 
                                           player.getRehearsalTokens(), 
                                           locationName);
-
         if (!locationName.equals("Trailer") && !locationName.equals("Casting Office")) {
             playerInfo += getLocationStatus(player, board);
         }
