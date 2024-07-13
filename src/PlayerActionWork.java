@@ -155,7 +155,7 @@ public class PlayerActionWork implements PlayerAction {
      */
     private Role getPlayerSelectedRole(List<Role> roles, GameView view) {
         String roleString = view.getPlayerInput();
-        return roles.stream()
+        return roles.stream() // Get the role with the same name as the input
                 .filter(r -> r.getName().equals(roleString))
                 .findFirst()
                 .orElse(null);
@@ -170,9 +170,14 @@ public class PlayerActionWork implements PlayerAction {
      * @param view the game view
      */
     private void assignRoleToPlayer(Player player, Role role, Board board, GameView view) {
+        //
         board.setPlayerRole(player, role);
+        // Display the role the player is working
         view.showMessage("You are now working the role of " + role.getName());
+        // Set the player as having worked
         player.setHasWorked(true);
+        // Set the role as occupied
+        role.setOccupied(true);
     }
 
 }
