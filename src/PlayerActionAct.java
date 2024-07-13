@@ -136,7 +136,16 @@ public class PlayerActionAct implements PlayerAction {
     private void wrapLocationScene(Player player, GameModel model, GameView view) {
         Board board = model.getBoard();
         Location location = board.getPlayerLocation(player);
-        view.showMessage("Bonus payout!");
+        // Check if any player has an on-card role
+        boolean anyPlayerOnCard = board.getLocationPlayers(location).stream()
+            .anyMatch(p -> {
+                Role role = board.getPlayerRole(p);
+                return role != null && role.getOnCard(); // Check if player has a non-null on-card role
+            });
+        // Display bonus payout message if there are any players on-card
+        if (anyPlayerOnCard) {
+            view.showMessage("Bonus payout!");
+        }
         board.wrapScene(location);
         view.showMessage("The scene is wrapped.");
     }
