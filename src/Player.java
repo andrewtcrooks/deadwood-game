@@ -1,13 +1,16 @@
 /**
  * This class represents a player in the game.
  * It holds information about the player's state, including:
+ * - ID
  * - rank
  * - money
  * - credits
- * - location
  * - rehearsal tokens
- * - whether they have a role
- * - whether that role is on a card
+ * - whether they are active
+ * - whether they have moved
+ * - whether they have worked
+ * - whether they have upgraded
+ * It also provides methods to modify the player's state.
  */
 public class Player {
     private int id;
@@ -15,8 +18,6 @@ public class Player {
     private int money;
     private int credits;
     private int rehearsalTokens;
-    // private boolean hasRole;
-    // private Role role;
     private boolean active;
     private boolean hasMoved;
     private boolean hasWorked;
