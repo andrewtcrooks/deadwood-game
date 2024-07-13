@@ -13,14 +13,27 @@ public class PlayerActionRehearse implements PlayerAction {
      */
     @Override
     public boolean validate(Player player, GameModel model, GameView view) {
+        Board board = model.getBoard();
         // Check if player has a role
-        if (!player.getHasRole()) {
+        return checkPlayerHasNoRole(player, board, view);
+    }
+
+    /**
+     * Checks if the player has no role.
+     *  
+     * @param player the player
+     * @param board the game board
+     * @param view the game view
+     * @return true if the player has a role, false otherwise
+     */
+    public boolean checkPlayerHasNoRole(Player player, Board board, GameView view) {
+        if (board.getPlayerRole(player) == null) {
             view.showMessage("You do not have a role to rehearse.");
             return false;
         }
         return true;
     }
-
+    
     /**
      * Executes the rehearse action for the player.
      *  

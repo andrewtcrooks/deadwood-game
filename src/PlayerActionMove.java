@@ -15,7 +15,8 @@ public class PlayerActionMove implements PlayerAction {
      */
     @Override
     public boolean validate(Player player, GameModel model, GameView view) {
-        return checkPlayerHasNoRole(player, view) && checkPlayerHasNotMoved(player, view);
+        Board board = model.getBoard();
+        return checkPlayerHasNoRole(player, board, view) && checkPlayerHasNotMoved(player, view);
     }
 
     /**
@@ -25,8 +26,8 @@ public class PlayerActionMove implements PlayerAction {
      * @param view the game view
      * @return true if the player has no role, false otherwise
      */
-    private boolean checkPlayerHasNoRole(Player player, GameView view) {
-        if (player.getHasRole()) {
+    private boolean checkPlayerHasNoRole(Player player, Board board, GameView view) {
+        if (board.getPlayerRole(player) != null) {
             view.showMessage("You must finish your role before moving.");
             return false;
         }

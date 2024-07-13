@@ -21,7 +21,7 @@ public class PlayerActionWork implements PlayerAction {
         return isNotInCastingOffice(player, board, view) && // true if not in Casting Office
                isNotInTrailer(player, board, view) && // true if not in Trailer
                isAtUnwrappedLocation(player, board, view) && // true if location is not wrapped
-               playerHasNoRole(player, view); // true if player has no role
+               playerHasNoRole(player, board, view); // true if player has no role
     }
     
     /**
@@ -76,11 +76,12 @@ public class PlayerActionWork implements PlayerAction {
      * @param view the game view
      * @return true if the player has no role, false otherwise
      */
-    private boolean playerHasNoRole(Player player, GameView view) {
-        if (player.getHasRole()) {
-            String roleName = player.getRole().getName();
-            String roleLine = player.getRole().getLine();
-            boolean onCard = player.getRole().getOnCard();
+    private boolean playerHasNoRole(Player player, Board board, GameView view) {
+        Role role = board.getPlayerRole(player);
+        if (role != null) {
+            String roleName = role.getName();
+            String roleLine = role.getLine();
+            boolean onCard = role.getOnCard();
             String message = "Current role: " + roleName + " - \"" + roleLine + "\"";
             if (onCard) {
                 view.showMessage(message);
@@ -102,19 +103,21 @@ public class PlayerActionWork implements PlayerAction {
      */
     @Override
     public boolean execute(Player player, GameModel model, GameView view) {
+        // Get the board
         Board board = model.getBoard();
-        List<Role> allRoles = listAvailableRoles(player, board);
-        if (allRoles.isEmpty()) {
-            view.showMessage("There are no roles available for you to work.");
-            return false;
-        }
+        // Get the location name
+        String locationName = board.getPlayerLocationName(player);
+        // Get the available roles at the location
+        List<Role> allRoles = board.getLocationRoles(locationName);
+        // Display the available roles
         displayAvailableRoles(allRoles, view);
+        // Get the selected role
         Role selectedRole = getPlayerSelectedRole(allRoles, view);
         if (selectedRole == null) {
             view.showMessage("Invalid role.");
             return false;
         }
-        assignRoleToPlayer(player, selectedRole, view);
+        assignRoleToPlayer(player, selectedRole, board, view);
         return player.getHasMoved();
     }
 
@@ -122,10 +125,12 @@ public class PlayerActionWork implements PlayerAction {
      * Lists the available roles for the player.
      *
      * @param player the player
+     * @param board the game board
      * @return the available roles for the player
      */
     private List<Role> listAvailableRoles(Player player, Board board) {
-        return board.getPlayerLocation(player).getRoles().stream()
+        String locationName = board.getPlayerLocationName(player);
+        return board.getLocationRoles(locationName).stream()
                 .filter(role -> role.getRank() <= player.getRank() && !role.isOccupied())
                 .collect(Collectors.toList());
     }
@@ -166,11 +171,11 @@ public class PlayerActionWork implements PlayerAction {
      *
      * @param player the player
      * @param role the role
+     * @param board the game board
      * @param view the game view
      */
-    private void assignRoleToPlayer(Player player, Role role, GameView view) {
-        player.takeRole(role);
-        role.assignPlayer(player);
+    private void assignRoleToPlayer(Player player, Role role, Board board, GameView view) {
+        board.setPlayerRole(player, role);
         view.showMessage("You are now working the role of " + role.getName());
         player.setHasWorked(true);
     }

@@ -37,8 +37,8 @@ public class PlayerActionWhere implements PlayerAction {
         } else if ("Casting Office".equals(locationName)) {
             view.showMessage("You are at the Casting Office");
         } else {
-            String sceneTitle = location.getSceneCard().getTitle();
-            int sceneID = location.getSceneCard().getID();
+            String sceneTitle = board.getLocationSceneCard(locationName).getTitle();
+            int sceneID = board.getLocationSceneCard(locationName).getID();
             view.showMessage(locationName + " shooting " + sceneTitle + " (scene " + sceneID + ")");
         }
         return false;

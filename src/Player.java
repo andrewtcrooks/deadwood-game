@@ -36,8 +36,8 @@ public class Player {
         this.credits = credits;
         // this.location = null;
         this.rehearsalTokens = 0;
-        this.hasRole = false;
-        this.role = null;
+        // this.hasRole = false;
+        // this.role = null;
         this.active = false;
         this.hasMoved = false;
         this.hasWorked = false;
@@ -89,23 +89,23 @@ public class Player {
         return this.rehearsalTokens;
     }
 
-    /**
-     * Returns whether the player has a role.
-     *
-     * @return true if the player has a role, false otherwise
-     */
-    public boolean getHasRole() {
-        return this.hasRole;
-    }
+    // /**
+    //  * Returns whether the player has a role.
+    //  *
+    //  * @return true if the player has a role, false otherwise
+    //  */
+    // public boolean getHasRole() {
+    //     return this.hasRole;
+    // }
 
-    /**
-     * Returns the role the player has.
-     *
-     * @return the role the player has
-     */
-    public Role getRole() {
-        return this.role;
-    }
+    // /**
+    //  * Returns the role the player has.
+    //  *
+    //  * @return the role the player has
+    //  */
+    // public Role getRole() {
+    //     return this.role;
+    // }
 
     /**
      * Returns the rank of the role the player has.
@@ -226,41 +226,41 @@ public class Player {
         this.rank = rank;
     }
 
-    /**
-     * Sets whether the player has a role.
-     *
-     * @param hasRole true if the player has a role, false otherwise
-     */
-    public void setHasRole(boolean hasRole) {
-        this.hasRole = hasRole;
-    }
+    // /**
+    //  * Sets whether the player has a role.
+    //  *
+    //  * @param hasRole true if the player has a role, false otherwise
+    //  */
+    // public void setHasRole(boolean hasRole) {
+    //     this.hasRole = hasRole;
+    // }
 
-    /**
-     * Sets the role the player has.
-     *
-     * @param role the new role for the player
-     */
-    public void takeRole(Role role) {
-        this.role = role;
-        setHasRole(true);
-        role.assignPlayer(this);
-    }
+    // /**
+    //  * Sets the role the player has.
+    //  *
+    //  * @param role the new role for the player
+    //  */
+    // public void takeRole(Role role) {
+    //     this.role = role;
+    //     setHasRole(true);
+    //     role.assignPlayer(this);
+    // }
 
-    /**
-     * Removes the role the player has.
-     */
-    public void leaveRole() {
-        if (this.role != null) {
+    // /**
+    //  * Removes the role the player has.
+    //  */
+    // public void leaveRole() {
+    //     if (this.role != null) {
             
-            // Remove the player from the role
-            this.role.removePlayer();
+    //         // Remove the player from the role
+    //         this.role.removePlayer();
 
-            // Reset the role related attributes for the player
-            setHasRole(false);
-            resetRehearsalTokens();
-            this.role = null;
-        }
-    }
+    //         // Reset the role related attributes for the player
+    //         setHasRole(false);
+    //         resetRehearsalTokens();
+    //         this.role = null;
+    //     }
+    // }
 
     /**
      * Sets whether the player is active or not.

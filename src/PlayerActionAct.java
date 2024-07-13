@@ -13,8 +13,9 @@ public class PlayerActionAct implements PlayerAction {
      */
     @Override
     public boolean validate(Player player, GameModel model, GameView view) {
+        Board board = model.getBoard();
         // Check if player has a role
-        if (!player.getHasRole()) {
+        if (board.getPlayerRole(player) == null) {
             view.showMessage("You do not have a role to act.");
             return false;
         }
@@ -31,14 +32,14 @@ public class PlayerActionAct implements PlayerAction {
      */
     @Override
     public boolean execute(Player player, GameModel model, GameView view) {
-        int budget = getSceneBudget(player, model);
-        int roll = performDiceRoll(player);
         Board board = model.getBoard();
+        int budget = getSceneBudget(player, board);
+        int roll = performDiceRoll(player);
         // Check if the player succeeded
         if (roll >= budget) {
-            processSuccess(player, board, roll, view);
+            processSuccess(player, roll, board, view);
         } else {
-            processFailure(player,roll, view);
+            processFailure(player,roll, board, view);
         }
         checkAndWrapScene(player, model, view);
         return true;
@@ -50,8 +51,9 @@ public class PlayerActionAct implements PlayerAction {
      * @param player the player
      * @return the budget of the scene
      */
-    private int getSceneBudget(Player player, GameModel model) {
-        return model.getBoard().getPlayerLocation(player).getSceneCard().getBudget();
+    private int getSceneBudget(Player player, Board board) {
+        String locationName = board.getPlayerLocationName(player);
+        return board.getLocationSceneCard(locationName).getBudget();
     }
 
     /**
@@ -73,11 +75,11 @@ public class PlayerActionAct implements PlayerAction {
      * @param view the game view
      * @param roll the result of the dice roll
      */
-    private void processSuccess(Player player, Board board, int roll, GameView view) {
+    private void processSuccess(Player player, int roll, Board board, GameView view) {
         view.showMessage("You rolled a " + roll + ". Success!");
         board.getPlayerLocation(player).removeShotCounter();
         // Check if the player is on-card
-        if (player.getRole().getOnCard()) {
+        if (board.getPlayerRole(player).getOnCard()) {
             player.addCredits(2);
         } else {
             player.addMoney(1);
@@ -92,10 +94,10 @@ public class PlayerActionAct implements PlayerAction {
      * @param view the game view
      * @param roll the result of the dice roll
      */
-    private void processFailure(Player player, int roll, GameView view) {
+    private void processFailure(Player player, int roll, Board board, GameView view) {
         view.showMessage("You rolled a " + roll + ". Failure.");
         // Check if the player is on-card
-        if (!player.getRole().getOnCard()) {
+        if (!board.getPlayerRole(player).getOnCard()) {
             player.addMoney(1);
         }
     }
@@ -110,14 +112,16 @@ public class PlayerActionAct implements PlayerAction {
         Board board = model.getBoard();
         if (board.getPlayerLocation(player).getShots() == 0) {  
             Location location = board.getPlayerLocation(player); 
-            boolean anyPlayerOnCard = board.getPlayersAtLocation(location).stream()
-                    .filter(Player::getHasRole) // Check if player has a role
-                    .anyMatch(p -> p.getRole().getOnCard());
+            boolean anyPlayerOnCard = board.getLocationPlayers(location).stream()
+            .filter(p -> {
+                Role role = board.getPlayerRole(p);
+                return role != null && role.getOnCard(); // Check if player has a non-null SceneCard role
+            })
+            .anyMatch(r -> true); // If a player passes the filter, they are on a SceneCard role
             if (anyPlayerOnCard) {
                 view.showMessage("Bonus payout!");
             }
-            model.wrapScene(location);
-            board.decrementNumScenesRemaining();
+            board.wrapScene(location);
             view.showMessage("The scene is wrapped.");
         }
     }
