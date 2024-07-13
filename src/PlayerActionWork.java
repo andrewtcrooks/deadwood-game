@@ -133,6 +133,10 @@ public class PlayerActionWork implements PlayerAction {
      * @param view the game view
      */
     private void displayAvailableRoles(List<Role> roles, GameView view) {
+        if (roles.isEmpty()){
+            view.showMessage("There are no roles available for you to work.");
+            return;
+        }
         view.showMessage("You can work the following roles:");
         roles.sort(Comparator.comparingInt(Role::getRank)
                 .thenComparing(Role::getOnCard));
