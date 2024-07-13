@@ -112,6 +112,8 @@ public class PlayerActionWork implements PlayerAction {
         List<Role> allRoles = new ArrayList<Role>(location.getRoles());
         // Add roles from SceneCard
         allRoles.addAll(board.getLocationSceneCard(locationName).getRoles());
+        // Filter out all the roles with ranks higher than the players rank
+        allRoles.removeIf(role -> role.getRank() > player.getRank());
         // Display the available roles
         displayAvailableRoles(allRoles, view);
         // Get the selected role
