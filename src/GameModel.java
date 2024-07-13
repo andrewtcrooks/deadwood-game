@@ -1,6 +1,4 @@
 import java.util.*;
-import java.util.stream.Collectors;
-
 import org.w3c.dom.Document;
 
 /**
@@ -271,5 +269,6 @@ public class GameModel implements Subject {
     public int getDay() {
         return this.day;
     }
+
 
 }

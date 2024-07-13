@@ -11,7 +11,7 @@ public class Board {
     private Map<Player, String> playerLocation;
     private Map<Player, Role> playerRole;
     private Map<String, SceneCard> locationScene;
-    private Map<String, List<Role>> locationRoles;
+    // private Map<String, List<Role>> locationRoles;
     // private Map<SceneCard, List<Role>> sceneRoles;
 
 
@@ -35,9 +35,7 @@ public class Board {
         // Initialize player roles map
         this.playerRole = new HashMap<>();
         // Initialize location scene map
-        this.locationScene = new HashMap<>();
-        // Initialize location roles map
-        this.locationRoles = new HashMap<>();        
+        this.locationScene = new HashMap<>();      
         // Deal scene cards to locations
         dealSceneCardsToLocations();
     }
@@ -54,8 +52,6 @@ public class Board {
             SceneCard card = this.deck.drawCard();
             // Set the scene card for the location
             this.locationScene.put(location.getName(), card);
-            // Set the roles for the location
-            this.locationRoles.put(location.getName(), card.getRoles());
         }
     }
 
@@ -134,17 +130,6 @@ public class Board {
     public void clearSceneCard(String locationName) {
         // Overwrite the scene card with null
        this.locationScene.put(locationName, null);
-        // // 
-        // Location location = locations.get(locationName);
-        // List<Role> locationRoles = location.getRoles();
-        // // Set the roles for the location to just the 
-        // this.locationRoles.put(locationName, locationRoles);
-
-        // TODO: definitely somehting to fix here
-
-
-
-        // this.allRoles = new ArrayList<Role>(this.locationRoles);
     }
 
     /**
@@ -292,20 +277,20 @@ public class Board {
         return locationScene.get(locationName);
     }
 
-    /**
-     * Returns the roles at a location.
-     *
-     * @param locationName The name of the location to check.
-     * @return The roles at the location.
-     */
-    public List<Role> getLocationRoles(String locationName) {
-        List<Role> allRoles = new ArrayList<Role>(locationRoles.get(locationName));
-        allRoles.addAll(locationScene.get(locationName).getRoles());
-        return allRoles.stream()
-            .sorted(Comparator.comparingInt(Role::getRank)
-                    .thenComparing(Role::getOnCard, Comparator.reverseOrder()))
-            .collect(Collectors.toList());
-    }
+    // /**
+    //  * Returns the roles at a location.
+    //  *
+    //  * @param locationName The name of the location to check.
+    //  * @return The roles at the location.
+    //  */
+    // public List<Role> getLocationRoles(String locationName) {
+    //     List<Role> allRoles = new ArrayList<Role>(locationRoles.get(locationName));
+    //     allRoles.addAll(locationScene.get(locationName).getRoles());
+    //     return allRoles.stream()
+    //         .sorted(Comparator.comparingInt(Role::getRank)
+    //                 .thenComparing(Role::getOnCard, Comparator.reverseOrder()))
+    //         .collect(Collectors.toList());
+    // }
 
 
 /************************************************************
@@ -321,8 +306,8 @@ public class Board {
         Collections.sort(diceRolls, Collections.reverseOrder()); // Sort dice rolls in descending order
         // Get all players with an on card role, sorted by their role rank in descending order
         List<Player> playersOnCard = getLocationPlayers(location).stream()
-            .filter(player -> getPlayerRole(player) != null &&  getPlayerRole(player).getOnCard())
-            .sorted(Comparator.comparingInt(Player::getRoleRank).reversed())
+            .filter(player -> getPlayerRole(player) != null && getPlayerRole(player).getOnCard())
+            .sorted(Comparator.comparingInt(player -> getPlayerRole(player).getRank()))
             .collect(Collectors.toList());
         // Distribute dice rolls as money in a round-robin fashion
         for (int i = 0; i < diceRolls.size(); i++) {
@@ -333,7 +318,7 @@ public class Board {
         List<Player> playersOffCard = getLocationPlayers(location).stream()
             .filter(player -> getPlayerRole(player) != null && !getPlayerRole(player).getOnCard())
             .collect(Collectors.toList());
-        playersOffCard.forEach(player -> player.addMoney(player.getRoleRank()));
+        playersOffCard.forEach(player -> player.addMoney(getPlayerRole(player).getRank()));
         // Players leave their roles
         playersOnCard.forEach(player -> setPlayerRole(player, null));
         playersOffCard.forEach(player -> setPlayerRole(player, null));

@@ -10,8 +10,7 @@ public class Location {
     private List<Take> takes;
     private boolean wrapped;
     private List<Role> locationRoles;
-    // private List<Role> allRoles;
-    // private SceneCard scene;
+
 
     /**
      * Constructs a new Location with the given parameters.
@@ -29,8 +28,6 @@ public class Location {
         this.takes = takes;
         this.wrapped = false;
         this.locationRoles = roles;
-        // this.allRoles = roles;
-        // this.scene = null;
     }
 
     /**
@@ -78,23 +75,24 @@ public class Location {
         return wrapped;
     }
 
-    // /**
-    //  * Returns the all roles for the Location and Scene.
-    //  *
-    //  * @return the all roles for the Location and Scene
-    //  */
-    // public List<Role> getRoles() {
-    //     return allRoles;
-    // }
+    /**
+     * Returns the all roles for the Location and Scene.
+     *
+     * @return the all roles for the Location and Scene
+     */
+    public List<Role> getRoles() {
+        return locationRoles;
+    }
 
-    // /**
-    //  * Returns the scene card for the Location.
-    //  *
-    //  * @return the scene card for the Location
-    //  */
-    // public SceneCard getSceneCard() {
-    //     return scene;
-    // }
+    /**
+     * Sets the roles for the Location.
+     *
+     * @param roles the roles for the Location
+     */
+    
+    public void setRoles(List<Role> roles) {
+        this.locationRoles = roles;
+    }
 
     /**
      * Returns the number of shots left in the Location.
@@ -117,18 +115,6 @@ public class Location {
     public void setSceneWrapped() {
         this.wrapped = true;
     }
-
-    // /**
-    //  * Sets a new scene card for the Location and redefines the roles list.
-    //  *
-    //  * @param scene the new scene card for the Location
-    //  */
-    // public void setSceneCard(SceneCard scene) {
-    //     this.scene = scene;
-    //     this.allRoles = new ArrayList<Role>(this.locationRoles); // Copy the roles from the location
-    //     this.allRoles.addAll(scene.getRoles()); // Add all roles from the new scene
-    //     this.wrapped = false;
-    // }
 
     /**
      * Removes a shot counter from the Location.
@@ -177,13 +163,5 @@ public class Location {
             take.reset();
         }
     }
-
-    // /**
-    //  * Clears the scene card from the Location and redefines the roles list.
-    //  */
-    // public void clearSceneCard() {
-    //     this.scene = null;
-    //     this.allRoles = new ArrayList<Role>(this.locationRoles);
-    // }
 
 }

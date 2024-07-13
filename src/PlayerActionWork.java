@@ -1,6 +1,6 @@
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 /*
  * Represents the work action for the player.
@@ -105,10 +105,13 @@ public class PlayerActionWork implements PlayerAction {
     public boolean execute(Player player, GameModel model, GameView view) {
         // Get the board
         Board board = model.getBoard();
-        // Get the location name
-        String locationName = board.getPlayerLocationName(player);
+        // Get the location and location name
+        Location location = board.getPlayerLocation(player);
+        String locationName = location.getName();
         // Get the available roles at the location
-        List<Role> allRoles = board.getLocationRoles(locationName);
+        List<Role> allRoles = new ArrayList<Role>(location.getRoles());
+        // Add roles from SceneCard
+        allRoles.addAll(board.getLocationSceneCard(locationName).getRoles());
         // Display the available roles
         displayAvailableRoles(allRoles, view);
         // Get the selected role
@@ -119,20 +122,6 @@ public class PlayerActionWork implements PlayerAction {
         }
         assignRoleToPlayer(player, selectedRole, board, view);
         return player.getHasMoved();
-    }
-
-    /**
-     * Lists the available roles for the player.
-     *
-     * @param player the player
-     * @param board the game board
-     * @return the available roles for the player
-     */
-    private List<Role> listAvailableRoles(Player player, Board board) {
-        String locationName = board.getPlayerLocationName(player);
-        return board.getLocationRoles(locationName).stream()
-                .filter(role -> role.getRank() <= player.getRank() && !role.isOccupied())
-                .collect(Collectors.toList());
     }
 
     /**
