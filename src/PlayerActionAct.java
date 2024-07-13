@@ -43,7 +43,7 @@ public class PlayerActionAct implements PlayerAction {
         }
         // Check if the scene is ready to be wrapped
         if (noShotsRemain(player, model)) {
-            wrapScene(player, model, view);
+            wrapLocationScene(player, model, view);
         }
         return true;
     }
@@ -133,7 +133,7 @@ public class PlayerActionAct implements PlayerAction {
      * @param model the game model
      * @param view the game view
      */
-    private void wrapScene(Player player, GameModel model, GameView view) {
+    private void wrapLocationScene(Player player, GameModel model, GameView view) {
         Board board = model.getBoard();
         Location location = board.getPlayerLocation(player);
         view.showMessage("Bonus payout!");
