@@ -11,8 +11,6 @@ public class Board {
     private Map<Player, String> playerLocation;
     private Map<Player, Role> playerRole;
     private Map<String, SceneCard> locationScene;
-    // private Map<String, List<Role>> locationRoles;
-    // private Map<SceneCard, List<Role>> sceneRoles;
 
 
 /************************************************************
@@ -277,21 +275,6 @@ public class Board {
         return locationScene.get(locationName);
     }
 
-    // /**
-    //  * Returns the roles at a location.
-    //  *
-    //  * @param locationName The name of the location to check.
-    //  * @return The roles at the location.
-    //  */
-    // public List<Role> getLocationRoles(String locationName) {
-    //     List<Role> allRoles = new ArrayList<Role>(locationRoles.get(locationName));
-    //     allRoles.addAll(locationScene.get(locationName).getRoles());
-    //     return allRoles.stream()
-    //         .sorted(Comparator.comparingInt(Role::getRank)
-    //                 .thenComparing(Role::getOnCard, Comparator.reverseOrder()))
-    //         .collect(Collectors.toList());
-    // }
-
 
 /************************************************************
  * Bonus and Payout Management
@@ -338,7 +321,5 @@ public class Board {
         }
         return rolls;
     }
-
-
 
 }
