@@ -41,7 +41,10 @@ public class PlayerActionAct implements PlayerAction {
         } else {
             processFailure(player,roll, board, view);
         }
-        checkAndWrapScene(player, model, view);
+        // Check if the scene is ready to be wrapped
+        if (checkScene(player, model)) {
+            wrapScene(player, model, view);
+        }
         return true;
     }
 
@@ -103,27 +106,39 @@ public class PlayerActionAct implements PlayerAction {
     }
 
     /**
-     * Checks if the scene is wrapped and wraps it if necessary.
-     *  
+     * Checks if the scene is ready to be wrapped.
+     * 
      * @param player the player
+     * @param model the game model
+     * @return true if the scene is ready to be wrapped, false otherwise
+     */
+    private boolean checkScene(Player player, GameModel model) {
+        Board board = model.getBoard();
+        Location location = board.getPlayerLocation(player);
+        if (location.getShots() == 0) {
+            boolean anyPlayerOnCard = board.getLocationPlayers(location).stream()
+                .anyMatch(p -> {
+                    Role role = board.getPlayerRole(p);
+                    return role != null && role.getOnCard(); // Check if player has a non-null SceneCard role
+                });
+            return anyPlayerOnCard;
+        }
+        return false;
+    }
+
+    /**
+     * Wraps the scene at the player's location.
+     * 
+     * @param player the player
+     * @param model the game model
      * @param view the game view
      */
-    private void checkAndWrapScene(Player player, GameModel model, GameView view) {
+    private void wrapScene(Player player, GameModel model, GameView view) {
         Board board = model.getBoard();
-        if (board.getPlayerLocation(player).getShots() == 0) {  
-            Location location = board.getPlayerLocation(player); 
-            boolean anyPlayerOnCard = board.getLocationPlayers(location).stream()
-            .filter(p -> {
-                Role role = board.getPlayerRole(p);
-                return role != null && role.getOnCard(); // Check if player has a non-null SceneCard role
-            })
-            .anyMatch(r -> true); // If a player passes the filter, they are on a SceneCard role
-            if (anyPlayerOnCard) {
-                view.showMessage("Bonus payout!");
-            }
-            board.wrapScene(location);
-            view.showMessage("The scene is wrapped.");
-        }
+        Location location = board.getPlayerLocation(player);
+        view.showMessage("Bonus payout!");
+        board.wrapScene(location);
+        view.showMessage("The scene is wrapped.");
     }
 
 }
