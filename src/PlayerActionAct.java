@@ -42,7 +42,7 @@ public class PlayerActionAct implements PlayerAction {
             processFailure(player,roll, board, view);
         }
         // Check if the scene is ready to be wrapped
-        if (checkScene(player, model)) {
+        if (noShotsRemain(player, model)) {
             wrapScene(player, model, view);
         }
         return true;
@@ -112,7 +112,7 @@ public class PlayerActionAct implements PlayerAction {
      * @param model the game model
      * @return true if the scene is ready to be wrapped, false otherwise
      */
-    private boolean checkScene(Player player, GameModel model) {
+    private boolean noShotsRemain(Player player, GameModel model) {
         Board board = model.getBoard();
         Location location = board.getPlayerLocation(player);
         if (location.getShots() == 0) {
