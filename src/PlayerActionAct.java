@@ -116,12 +116,7 @@ public class PlayerActionAct implements PlayerAction {
         Board board = model.getBoard();
         Location location = board.getPlayerLocation(player);
         if (location.getShots() == 0) {
-            boolean anyPlayerOnCard = board.getLocationPlayers(location).stream()
-                .anyMatch(p -> {
-                    Role role = board.getPlayerRole(p);
-                    return role != null && role.getOnCard(); // Check if player has a non-null SceneCard role
-                });
-            return anyPlayerOnCard;
+            return true;
         }
         return false;
     }
