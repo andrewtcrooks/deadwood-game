@@ -1,12 +1,10 @@
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-import com.google.gson.Gson;
 
 /*
  * Represents the load action for the player.
