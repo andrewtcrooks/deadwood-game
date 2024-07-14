@@ -6,9 +6,12 @@ import java.util.stream.Collectors;
  */
 public class Board {
     private int numScenesRemaining;
+    // maps player ID to location name
     private Map<Integer, String> playerLocation;
-    private Map<Player, Role> playerRole;
-    private Map<String, SceneCard> locationScene;
+    // maps player ID to role name
+    private Map<Integer, String> playerRole;
+    // maps location name to scene card ID
+    private Map<String, Integer> locationScene;
 
 
 /************************************************************
@@ -44,8 +47,10 @@ public class Board {
             }
             // Draw a scene card from the deck
             SceneCard card = deck.drawCard();
+            // Get the scene card ID
+            int sceneCardID = card.getID();
             // Set the scene card for the location
-            this.locationScene.put(location.getName(), card);
+            this.locationScene.put(location.getName(), sceneCardID);
         }
     }
 
@@ -94,20 +99,35 @@ public class Board {
     /**
      * Wraps the scene in the Location.
      */
-    public void wrapScene(List<Player> players, Location location) {
-        // Check for any player working a role on a card
+    public void wrapScene(List<Player> players, Deck deck, Location location) {
+        // Get players at location
         List<Player> playersAtLocation = getLocationPlayers(players, location);
-        boolean anyPlayerOnCard = playersAtLocation.stream()
-            .anyMatch(player -> getPlayerRole(player) != null && getPlayerRole(player).getOnCard());
+        // Get the scene card at the location
+        int sceneCardID = getLocationSceneCardID(location.getName());
+        SceneCard sceneCard = deck.getSceneCard(sceneCardID);
+        // Get a list of the names of the on card roles
+        List<String> roleNamesOnCard = sceneCard.getRoles().stream()
+            .map(Role::getName)
+            .collect(Collectors.toList());
+        // Get the players working on card
+        List<Player> playersOnCard = playersAtLocation.stream()
+            .filter(player -> roleNamesOnCard.contains(getPlayerRole(player.getID())))
+            .collect(Collectors.toList());
+        // Get a list of the names of the off card roles
+        List<String> rolesNamesOffCard = location.getRoles().stream()
+            .map(Role::getName)
+            .collect(Collectors.toList());
+        // Get the players working off card
+        List<Player> playersOffCard = playersAtLocation.stream()
+            .filter(player -> rolesNamesOffCard.contains(getPlayerRole(player.getID())))
+            .collect(Collectors.toList());
         // Pay out bonus if any player was on a card
-        if (anyPlayerOnCard) {
-            payOutBonus(players, location);
+        if (playersOnCard.size() > 0) {
+            payOutBonus(playersOnCard, playersOffCard, deck, location);
         }
         // Remove all players from their roles and reset rehearsal tokens
-        playersAtLocation.forEach(player -> {
-            setPlayerRole(player, null);
-            player.resetRehearsalTokens();
-        });
+        playersAtLocation.forEach(player -> setPlayerRole(player.getID(), null));
+        playersAtLocation.forEach(player -> player.resetRehearsalTokens());
         // Reset takes
         location.resetTakes();
         // Clear the scene card        
@@ -218,8 +238,8 @@ public List<Player> getLocationPlayers(List<Player> players, Location location) 
      * @param player The player to set the role for.
      * @param role The role to set.
      */
-    public void setPlayerRole(Player player, Role role) {
-        playerRole.put(player, role);
+    public void setPlayerRole(int playerID, String roleName) {
+        playerRole.put(playerID, roleName);
     }
 
     /**
@@ -228,8 +248,8 @@ public List<Player> getLocationPlayers(List<Player> players, Location location) 
      * @param player The player to check.
      * @return The player's role.
      */
-    public Role getPlayerRole(Player player) {
-        return playerRole.get(player);
+    public String getPlayerRole(int playerID) {
+        return playerRole.get(playerID);
     }
 
     /**
@@ -238,8 +258,8 @@ public List<Player> getLocationPlayers(List<Player> players, Location location) 
      * @param locationName The name of the location to set the scene card for.
      * @param sceneCard The scene card to set.
      */
-    public void setLocationSceneCard(String locationName, SceneCard sceneCard) {
-        locationScene.put(locationName, sceneCard);
+    public void setLocationSceneCard(String locationName, Integer sceneCardID) {
+        locationScene.put(locationName, sceneCardID);
     }
 
     /**
@@ -248,7 +268,7 @@ public List<Player> getLocationPlayers(List<Player> players, Location location) 
      * @param locationName The name of the location to check.
      * @return The scene card at the location.
      */
-    public SceneCard getLocationSceneCard(String locationName) {
+    public Integer getLocationSceneCardID(String locationName) {
         return locationScene.get(locationName);
     }
 
@@ -258,8 +278,13 @@ public List<Player> getLocationPlayers(List<Player> players, Location location) 
      * @param location The location to check.
      * @return The roles for the scene card at the location.
      */
-    public SceneCard getLocationSceneCardRoles(String locationName) {
-        return locationScene.get(locationName);
+    public List<Role> getLocationSceneCardRoles(String locationName, Deck deck) {
+        // Get the scene card ID
+        Integer sceneCardID = getLocationSceneCardID(locationName);
+        // Get the scene card
+        SceneCard sceneCard = deck.getSceneCard(sceneCardID);
+        // Get the roles for the scene card
+        return sceneCard.getRoles();
     }
 
 
@@ -270,28 +295,29 @@ public List<Player> getLocationPlayers(List<Player> players, Location location) 
     /**
      * Pays out the bonus to all players at the Location.
      */
-    private void payOutBonus(List<Player> players, Location location) {
-        int movieBudget = getLocationSceneCard(location.getName()).getBudget(); // Get the movie budget
+    private void payOutBonus(List<Player> playersOnCard, List<Player> playersOffCard, Deck deck, Location location) {
+        // Get the scene card at the location
+        int sceneCardID = getLocationSceneCardID(location.getName());
+        SceneCard sceneCard = deck.getSceneCard(sceneCardID);
+        // Get the movie budget
+        int movieBudget = sceneCard.getBudget();
+        // Roll a number of dice equal to the budget
         List<Integer> diceRolls = rollDice(movieBudget); // Roll dice equal to the budget
         Collections.sort(diceRolls, Collections.reverseOrder()); // Sort dice rolls in descending order
-        // Get all players with an on card role, sorted by their role rank in descending order
-        List<Player> playersOnCard = getLocationPlayers(players,location).stream()
-            .filter(player -> getPlayerRole(player) != null && getPlayerRole(player).getOnCard())
-            .sorted(Comparator.comparingInt(player -> getPlayerRole(player).getRank()))
-            .collect(Collectors.toList());
         // Distribute dice rolls as money in a round-robin fashion
         for (int i = 0; i < diceRolls.size(); i++) {
             Player player = playersOnCard.get(i % playersOnCard.size()); // Wrap around if more dice than players
             player.addMoney(diceRolls.get(i)); // Add the dice roll as a bonus
         }
-        // Pay each player with an off card role an amount equal to the rank of the role they are working
-        List<Player> playersOffCard = getLocationPlayers(players, location).stream()
-            .filter(player -> getPlayerRole(player) != null && !getPlayerRole(player).getOnCard())
-            .collect(Collectors.toList());
-        playersOffCard.forEach(player -> player.addMoney(getPlayerRole(player).getRank()));
-        // Players leave their roles
-        playersOnCard.forEach(player -> setPlayerRole(player, null));
-        playersOffCard.forEach(player -> setPlayerRole(player, null));
+        // Pay out the off card players an amount equal to the rank of their role
+        List<Role> roles = location.getRoles();
+        for (Player player : playersOffCard) {
+            Role role = roles.stream()
+                .filter(r -> r.getName().equals(getPlayerRole(player.getID())))
+                .findFirst()
+                .orElse(null);
+            player.addMoney(role.getRank());
+        }
     }
 
     /**

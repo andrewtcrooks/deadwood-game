@@ -17,11 +17,12 @@ public class PlayerActionWork implements PlayerAction {
      */
     @Override
     public boolean validate(Player player, GameModel model, GameView view) {
+        Deck deck = model.getDeck();
         Board board = model.getBoard();
         return isNotInCastingOffice(player, board, view) && // true if not in Casting Office
                isNotInTrailer(player, board, view) && // true if not in Trailer
                isAtUnwrappedLocation(player, board, model, view) && // true if location is not wrapped
-               playerHasNoRole(player, board, view); // true if player has no role
+               playerHasNoRole(player, deck, board, view); // true if player has no role
     }
     
     /**
@@ -83,8 +84,17 @@ public class PlayerActionWork implements PlayerAction {
      * @param view the game view
      * @return true if the player has no role, false otherwise
      */
-    private boolean playerHasNoRole(Player player, Board board, GameView view) {
-        Role role = board.getPlayerRole(player);
+    private boolean playerHasNoRole(Player player, Deck deck, Board board, GameView view) {
+        // Get player location Name
+        String locationName = board.getPlayerLocationName(player);
+        // Get location scene card
+        List<Role> roles = board.getLocationSceneCardRoles(locationName, deck);
+        // Get player role by finding which role in the list of roles matches the players role
+        Role role = roles.stream()
+                .filter(r -> r.getName().equals(board.getPlayerRole(player.getID())))
+                .findFirst()
+                .orElse(null);
+        // If the player has a role, display the role and return false
         if (role != null) {
             String roleName = role.getName();
             String roleLine = role.getLine();
@@ -110,13 +120,14 @@ public class PlayerActionWork implements PlayerAction {
      */
     @Override
     public boolean execute(Player player, GameModel model, GameView view) {
+        Deck deck = model.getDeck();
         Board board = model.getBoard();
         String locationName = board.getPlayerLocationName(player);
         Location location = model.getLocation(locationName);
         // Get the available roles at the location
         List<Role> allRoles = new ArrayList<Role>(location.getRoles());
         // Add roles from SceneCard
-        allRoles.addAll(board.getLocationSceneCard(locationName).getRoles());
+        allRoles.addAll(board.getLocationSceneCardRoles(locationName, deck));
         // Filter out all the roles with ranks higher than the players rank that are not occupied
         allRoles.removeIf(role -> role.getRank() > player.getRank() || role.isOccupied());
         // Display the available roles
@@ -175,8 +186,9 @@ public class PlayerActionWork implements PlayerAction {
      * @param view the game view
      */
     private void assignRoleToPlayer(Player player, Role role, Board board, GameView view) {
-        //
-        board.setPlayerRole(player, role);
+        // Get role name
+        String roleName = role.getName();
+        board.setPlayerRole(player.getID(), roleName);
         // Display the role the player is working
         view.showMessage("You are now working the role of " + role.getName());
         // Set the player as having worked

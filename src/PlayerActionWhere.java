@@ -26,6 +26,7 @@ public class PlayerActionWhere implements PlayerAction {
      */
     @Override
     public boolean execute(Player player, GameModel model, GameView view) {
+        Deck deck = model.getDeck();
         Board board = model.getBoard();
         String locationName = board.getPlayerLocationName(player);
         Location location = model.getLocation(locationName);
@@ -37,9 +38,10 @@ public class PlayerActionWhere implements PlayerAction {
         } else if ("Casting Office".equals(locationName)) {
             view.showMessage("You are at the Casting Office");
         } else {
-            String sceneTitle = board.getLocationSceneCard(locationName).getTitle();
-            int sceneID = board.getLocationSceneCard(locationName).getID();
-            view.showMessage(locationName + " shooting " + sceneTitle + " (scene " + sceneID + ")");
+            int sceneCardID = board.getLocationSceneCardID(locationName);
+            SceneCard card = deck.getSceneCard(sceneCardID);
+            String sceneTitle = card.getTitle();
+            view.showMessage(locationName + " shooting " + sceneTitle + " (scene " + sceneCardID + ")");
         }
         return false;
     }

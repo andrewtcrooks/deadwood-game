@@ -27,7 +27,7 @@ public class PlayerActionMove implements PlayerAction {
      * @return true if the player has no role, false otherwise
      */
     private boolean checkPlayerHasNoRole(Player player, Board board, GameView view) {
-        if (board.getPlayerRole(player) != null) {
+        if (board.getPlayerRole(player.getID()) != null) {
             view.showMessage("You must finish your role before moving.");
             return false;
         }
