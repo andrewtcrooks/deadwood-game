@@ -189,8 +189,8 @@ public class GameModel implements Subject {
      *
      * @return The locations.
      */
-    public Location getLocations() {
-        return (Location) locations;
+    public Map<String,Location> getLocations() {
+        return locations;
     }
 
     /**
