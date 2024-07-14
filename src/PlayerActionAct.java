@@ -1,3 +1,5 @@
+import java.util.List;
+
 /*
  * Represents the act action for the player.
  */
@@ -138,8 +140,9 @@ public class PlayerActionAct implements PlayerAction {
     private void wrapLocationScene(Player player, Board board, GameModel model, GameView view) {
         String locationName = board.getPlayerLocationName(player);
         Location location = model.getLocation(locationName);
+        List<Player> players = model.getPlayers();
         // Check if any player has an on-card role
-        boolean anyPlayerOnCard = board.getLocationPlayers(location).stream()
+        boolean anyPlayerOnCard = board.getLocationPlayers(players, location).stream()
             .anyMatch(p -> {
                 Role role = board.getPlayerRole(p);
                 return role != null && role.getOnCard(); // Check if player has a non-null on-card role
@@ -148,7 +151,7 @@ public class PlayerActionAct implements PlayerAction {
         if (anyPlayerOnCard) {
             view.showMessage("Bonus payout!");
         }
-        board.wrapScene(location);
+        board.wrapScene(players, location);
         view.showMessage("The scene is wrapped.");
     }
 
