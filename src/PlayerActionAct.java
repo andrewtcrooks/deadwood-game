@@ -89,7 +89,6 @@ public class PlayerActionAct implements PlayerAction {
     private void processSuccess(Player player, int roll, Board board, GameModel model, GameView view) {
         view.showMessage("You rolled a " + roll + ". Success!");
         String locationName = board.getPlayerLocationName(player);
-        Location location = model.getLocation(locationName);
         SceneCard sceneCard = model.getDeckSceneCard(board.getLocationSceneCardID(locationName));
         // Check if player has a role that matches a role on the SceneCard
         if (sceneCard.getRoles().stream().anyMatch(r -> r.getName().equals(board.getPlayerRole(player.getID())))) {
@@ -111,7 +110,6 @@ public class PlayerActionAct implements PlayerAction {
     private void processFailure(Player player, int roll, Board board, GameModel model, GameView view) {
         view.showMessage("You rolled a " + roll + ". Failure.");
         String locationName = board.getPlayerLocationName(player);
-        Location location = model.getLocation(locationName);
         SceneCard sceneCard = model.getDeckSceneCard(board.getLocationSceneCardID(locationName));
         // Check if the player is on-card
         if (sceneCard.getRoles().stream().anyMatch(r -> r.getName().equals(board.getPlayerRole(player.getID())))) {
