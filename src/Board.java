@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
  */
 public class Board {
     private int numScenesRemaining;
-    private Map<String, Location> locations;
     private Map<Player, String> playerLocation;
     private Map<Player, Role> playerRole;
     private Map<String, SceneCard> locationScene;
@@ -23,7 +22,6 @@ public class Board {
      * @param locations The map of locations
      */
     public Board(Deck deck, Map<String, Location> locations) {
-        this.locations = locations;
         // Initialize number of scenes remaining
         this.numScenesRemaining = 10;
         // Initialize players at locations map
@@ -33,14 +31,14 @@ public class Board {
         // Initialize location scene map
         this.locationScene = new HashMap<>();      
         // Deal scene cards to locations
-        dealSceneCardsToLocations(deck);
+        dealSceneCardsToLocations(deck, locations);
     }
 
     /**
      * Deals new scene card to each location on the board.
      */
-    private void dealSceneCardsToLocations(Deck deck) {
-        for (Location location : this.locations.values()) {
+    private void dealSceneCardsToLocations(Deck deck, Map<String,Location> locations) {
+        for (Location location : locations.values()) {
             if (location.getName().equals("Trailer") || location.getName().equals("Casting Office")) {
                 continue; // Skip the current iteration for Trailer and Casting Office locations
             }
@@ -59,8 +57,8 @@ public class Board {
     /**
      * Resets the board to its initial state.
      */
-    public void resetBoard(Deck deck) {
-        dealSceneCardsToLocations(deck);
+    public void resetBoard(Deck deck, Map<String,Location> locations) {
+        dealSceneCardsToLocations(deck, locations);
     }
 
     /**
@@ -137,15 +135,6 @@ public class Board {
         location.wrapShot();
     }
 
-        /**
-     * Returns the locations on the board.
-     * 
-     * @return The locations on the board.
-     */
-    public Map<String, Location> getLocations() {
-        return this.locations;
-    }
-
     /**
      * Returns the number of shots remaining at a location.
      *  
@@ -191,17 +180,6 @@ public class Board {
         return playerLocation.get(player);
     }
 
-    /**
-     * Returns the location a player is at.
-     * 
-     * @param player The player to check.
-     * @return The location the player is at.
-     */
-    public Location getPlayerLocation(Player player) {
-        String locationName = playerLocation.get(player);
-        return locations.get(locationName);
-    }
-    
     /**
      * Returns the players at a location.
      * 
