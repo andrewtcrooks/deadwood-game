@@ -13,7 +13,7 @@ public class GameModel implements Subject {
     private transient List<Observer> observers = new ArrayList<>();
     private int numDays;
     private int day = 1;
-    private List<Player> players;
+    private Map<Integer, Player> players;
     private Deck deck;
     private Map<String, Location> locations;
     private Board board;
@@ -78,7 +78,7 @@ public class GameModel implements Subject {
                                                                                 // otherwise 0
         this.numDays = numPlayers < 4 ? 3 : 4; // 3 if numPlayers are less than 4, otherwise 4
         // Initialize the players
-        this.players = initPlayersList(numPlayers, playerRank, playerCredits);
+        this.players = initPlayersMap(numPlayers, playerRank, playerCredits);
     }
 
     /**
@@ -87,16 +87,16 @@ public class GameModel implements Subject {
      * @param numPlayers The number of players.
      * @param playerRank The rank of the players.
      * @param playerCredits The credits of the players.
-     * @return The list of players.
+     * @return The map of players.
      */
-    private List<Player> initPlayersList(int numPlayers, int playerRank, int playerCredits) {
-        List<Player> players = new ArrayList<>();
+    private Map<Integer, Player> initPlayersMap(int numPlayers, int playerRank, int playerCredits) {
+        Map<Integer, Player> playersMap = new HashMap<>();
         for (int i = 0; i < numPlayers; i++) {
             Player newPlayer = new Player(i + 1, playerRank, playerCredits);
             // newPlayer.setLocation(null); //placeholder until initBoard is run
-            players.add(newPlayer);
+            playersMap.put(i + 1, newPlayer);
         }
-        return players;
+        return playersMap;
     }
 
     /**
@@ -139,12 +139,12 @@ public class GameModel implements Subject {
      * @param deck The deck of cards.
      * @param locations The map of locations.
      */
-    private void initBoard(List<Player> players, Deck deck, Map<String, Location> locations) {
+    private void initBoard(Map<Integer, Player> players, Deck deck, Map<String, Location> locations) {
         // Create a new board
         this.board = new Board(deck, locations);
         // Set all player locations to Trailer
-        for (Player player : players) {
-            board.setPlayerLocation(player, "Trailer");
+        for (Map.Entry<Integer, Player> entry : players.entrySet()) {
+            board.setPlayerLocation(entry.getValue(), "Trailer");
         }
     }
 
@@ -218,34 +218,31 @@ public class GameModel implements Subject {
      * @return The player with the given ID.
      * @throws IllegalArgumentException If no player with the given ID is found.
      */
-    Player getPlayer(int ID) {
-        for (Player player : players) {
-            if (Integer.valueOf(player.getID()).equals(ID)) {
-                return player;
-            }
+    public Player getPlayer(int ID) {
+        if (players.containsKey(ID)) {
+            return players.get(ID);
         }
-        throw new IllegalArgumentException("No player " + ID);
+        throw new IllegalArgumentException("No player with ID: " + ID);
     }
 
     /**
-     * Returns the list of players.
+     * Returns the map of player IDs to Player objects.
      *
-     * @return The list of players.
+     * @return The map of player IDs to Player objects.
      */
-    public List<Player> getPlayers() {
-        return players;
+    public Map<Integer, Player> getPlayers() {
+        return new HashMap<>(players);
     }
 
     /**
      * Change all player locations on the board to "Trailer"
      */
     public void resetPlayerLocations() {
-        for (Player player : this.players) {
+        for (Map.Entry<Integer, Player> entry : this.players.entrySet()) {
             // move player to trailer
-            this.board.setPlayerLocation(player, "Trailer");
+            this.board.setPlayerLocation(entry.getValue(), "Trailer");
         }
     }
-
     /**
      * Returns the location with the given name.
      *
