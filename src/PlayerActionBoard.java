@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -46,12 +45,8 @@ public class PlayerActionBoard implements PlayerAction {
      * @return the sorted list of players
      */
     private List<Player> getSortedPlayers(GameModel model) {
-        // Get player Map
-        Map<Integer, Player> playersMap = model.getPlayers();
-        // Convert the Map to a List
-        List<Player> players = new ArrayList<>(playersMap.values());
-        // Sort the List by player ID
-        players.sort(Comparator.comparingInt(Player::getID));
+        List<Player> players = new ArrayList<>(model.getPlayers());
+        players.sort(Comparator.comparing(Player::getID));
         return players;
     }
 

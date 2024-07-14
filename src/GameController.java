@@ -116,18 +116,16 @@ public class GameController{
      * Scores the game and displays the final results.
      */
     public void scoreGame() {
-        // Get the players as a Map
-        Map<Integer, Player> players = model.getPlayers();
-        // Convert Map to List for sorting
-        List<Player> playersList = new ArrayList<>(players.values());
+        // Get the players
+        List<Player> players = model.getPlayers();
         // Sort players by score and then by ID if scores are tied
-        playersList.sort(Comparator.comparingInt(Player::getScore).reversed().thenComparingInt(Player::getID));
+        players.sort(Comparator.comparingInt(Player::getScore).reversed().thenComparingInt(player -> player.getID()));
         // Print game over screen
         view.showMessage("Game over!");
         // declare player(s) with the highest score the winner
-        int highestScore = playersList.get(0).getScore();
+        int highestScore = players.get(0).getScore();
         List<Player> winners = new ArrayList<>();
-        for (Player player : playersList) {
+        for (Player player : players) {
             if (player.getScore() == highestScore) {
                 winners.add(player);
             } else {
@@ -135,7 +133,7 @@ public class GameController{
             }
         }
         // Print scores and indicate the winner(s)
-        for (Player player : playersList) {
+        for (Player player : players) {
             String winnerIndicator = player.getScore() == highestScore ? "  !Winner!" : "";
             System.out.println("Player ID: " + player.getID() + ", Score: " + player.getScore() + winnerIndicator);
         }
