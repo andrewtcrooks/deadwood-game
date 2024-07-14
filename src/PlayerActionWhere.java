@@ -27,8 +27,8 @@ public class PlayerActionWhere implements PlayerAction {
     @Override
     public boolean execute(Player player, GameModel model, GameView view) {
         Board board = model.getBoard();
-        Location location = board.getPlayerLocation(player);
         String locationName = board.getPlayerLocationName(player);
+        Location location = model.getLocation(locationName);
         // Check if the scene is wrapped first
         if (location.getIsWrapped()) {
             view.showMessage(locationName + " wrapped");

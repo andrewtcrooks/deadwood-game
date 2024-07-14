@@ -34,7 +34,7 @@ public class PlayerActionBoard implements PlayerAction {
     public boolean execute(Player player, GameModel model, GameView view) {
         Board board = model.getBoard();
         List<Player> players = getSortedPlayers(model);
-        displayBoard(players, board, view);
+        displayBoard(players, board, model, view);
         return false;
     }
 
@@ -54,13 +54,15 @@ public class PlayerActionBoard implements PlayerAction {
      * Displays the board with the player information.
      * 
      * @param players the players
+     * @param board the game board
+     * @param model the game model
      * @param view the game view
      */
-    private void displayBoard(List<Player> players, Board board, GameView view) {
+    private void displayBoard(List<Player> players, Board board, GameModel model, GameView view) {
         view.showMessage("Board:");
-        displayWrappedLocations(players, board, view);
+        displayWrappedLocations(players, model, view);
         for (Player p : players) {
-            displayPlayerInfo(p, board, view);
+            displayPlayerInfo(p, board, model, view);
         }
     }
 
@@ -68,10 +70,11 @@ public class PlayerActionBoard implements PlayerAction {
      * Displays the wrapped locations on the board.
      * 
      * @param players the players
+     * @param model the game model
      * @param view the game view
      */
-    private void displayWrappedLocations(List<Player> players, Board board, GameView view) {
-        Set<String> wrappedLocations = board.getLocations().values().stream().filter(Location::getIsWrapped)
+    private void displayWrappedLocations(List<Player> players, GameModel model, GameView view) {
+        Set<String> wrappedLocations = model.getLocations().values().stream().filter(Location::getIsWrapped)
         .map(Location::getName)
         .collect(Collectors.toSet());
         if (!wrappedLocations.isEmpty()) {
@@ -83,10 +86,12 @@ public class PlayerActionBoard implements PlayerAction {
      * Displays the player information on the board.
      * 
      * @param player the player
+     * @param board the game board
+     * @param model the game model
      * @param view the game view
      */
-    private void displayPlayerInfo(Player player, Board board, GameView view) {
-        String playerInfo = constructPlayerInfo(player, board);
+    private void displayPlayerInfo(Player player, Board board, GameModel model, GameView view) {
+        String playerInfo = constructPlayerInfo(player, board, model);
         if (player.getActive()) {
             view.showMessage("* " + playerInfo);
         } else {
@@ -98,9 +103,11 @@ public class PlayerActionBoard implements PlayerAction {
      * Constructs the player information to be displayed on the board.
      * 
      * @param player the player
+     * @param board the game board
+     * @param model the game model
      * @return the player information
      */
-    private String constructPlayerInfo(Player player, Board board) {
+    private String constructPlayerInfo(Player player, Board board, GameModel model) {
         String locationName = board.getPlayerLocationName(player);
         String playerInfo = String.format("Player %d (rank %d, $%4d, %4dcr, %drt) - %-14s", 
                                           player.getID(), 
@@ -110,9 +117,8 @@ public class PlayerActionBoard implements PlayerAction {
                                           player.getRehearsalTokens(), 
                                           locationName);
         if (!locationName.equals("Trailer") && !locationName.equals("Casting Office")) {
-            playerInfo += getLocationStatus(player, board);
+            playerInfo += getLocationStatus(player, board, model);
         }
-
         return playerInfo;
     }
 
@@ -120,10 +126,13 @@ public class PlayerActionBoard implements PlayerAction {
      * Returns the status of the player's location.
      * 
      * @param player the player
+     * @param board the game board
+     * @param model the game model
      * @return the status of the player's location
      */
-    private String getLocationStatus(Player player, Board board) {
-        Location location = board.getPlayerLocation(player);
+    private String getLocationStatus(Player player, Board board, GameModel model) {
+        String locationName = board.getPlayerLocationName(player);
+        Location location = model.getLocation(locationName);
         if (!location.getIsWrapped()) {
             int shotsRemaining = location.getShots();
             return " - Shots remaining: " + shotsRemaining;

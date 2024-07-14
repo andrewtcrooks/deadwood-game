@@ -20,7 +20,7 @@ public class PlayerActionWork implements PlayerAction {
         Board board = model.getBoard();
         return isNotInCastingOffice(player, board, view) && // true if not in Casting Office
                isNotInTrailer(player, board, view) && // true if not in Trailer
-               isAtUnwrappedLocation(player, board, view) && // true if location is not wrapped
+               isAtUnwrappedLocation(player, board, model, view) && // true if location is not wrapped
                playerHasNoRole(player, board, view); // true if player has no role
     }
     
@@ -28,6 +28,7 @@ public class PlayerActionWork implements PlayerAction {
      * Checks if the player is not in the Casting Office.
      *
      * @param player the player
+     * @param board the game board
      * @param view the game view
      * @return true if the player is not in the Casting Office, false otherwise
      */
@@ -43,6 +44,7 @@ public class PlayerActionWork implements PlayerAction {
      * Checks if the player is not in the Trailer.
      *
      * @param player the player
+     * @param board the game board
      * @param view the game view
      * @return true if the player is not in the Trailer, false otherwise
      */
@@ -58,11 +60,15 @@ public class PlayerActionWork implements PlayerAction {
      * Checks if the player is at an unwrapped location.
      *
      * @param player the player
+     * @param board the game board
+     * @param model the game model
      * @param view the game view
      * @return true if the location is not wrapped, false otherwise
      */
-    private boolean isAtUnwrappedLocation(Player player, Board board, GameView view) {
-        if (board.getPlayerLocation(player).getIsWrapped()) {
+    private boolean isAtUnwrappedLocation(Player player, Board board, GameModel model, GameView view) {
+        String locationName = board.getPlayerLocationName(player);
+        Location location = model.getLocation(locationName);
+        if (location.getIsWrapped()) {
             view.showMessage("Location is wrapped. No more work available until tomorrow.");
             return false;
         }
@@ -73,6 +79,7 @@ public class PlayerActionWork implements PlayerAction {
      * Checks if the player has a role.
      *
      * @param player the player
+     * @param board the game board
      * @param view the game view
      * @return true if the player has no role, false otherwise
      */
@@ -103,11 +110,9 @@ public class PlayerActionWork implements PlayerAction {
      */
     @Override
     public boolean execute(Player player, GameModel model, GameView view) {
-        // Get the board
         Board board = model.getBoard();
-        // Get the location and location name
-        Location location = board.getPlayerLocation(player);
-        String locationName = location.getName();
+        String locationName = board.getPlayerLocationName(player);
+        Location location = model.getLocation(locationName);
         // Get the available roles at the location
         List<Role> allRoles = new ArrayList<Role>(location.getRoles());
         // Add roles from SceneCard

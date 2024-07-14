@@ -37,13 +37,13 @@ public class PlayerActionAct implements PlayerAction {
         int roll = performDiceRoll(player);
         // Check if the player succeeded
         if (roll >= budget) {
-            processSuccess(player, roll, board, view);
+            processSuccess(player, roll, board, model, view);
         } else {
             processFailure(player,roll, board, view);
         }
         // Check if the scene is ready to be wrapped
-        if (noShotsRemain(player, model)) {
-            wrapLocationScene(player, model, view);
+        if (noShotsRemain(player, board, model)) {
+            wrapLocationScene(player, board, model, view);
         }
         return true;
     }
@@ -75,12 +75,16 @@ public class PlayerActionAct implements PlayerAction {
      * Processes a successful act action for the player.
      *  
      * @param player the player
-     * @param view the game view
      * @param roll the result of the dice roll
+     * @param board the game board
+     * @param model the game model
+     * @param view the game view
      */
-    private void processSuccess(Player player, int roll, Board board, GameView view) {
+    private void processSuccess(Player player, int roll, Board board, GameModel model, GameView view) {
         view.showMessage("You rolled a " + roll + ". Success!");
-        board.getPlayerLocation(player).removeShotCounter();
+        String locationName = board.getPlayerLocationName(player);
+        Location location = model.getLocation(locationName);
+        location.removeShotCounter();
         // Check if the player is on-card
         if (board.getPlayerRole(player).getOnCard()) {
             player.addCredits(2);
@@ -94,8 +98,9 @@ public class PlayerActionAct implements PlayerAction {
      * Processes a failed act action for the player.
      *  
      * @param player the player
-     * @param view the game view
      * @param roll the result of the dice roll
+     * @param board the game board
+     * @param view the game view
      */
     private void processFailure(Player player, int roll, Board board, GameView view) {
         view.showMessage("You rolled a " + roll + ". Failure.");
@@ -106,15 +111,16 @@ public class PlayerActionAct implements PlayerAction {
     }
 
     /**
-     * Checks if the scene is ready to be wrapped.
+     * Checks if no shots remain at the player's location.
      * 
      * @param player the player
+     * @param board the game board
      * @param model the game model
      * @return true if the scene is ready to be wrapped, false otherwise
      */
-    private boolean noShotsRemain(Player player, GameModel model) {
-        Board board = model.getBoard();
-        Location location = board.getPlayerLocation(player);
+    private boolean noShotsRemain(Player player, Board board, GameModel model) {
+        String locationName = board.getPlayerLocationName(player);
+        Location location = model.getLocation(locationName);
         if (location.getShots() == 0) {
             return true;
         }
@@ -125,12 +131,13 @@ public class PlayerActionAct implements PlayerAction {
      * Wraps the scene at the player's location.
      * 
      * @param player the player
+     * @param board the game board
      * @param model the game model
      * @param view the game view
      */
-    private void wrapLocationScene(Player player, GameModel model, GameView view) {
-        Board board = model.getBoard();
-        Location location = board.getPlayerLocation(player);
+    private void wrapLocationScene(Player player, Board board, GameModel model, GameView view) {
+        String locationName = board.getPlayerLocationName(player);
+        Location location = model.getLocation(locationName);
         // Check if any player has an on-card role
         boolean anyPlayerOnCard = board.getLocationPlayers(location).stream()
             .anyMatch(p -> {

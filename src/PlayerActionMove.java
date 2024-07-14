@@ -60,7 +60,7 @@ public class PlayerActionMove implements PlayerAction {
     @Override
     public boolean execute(Player player, GameModel model, GameView view) {
         Board board = model.getBoard();
-        List<String> neighbors = getNeighbors(player, board);
+        List<String> neighbors = getNeighbors(player, board, model);
         displayMoveOptions(neighbors, view);
         String location = getPlayerLocationChoice(view);
         String locationFormatted = formatLocationForNeighbors(location);
@@ -77,10 +77,14 @@ public class PlayerActionMove implements PlayerAction {
      * Gets the neighbors of the player's current location.
      *
      * @param player the player
+     * @param board the game board
+     * @param model the game model
      * @return the neighbors of the player's current location
      */
-    private List<String> getNeighbors(Player player, Board board) {
-        return board.getPlayerLocation(player).getNeighbors();
+    private List<String> getNeighbors(Player player, Board board, GameModel model) {
+        String locationName = board.getPlayerLocationName(player);
+        Location location = model.getLocation(locationName);
+        return location.getNeighbors();
     }
 
     /**
@@ -138,9 +142,9 @@ public class PlayerActionMove implements PlayerAction {
      * Moves the player to the location.
      *
      * @param player the player
-     * @param model the game model
+     * @param board the game board
      * @param view the game view
-     * @param location the location to move to
+     * @param endLocationString the location to move to
      */
     private void movePlayerToLocation(Player player, Board board, GameView view, String endLocationString) {
         // Get String representation of start location
