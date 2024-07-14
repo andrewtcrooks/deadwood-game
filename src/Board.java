@@ -197,7 +197,7 @@ public class Board {
      * @return The name of the location the player is at.
      */
     public String getPlayerLocationName(Player player) {
-        return playerLocation.get(player);
+        return playerLocation.get(player.getID());
     }
 
 /**
