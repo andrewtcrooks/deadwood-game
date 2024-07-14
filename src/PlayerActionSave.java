@@ -83,9 +83,8 @@ public class PlayerActionSave implements PlayerAction {
      * @param view the game view
      */
     private void saveGameToFile(String filename, GameModel model, GameView view) {
-        Gson gson = new Gson();
-        try (Writer writer = new FileWriter("saved/" + filename + ".json")) {
-            gson.toJson(model, writer);
+        try {
+            JsonUtil.saveToJsonFile(model, "saved/" + filename + ".json");
             view.showMessage("Game saved successfully as " + filename + ".json");
         } catch (IOException e) {
             view.showMessage("Failed to save the game.");

@@ -97,9 +97,8 @@ public class PlayerActionLoad implements PlayerAction {
             return;
         }
         // load the game from the JSON file
-        try (FileReader reader = new FileReader(file)) {
-            Gson gson = new Gson();
-            GameModel loadedModel = gson.fromJson(reader, GameModel.class);
+        try {
+            GameModel loadedModel = JsonUtil.loadFromJsonFile(fullPath, GameModel.class);
             model.setModel(loadedModel);
             view.showMessage("Game loaded successfully.");
         } catch (IOException e) {
