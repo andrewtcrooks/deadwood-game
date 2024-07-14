@@ -115,10 +115,12 @@ public class PlayerActionUpgrade implements PlayerAction {
     public boolean execute(Player player, GameModel model, GameView view) {
         displayUpgradeOptions(player, view);
         int chosenRank = getUserChosenRank(view);
+        // Validate the chosen rank
         if (!validateChosenRank(chosenRank, player.getRank(), view)) {
             return false;
         }
         String paymentMethod = determinePaymentMethod(player, chosenRank, view);
+        // Validate the payment method
         if (!isValidPaymentMethod(paymentMethod, view)) {
             return false;
         }
