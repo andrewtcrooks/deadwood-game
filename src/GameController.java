@@ -165,8 +165,10 @@ public class GameController{
         model.resetPlayerLocations();
         // get deck
         Deck deck = model.getDeck();
+        // get locations
+        Map<String, Location> locations = model.getLocations();
         // reset the board for the next day
-        model.getBoard().resetBoard(deck);
+        model.getBoard().resetBoard(deck, locations);
     }
 
 }
