@@ -163,8 +163,10 @@ public class GameController{
     private void endDay() {
         // reset player locations
         model.resetPlayerLocations();
+        // get deck
+        Deck deck = model.getDeck();
         // reset the board for the next day
-        model.getBoard().resetBoard();
+        model.getBoard().resetBoard(deck);
     }
 
 }

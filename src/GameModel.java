@@ -176,6 +176,24 @@ public class GameModel implements Subject {
     }
 
     /**
+     * Returns the deck.
+     *
+     * @return The deck.
+     */
+    public Deck getDeck() {
+        return deck;
+    }
+
+    /**
+     * Returns the locations.
+     *
+     * @return The locations.
+     */
+    public Location getLocations() {
+        return (Location) locations;
+    }
+
+    /**
      * Returns the board.
      *
      * @return The board.

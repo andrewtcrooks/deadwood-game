@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
  */
 public class Board {
     private int numScenesRemaining;
-    private Deck deck;
     private Map<String, Location> locations;
     private Map<Player, String> playerLocation;
     private Map<Player, Role> playerRole;
@@ -24,7 +23,6 @@ public class Board {
      * @param locations The map of locations
      */
     public Board(Deck deck, Map<String, Location> locations) {
-        this.deck = deck;
         this.locations = locations;
         // Initialize number of scenes remaining
         this.numScenesRemaining = 10;
@@ -35,19 +33,19 @@ public class Board {
         // Initialize location scene map
         this.locationScene = new HashMap<>();      
         // Deal scene cards to locations
-        dealSceneCardsToLocations();
+        dealSceneCardsToLocations(deck);
     }
 
     /**
      * Deals new scene card to each location on the board.
      */
-    private void dealSceneCardsToLocations() {
+    private void dealSceneCardsToLocations(Deck deck) {
         for (Location location : this.locations.values()) {
             if (location.getName().equals("Trailer") || location.getName().equals("Casting Office")) {
                 continue; // Skip the current iteration for Trailer and Casting Office locations
             }
             // Draw a scene card from the deck
-            SceneCard card = this.deck.drawCard();
+            SceneCard card = deck.drawCard();
             // Set the scene card for the location
             this.locationScene.put(location.getName(), card);
         }
@@ -61,8 +59,8 @@ public class Board {
     /**
      * Resets the board to its initial state.
      */
-    public void resetBoard() {
-        dealSceneCardsToLocations();
+    public void resetBoard(Deck deck) {
+        dealSceneCardsToLocations(deck);
     }
 
     /**
