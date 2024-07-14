@@ -10,6 +10,7 @@ public class SceneCard {
     private String image;
     private int budget;
     private List<Role> roles;
+    private boolean discarded = false;
 
     /**
      * Initializes a new SceneCard with the given ID, title, description, image, budget, and roles.
@@ -28,6 +29,7 @@ public class SceneCard {
         this.id = id;
         this.desc = desc;
         this.roles = roles;
+        this.discarded = false;
     }
 
     /**
@@ -35,8 +37,8 @@ public class SceneCard {
      *
      * @return The title of the SceneCard.
      */
-    String getTitle() {
-        return title;
+    public String getTitle() {
+        return this.title;
     }
 
     /**
@@ -44,8 +46,8 @@ public class SceneCard {
      *
      * @return The image on the SceneCard.
      */
-    String getImage() {
-        return image;
+    public String getImage() {
+        return this.image;
     }
 
     /**
@@ -53,8 +55,8 @@ public class SceneCard {
      *
      * @return The budget for the SceneCard.
      */
-    int getBudget() {
-        return budget;
+    public int getBudget() {
+        return this.budget;
     }
 
     /**
@@ -62,8 +64,8 @@ public class SceneCard {
      *
      * @return The unique identifier of the SceneCard.
      */
-    int getID() {
-        return id;
+    public int getID() {
+        return this.id;
     }
 
     /**
@@ -71,8 +73,8 @@ public class SceneCard {
      *
      * @return The description of the SceneCard.
      */
-    String getDesc() {
-        return desc;
+    public String getDesc() {
+        return this.desc;
     }
 
     /**
@@ -80,7 +82,23 @@ public class SceneCard {
      *
      * @return The list of roles on the SceneCard.
      */
-    List<Role> getRoles() {
-        return roles;
+    public List<Role> getRoles() {
+        return this.roles;
+    }
+
+    /**
+     * Returns whether the SceneCard has been discarded.
+     * 
+     * @return true if the SceneCard has been discarded, false otherwise
+     */
+    public boolean isDiscarded() {
+        return this.discarded;
+    }
+
+    /**
+     * Discards the SceneCard.
+     */
+    public void discard() {
+        this.discarded = true;
     }
 }
