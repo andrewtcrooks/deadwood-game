@@ -12,7 +12,12 @@ import java.util.Properties;
 public class Deadwood {
     private static Properties config = new Properties();
 
-
+    
+    /**
+     * The main method for Deadwood.
+     * 
+     * @param args the command line arguments
+     */
     public static void main(String[] args) {
         loadConfiguration();
         try {
@@ -43,6 +48,8 @@ public class Deadwood {
 
     /**
      * Initializes the game view.
+     * 
+     * @return the initialized view
      */
     private static GameView initializeView() {
         GameView view = GameCLIView.getInstance();
@@ -54,6 +61,7 @@ public class Deadwood {
      * Initializes the game model.
      * 
      * @param view the view to register as an observer
+     * @return the initialized model
      */
     private static GameModel initializeModel(GameView view) {
         GameModel model = GameModel.getInstance();
@@ -66,6 +74,7 @@ public class Deadwood {
      * 
      * @param model the model to use
      * @param view the view to use
+     * @return the initialized controller
      */
     private static GameController initializeController(GameModel model, GameView view) {
         GameController controller = new GameController();
