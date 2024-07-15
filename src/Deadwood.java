@@ -12,6 +12,7 @@ import java.util.Properties;
 public class Deadwood {
     private static Properties config = new Properties();
 
+
     public static void main(String[] args) {
         loadConfiguration();
         try {
