@@ -26,6 +26,11 @@ public class GameController{
         actionMap.put("help", new PlayerActionHelp());
     }
 
+
+/************************************************************
+ * Contructor and Initialization
+ ************************************************************/
+
     /**
      * Constructs a new GameController.
      */
@@ -63,6 +68,11 @@ public class GameController{
         }
     }
 
+
+/************************************************************
+ * Game Flow Management
+ ************************************************************/
+
     /**
      * Starts the game and manages the game flow after the game is initialized.
      */
@@ -77,6 +87,21 @@ public class GameController{
             endDay();
             // increment day by one
             this.model.incrementDay();
+        }
+    }
+
+    /**
+     * Manages a day in the game.
+     */
+    private void playDay() {
+        // Display the beginning of the day message
+        view.showMessage("Day " + (model.getDay()) + " has begun.");
+        // cycle through each player's turn until only 1 scene is left
+        while (this.model.getBoard().getNumScenesRemaining() > 1) {
+            // manage the player's turn
+            playerTurn(this.currentPlayer);
+            // player starts at 1, move to the next player 2 through 8, then 1 through 8 repeatedly
+            this.currentPlayer = (this.currentPlayer % this.numPlayers) + 1;
         }
     }
 
@@ -120,6 +145,20 @@ public class GameController{
     }
 
     /**
+     * Ends the day by resetting the board for the next day.
+     */
+    private void endDay() {
+        // reset player locations
+        model.resetPlayerLocations();
+        // get deck
+        Deck deck = model.getDeck();
+        // get locations
+        Map<String, Location> locations = model.getLocations();
+        // reset the board for the next day
+        model.getBoard().resetBoard(deck, locations);
+    }
+
+    /**
      * Scores the game and displays the final results.
      */
     public void scoreGame() {
@@ -144,35 +183,6 @@ public class GameController{
             String winnerIndicator = player.getScore() == highestScore ? "  !Winner!" : "";
             System.out.println("Player ID: " + player.getID() + ", Score: " + player.getScore() + winnerIndicator);
         }
-    }
-
-    /**
-     * Manages a day in the game.
-     */
-    private void playDay() {
-        // Display the beginning of the day message
-        view.showMessage("Day " + (model.getDay()) + " has begun.");
-        // cycle through each player's turn until only 1 scene is left
-        while (this.model.getBoard().getNumScenesRemaining() > 1) {
-            // manage the player's turn
-            playerTurn(this.currentPlayer);
-            // player starts at 1, move to the next player 2 through 8, then 1 through 8 repeatedly
-            this.currentPlayer = (this.currentPlayer % this.numPlayers) + 1;
-        }
-    }
-
-    /**
-     * Ends the day by resetting the board for the next day.
-     */
-    private void endDay() {
-        // reset player locations
-        model.resetPlayerLocations();
-        // get deck
-        Deck deck = model.getDeck();
-        // get locations
-        Map<String, Location> locations = model.getLocations();
-        // reset the board for the next day
-        model.getBoard().resetBoard(deck, locations);
     }
 
 }
