@@ -9,7 +9,6 @@ import org.w3c.dom.Document;
  * It also provides global access to the game state and data.
  */
 public class GameModel implements Subject {
-
     private static transient GameModel instance = null;
     private transient List<Observer> observers = new ArrayList<>();
     private int numDays;
@@ -18,6 +17,11 @@ public class GameModel implements Subject {
     private Deck deck;
     private Map<String, Location> locations;
     private Board board;
+
+
+/************************************************************
+ * Contructor
+ ************************************************************/
 
     /**
      * Initializes a new Model.
@@ -28,6 +32,11 @@ public class GameModel implements Subject {
         this.locations = null;
         this.board = null;
     }
+
+
+/************************************************************
+ * Singleton Pattern
+ ************************************************************/
 
     /**
      * Returns the instance of the Model.
@@ -41,36 +50,6 @@ public class GameModel implements Subject {
         return instance;
     }
 
-    /**
-     * Loads the model state from a JSON file.
-     * 
-     * @param jsonFilePath Path to the JSON file.
-     */
-    public static synchronized boolean loadFromJson(String jsonFilePath) {
-        try {
-            // Load the new state from the JSON file
-            GameModel newModel = JsonUtil.loadFromJsonFile(jsonFilePath, GameModel.class);
-            // Reset the singleton instance with the new state
-            getInstance().loadModel(newModel);
-            return true;
-        } catch (IOException e) {
-            return false;
-        }
-    }
-
-    /**
-     * Loads the GameModel data from the given GameModel.
-     * @param newModel
-     */
-    private void loadModel(GameModel newModel) {
-        this.numDays = newModel.numDays;
-        this.day = newModel.day;
-        this.players = newModel.players;
-        this.deck = newModel.deck;
-        this.locations = newModel.locations;
-        this.board = newModel.board;
-    }
-
     //TODO: comment out unless running Unit Tests
     /**
      * Resets the instance of the Model.
@@ -79,11 +58,17 @@ public class GameModel implements Subject {
         instance = null;
     }
 
+
+/************************************************************
+ * Initialization
+ ************************************************************/
+
     /**
      * Initializes the model with the given number of players and XML file path.
      *
      * @param numPlayers The number of players.
-     * @param xmlFilePath The XML file path.
+     * @param boardXMLFilePath The file path to the board XML file.
+     * @param cardsXMLFilePath The file path to the cards XML file.
      */
     public void initModel(int numPlayers, String boardXMLFilePath, String cardsXMLFilePath) {
         initPlayers(numPlayers);
@@ -165,7 +150,6 @@ public class GameModel implements Subject {
     /**
      * Initializes the board.
      *
-     * @param numPlayers The number of players.
      * @param players The list of players.
      * @param deck The deck of cards.
      * @param locations The map of locations.
@@ -179,68 +163,68 @@ public class GameModel implements Subject {
         }
     }
 
-    /**
-     * Registers an observer with the model.
-     *
-     * @param observer The observer to register.
-     */
-    public void registerObserver(Observer observer) {
-        observers.add(observer);
-    }
+    
+/************************************************************
+ * Model State Management
+ ************************************************************/
 
     /**
-     * Removes an observer from the list of observers.
-     *
-     * @param observer The observer to remove.
+     * Loads the model state from a JSON file.
+     * 
+     * @param jsonFilePath Path to the JSON file.
+     * @return True if the model was successfully loaded, false otherwise.
+     * @throws IOException If an error occurs while loading the JSON file.
      */
-    public void removeObserver(Observer observer) {
-        observers.remove(observer);
-    }
-
-    /**
-     * Notifies all observers that the state has changed.
-     */
-    public void notifyObservers() {
-        for (Observer observer : observers) {
-            observer.update(this);
+    public static synchronized boolean loadFromJson(String jsonFilePath) {
+        try {
+            // Load the new state from the JSON file
+            GameModel newModel = JsonUtil.loadFromJsonFile(jsonFilePath, GameModel.class);
+            // Reset the singleton instance with the new state
+            getInstance().loadModel(newModel);
+            return true;
+        } catch (IOException e) {
+            return false;
         }
     }
 
     /**
-     * Returns the deck.
-     *
-     * @return The deck.
+     * Loads the GameModel data from the given GameModel.
+     * @param newModel
      */
-    public Deck getDeck() {
-        return deck;
+    private void loadModel(GameModel newModel) {
+        this.numDays = newModel.numDays;
+        this.day = newModel.day;
+        this.players = newModel.players;
+        this.deck = newModel.deck;
+        this.locations = newModel.locations;
+        this.board = newModel.board;
+    }
+
+
+/************************************************************
+ * Day Management
+ ************************************************************/
+
+    /**
+     * Increments the current day.
+     */
+    public void incrementDay() {
+        this.day++;
     }
 
     /**
-     * Returns the locations.
+     * Returns the current day.
      *
-     * @return The locations.
+     * @return The current day.
      */
-    public Map<String,Location> getLocations() {
-        return locations;
+    public int getDay() {
+        return this.day;
     }
 
-    /**
-     * Returns the board.
-     *
-     * @return The board.
-     */
-    public Board getBoard() {
-        return board;
-    }
 
-    /**
-     * Returns the number of days.
-     *
-     * @return The number of days.
-     */
-    public int getNumDays() {
-        return this.numDays;
-    }
+/************************************************************
+ * Player Management
+ ************************************************************/
 
     /**
      * Returns the player with the given ID.
@@ -292,6 +276,47 @@ public class GameModel implements Subject {
         }
     }
 
+    
+/************************************************************
+ * Game Element Accessors
+ ************************************************************/
+
+    /**
+     * Returns the deck.
+     *
+     * @return The deck.
+     */
+    public Deck getDeck() {
+        return deck;
+    }
+
+    /**
+     * Returns the locations.
+     *
+     * @return The locations.
+     */
+    public Map<String,Location> getLocations() {
+        return locations;
+    }
+
+    /**
+     * Returns the board.
+     *
+     * @return The board.
+     */
+    public Board getBoard() {
+        return board;
+    }
+
+    /**
+     * Returns the number of days.
+     *
+     * @return The number of days.
+     */
+    public int getNumDays() {
+        return this.numDays;
+    }
+
     /**
      * Returns the scene card with the given ID.
      *
@@ -315,34 +340,37 @@ public class GameModel implements Subject {
         }
         throw new IllegalArgumentException("No location " + name);
     }
-    
+
+
+/************************************************************
+ * Observer Pattern
+ ************************************************************/
+
     /**
-     * Sets the model to the given model. Used for loading saved game state.
+     * Registers an observer with the model.
      *
-     * @param model The model to set.
+     * @param observer The observer to register.
      */
-    public void setModel(GameModel model) {
-        // set the model to the given model
-        instance = model;
-        // update views
-        notifyObservers();
+    public void registerObserver(Observer observer) {
+        observers.add(observer);
     }
 
     /**
-     * Increments the current day.
-     */
-    public void incrementDay() {
-        this.day++;
-    }
-
-    /**
-     * Returns the current day.
+     * Removes an observer from the list of observers.
      *
-     * @return The current day.
+     * @param observer The observer to remove.
      */
-    public int getDay() {
-        return this.day;
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
     }
 
+    /**
+     * Notifies all observers that the state has changed.
+     */
+    public void notifyObservers() {
+        for (Observer observer : observers) {
+            observer.update(this);
+        }
+    }
 
 }
