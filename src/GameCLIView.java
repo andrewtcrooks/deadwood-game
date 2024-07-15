@@ -1,9 +1,13 @@
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+/**
+ * Represents the command line interface view for the Deadwood game.
+ */
 public class GameCLIView implements GameView {
     private static GameCLIView instance;
     private Scanner scanner;
+
 
     /**
      * Constructs a new GameCLIView.
@@ -14,6 +18,8 @@ public class GameCLIView implements GameView {
 
     /**
      * Singleton instance of the GameCLIView.
+     * 
+     * @return The instance of the GameCLIView
      */
     public static synchronized GameCLIView getInstance() {
         if (instance == null) {
