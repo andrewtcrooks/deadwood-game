@@ -4,6 +4,7 @@
 public class Dice {
     private int value;
 
+    
     /**
      * Constructs a new Dice object and rolls it.
      */
