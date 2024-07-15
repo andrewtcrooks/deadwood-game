@@ -307,8 +307,10 @@ public List<Player> getLocationPlayers(List<Player> players, Location location) 
         Collections.sort(diceRolls, Collections.reverseOrder()); 
         // Distribute dice rolls as money in a round-robin fashion
         for (int i = 0; i < diceRolls.size(); i++) {
-            Player player = playersOnCard.get(i % playersOnCard.size()); // Wrap around if more dice than players
-            player.addMoney(diceRolls.get(i)); // Add the dice roll as a bonus
+            // Wrap around if more dice than players
+            Player player = playersOnCard.get(i % playersOnCard.size());
+            // Add the dice roll as a bonus
+            player.addMoney(diceRolls.get(i)); 
         }
         // Pay out the off card players an amount equal to the rank of their role
         List<Role> roles = location.getRoles();
