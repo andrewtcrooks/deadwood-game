@@ -33,8 +33,6 @@ public class Board {
         this.playerRole = new HashMap<>();
         // Initialize location scene map
         this.locationScene = new HashMap<>();
-        // Shuffle the Deck
-        deck.shuffle();     
         // Deal scene cards to locations
         dealSceneCardsToLocations(deck, locations);
     }

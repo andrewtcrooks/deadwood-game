@@ -1,25 +1,28 @@
 import java.util.*;
 import org.w3c.dom.Document;
 
-
 /**
- * Represents a deck of SceneCard objects.
+ * Represents a shuffled deck of SceneCard objects.
  */
 public class Deck {
     private List<SceneCard> cards;
 
+
     /**
-     * Initializes a new Deck with SceneCard objects created from the data in the XML file at the given path.
-     * The cards are then shuffled.
+     * Initializes a new shuffled Deck with SceneCard objects created from the data in the XML file at the given path.
      *
      * @param xmlFilePath The path to the XML file containing the card data.
      */
-    Deck(String xmlFilePath) {
+    public Deck(String xmlFilePath) {
         ParseCardsXML parser = new ParseCardsXML();
         try {
             Document doc = parser.getDocFromFile(xmlFilePath);
+            // Parse the data from the XML file
             parser.readData(doc);
+            // Get the cards from the parser
             this.cards = parser.getCards();
+            // Shuffle the deck
+            this.shuffle();
         } catch (Exception e) {
             e.printStackTrace();
         }
