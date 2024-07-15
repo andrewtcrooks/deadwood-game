@@ -36,7 +36,8 @@ public class Deck {
      */
     public SceneCard drawCard() {
         if (!this.cards.isEmpty()) {
-            return this.cards.remove(this.cards.size() - 1);
+            // Remove and return the top card
+            return this.cards.remove(0);
         } else {
             throw new IllegalStateException("Deck is empty");
         }
@@ -50,7 +51,8 @@ public class Deck {
     }
     
     /**
-     * Returns true if the deck is empty, false otherwise.
+     * Returns if the deck is empty.
+     * @return true if the deck is empty, false otherwise.
      */
     public boolean isEmpty() {
         return this.cards.isEmpty();
@@ -58,8 +60,8 @@ public class Deck {
 
     /**
      * Returns the specific SceneCard with the given ID
-     * @param index
-     * @return
+     * @param sceneCardID
+     * @return the SceneCard with the given ID
      */
     public SceneCard getSceneCard(int sceneCardID) {
         return this.cards.get(sceneCardID);
