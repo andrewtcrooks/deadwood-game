@@ -3,7 +3,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /*
- * Deadwood.java by Andrew Crooks
+ * Deadwood by Andrew Crooks
  *  
  * This class is the main class for the Deadwood application.
  * It creates the model, view, and controller for the game.
@@ -33,7 +33,7 @@ public class Deadwood {
             if (input == null) {
                 throw new IOException("Unable to find config.properties");
             }
-            // Load a properties file from class path
+            // Load the config.properties file
             config.load(input);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -51,6 +51,8 @@ public class Deadwood {
 
     /**
      * Initializes the game model.
+     * 
+     * @param view the view to register as an observer
      */
     private static GameModel initializeModel(GameView view) {
         GameModel model = GameModel.getInstance();
@@ -60,6 +62,9 @@ public class Deadwood {
 
     /**
      * Initializes the game controller.
+     * 
+     * @param model the model to use
+     * @param view the view to use
      */
     private static GameController initializeController(GameModel model, GameView view) {
         GameController controller = new GameController();
@@ -73,6 +78,8 @@ public class Deadwood {
 
     /**
      * Plays a game of Deadwood.
+     * 
+     * @param controller the controller to use
      */
     private static void playGame(GameController controller) {
         controller.playDays();
