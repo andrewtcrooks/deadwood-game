@@ -227,6 +227,15 @@ public class GameModel implements Subject {
  ************************************************************/
 
     /**
+     * Returns the number of players.
+     *
+     * @return The number of players.
+     */
+    public int getNumPlayers() {
+        return this.players.size();
+    }
+
+    /**
      * Returns the player with the given ID.
      *
      * @param ID The ID of the player.
@@ -276,7 +285,7 @@ public class GameModel implements Subject {
         }
     }
 
-    
+
 /************************************************************
  * Game Element Accessors
  ************************************************************/
