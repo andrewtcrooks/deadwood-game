@@ -7,6 +7,7 @@ public class Area {
     private int h;
     private int w;
 
+    
     /**
      * Initializes a new Area with the given x, y, h, and w.
      *
@@ -40,21 +41,21 @@ public class Area {
         return this.y;
     }
 
-    /**
-     * Returns the height of the Area.
-     *
-     * @return The height of the Area.
-     */
-    public int getH() {
-        return this.h;
-    }
+    // /**
+    //  * Returns the height of the Area.
+    //  *
+    //  * @return The height of the Area.
+    //  */
+    // public int getH() {
+    //     return this.h;
+    // }
 
-    /**
-     * Returns the width of the Area.
-     *
-     * @return The width of the Area.
-     */
-    public int getW() {
-        return this.w;
-    }
+    // /**
+    //  * Returns the width of the Area.
+    //  *
+    //  * @return The width of the Area.
+    //  */
+    // public int getW() {
+    //     return this.w;
+    // }
 }
