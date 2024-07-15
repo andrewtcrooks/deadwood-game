@@ -302,8 +302,9 @@ public List<Player> getLocationPlayers(List<Player> players, Location location) 
         // Get the movie budget
         int movieBudget = sceneCard.getBudget();
         // Roll a number of dice equal to the budget
-        List<Integer> diceRolls = rollDice(movieBudget); // Roll dice equal to the budget
-        Collections.sort(diceRolls, Collections.reverseOrder()); // Sort dice rolls in descending order
+        List<Integer> diceRolls = rollDice(movieBudget);
+        // Sort dice rolls in descending order
+        Collections.sort(diceRolls, Collections.reverseOrder()); 
         // Distribute dice rolls as money in a round-robin fashion
         for (int i = 0; i < diceRolls.size(); i++) {
             Player player = playersOnCard.get(i % playersOnCard.size()); // Wrap around if more dice than players
