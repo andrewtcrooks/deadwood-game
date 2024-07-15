@@ -15,7 +15,7 @@ public class Board {
 
 
 /************************************************************
- * Contructor and initialization methods
+ * Contructor and Initialization Methods
  ************************************************************/
 
     /**
