@@ -53,7 +53,7 @@ public class PlayerActionLoad implements PlayerAction {
                  .filter(file -> file.getName().endsWith(".json"))
                  .forEach(file -> {
                      String filename = file.getName();
-                     String trimmedFilename = filename.substring(0, filename.length() - ".deadwood".length());
+                     String trimmedFilename = filename.substring(0, filename.length() - ".json".length());
                      view.showMessage(trimmedFilename);
                  });
         } catch (IOException e) {
@@ -95,13 +95,10 @@ public class PlayerActionLoad implements PlayerAction {
             return;
         }
         // load the game from the JSON file
-        try {
-            GameModel loadedModel = JsonUtil.loadFromJsonFile(fullPath, GameModel.class);
-            model.setModel(loadedModel);
+        if (GameModel.loadFromJson(fullPath)) {
             view.showMessage("Game loaded successfully.");
-        } catch (IOException e) {
-            e.printStackTrace();
-            view.showMessage("Failed to load the game.");
+        } else {
+            view.showMessage("Error loading game.");
         }
     }
 

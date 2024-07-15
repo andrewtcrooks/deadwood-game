@@ -107,6 +107,13 @@ public class GameController{
             if (action.validate(player, model, view)) {
                 endTurn = action.execute(player, model, view); // If execute returns true, the turn ends
             }
+            // If command was "load", set the current player to the model's active player
+            if (command.equals("load")) {
+                // Reset the current player to the reloaded model's active player
+                player = this.model.getActivePlayer();
+                // Set the current player (int) to the reloaded model's active player ID
+                this.currentPlayer = player.getID();
+            }
         }
         // Set player to inactive
         player.setActive(false);

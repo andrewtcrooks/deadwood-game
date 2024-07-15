@@ -92,7 +92,7 @@ public class Player {
      *
      * @return true if the player is active, false otherwise
      */
-    public boolean getActive() {
+    public boolean isActive() {
         return this.active;
     }
 

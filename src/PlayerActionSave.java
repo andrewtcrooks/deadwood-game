@@ -46,14 +46,13 @@ public class PlayerActionSave implements PlayerAction {
      */
     private void displaySavedGames(GameView view) {
         view.showMessage("Current saved games:");
-        System.out.println(System.getProperty("user.dir"));
-        try (Stream<Path> paths = Files.walk(Paths.get("saved/"))) {
+        try (Stream<Path> paths = Files.walk(Paths.get("./saved"))) {
             paths.filter(Files::isRegularFile)
                  .map(Path::toFile)
-                 .filter(file -> file.getName().endsWith(".deadwood"))
+                 .filter(file -> file.getName().endsWith(".json"))
                  .forEach(file -> {
                      String filename = file.getName();
-                     String trimmedFilename = filename.substring(0, filename.length() - ".deadwood".length());
+                     String trimmedFilename = filename.substring(0, filename.length() - ".json".length());
                      view.showMessage(trimmedFilename);
                  });
         } catch (IOException e) {

@@ -92,7 +92,7 @@ public class PlayerActionBoard implements PlayerAction {
      */
     private void displayPlayerInfo(Player player, Board board, GameModel model, GameView view) {
         String playerInfo = constructPlayerInfo(player, board, model);
-        if (player.getActive()) {
+        if (player.isActive()) {
             view.showMessage("* " + playerInfo);
         } else {
             view.showMessage("  " + playerInfo);

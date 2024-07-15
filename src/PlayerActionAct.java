@@ -37,11 +37,13 @@ public class PlayerActionAct implements PlayerAction {
     public boolean execute(Player player, GameModel model, GameView view) {
         Deck deck = model.getDeck();
         Board board = model.getBoard();
+        Location location = model.getLocation(board.getPlayerLocationName(player));
         int budget = getSceneBudget(player, board, model);
         int roll = performDiceRoll(player);
         // Check if the player succeeded
         if (roll >= budget) {
             processSuccess(player, roll, board, model, view);
+            location.removeShotCounter();
         } else {
             processFailure(player,roll, board, model, view);
         }

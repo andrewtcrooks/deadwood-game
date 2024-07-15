@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.*;
 import org.w3c.dom.Document;
 
@@ -38,6 +39,36 @@ public class GameModel implements Subject {
             instance = new GameModel();
         }
         return instance;
+    }
+
+    /**
+     * Loads the model state from a JSON file.
+     * 
+     * @param jsonFilePath Path to the JSON file.
+     */
+    public static synchronized boolean loadFromJson(String jsonFilePath) {
+        try {
+            // Load the new state from the JSON file
+            GameModel newModel = JsonUtil.loadFromJsonFile(jsonFilePath, GameModel.class);
+            // Reset the singleton instance with the new state
+            getInstance().loadModel(newModel);
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Loads the GameModel data from the given GameModel.
+     * @param newModel
+     */
+    private void loadModel(GameModel newModel) {
+        this.numDays = newModel.numDays;
+        this.day = newModel.day;
+        this.players = newModel.players;
+        this.deck = newModel.deck;
+        this.locations = newModel.locations;
+        this.board = newModel.board;
     }
 
     //TODO: comment out unless running Unit Tests
@@ -225,6 +256,21 @@ public class GameModel implements Subject {
             }
         }
         throw new IllegalArgumentException("No player " + ID);
+    }
+
+    /**
+     * Returns the active player.
+     *
+     * @return The active player.
+     * @throws IllegalArgumentException If no active player is found.
+     */
+    public Player getActivePlayer() {
+        for (Player player : players) {
+            if (player.isActive()) {
+                return player;
+            }
+        }
+        throw new IllegalArgumentException("No active player");
     }
 
     /**

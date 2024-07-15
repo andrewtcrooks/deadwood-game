@@ -130,6 +130,11 @@ public class PlayerActionWork implements PlayerAction {
         allRoles.addAll(board.getLocationSceneCardRoles(locationName, deck));
         // Filter out all the roles with ranks higher than the players rank that are not occupied
         allRoles.removeIf(role -> role.getRank() > player.getRank() || role.isOccupied());
+        // Check if there are available roles
+        if (allRoles.isEmpty()) {
+            view.showMessage("There are no roles available for you to work.");
+            return false;
+        }
         // Display the available roles
         displayAvailableRoles(allRoles, view);
         // Get the selected role
@@ -149,10 +154,6 @@ public class PlayerActionWork implements PlayerAction {
      * @param view the game view
      */
     private void displayAvailableRoles(List<Role> roles, GameView view) {
-        if (roles.isEmpty()){
-            view.showMessage("There are no roles available for you to work.");
-            return;
-        }
         view.showMessage("You can work the following roles:");
         roles.sort(Comparator.comparingInt(Role::getRank)
                 .thenComparing(Role::getOnCard));
