@@ -12,7 +12,9 @@ public class GameModel implements Subject {
     private static transient GameModel instance = null;
     private transient List<Observer> observers = new ArrayList<>();
     private int numDays;
-    private int day = 1;
+    private int currentDay = 1;
+    private int numPlayers;
+    private int currentPlayer = 1; // Player 1 starts the game
     private List<Player> players;
     private Deck deck;
     private Map<String, Location> locations;
@@ -71,6 +73,7 @@ public class GameModel implements Subject {
      * @param cardsXMLFilePath The file path to the cards XML file.
      */
     public void initModel(int numPlayers, String boardXMLFilePath, String cardsXMLFilePath) {
+        this.numPlayers = numPlayers;
         initPlayers(numPlayers);
         initDeck(cardsXMLFilePath);
         initLocations(boardXMLFilePath);
@@ -193,7 +196,9 @@ public class GameModel implements Subject {
      */
     private void loadModel(GameModel newModel) {
         this.numDays = newModel.numDays;
-        this.day = newModel.day;
+        this.currentDay = newModel.currentDay;
+        this.numPlayers = newModel.numPlayers;
+        this.currentPlayer = newModel.currentPlayer;
         this.players = newModel.players;
         this.deck = newModel.deck;
         this.locations = newModel.locations;
@@ -209,7 +214,7 @@ public class GameModel implements Subject {
      * Increments the current day.
      */
     public void incrementDay() {
-        this.day++;
+        this.currentDay++;
     }
 
     /**
@@ -218,7 +223,7 @@ public class GameModel implements Subject {
      * @return The current day.
      */
     public int getDay() {
-        return this.day;
+        return this.currentDay;
     }
 
 
@@ -232,7 +237,26 @@ public class GameModel implements Subject {
      * @return The number of players.
      */
     public int getNumPlayers() {
-        return this.players.size();
+        return this.numPlayers;
+    }
+
+    /**
+     * Returns the current player.
+     *
+     * @return The current player.
+     */
+    public int getCurrentPlayer() {
+        return this.currentPlayer;
+    }
+
+    /**
+     * Increments the current player.
+     */
+    public void setNextPlayerToCurrentPlayer() {
+        this.currentPlayer++;
+        if (this.currentPlayer > this.numPlayers) {
+            this.currentPlayer = 1;
+        }
     }
 
     /**

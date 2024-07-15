@@ -7,8 +7,8 @@ import java.util.*;
 public class GameController{
     private GameModel model;
     private GameView view;
-    private int currentPlayer;
-    private int numPlayers;
+    // private int currentPlayer;
+    // private int numPlayers;
     private static final HashMap<String, PlayerAction> actionMap = new HashMap<>();
     static {
         actionMap.put("who", new PlayerActionWho());
@@ -50,7 +50,7 @@ public class GameController{
      */
     public void initializeGame(GameModel model, GameView view, String boardXMLFilePath, String cardsXMLFilePath) {
         // Initialize current player, player actions, model, and view
-        this.currentPlayer = 1; // Player 1 starts the game
+        // this.currentPlayer = 1; // Player 1 starts the game
         this.model = model;
         this.view = view;
         
@@ -58,7 +58,7 @@ public class GameController{
         boolean initializationSuccessful = false;
         while (!initializationSuccessful) {
             try {
-                this.numPlayers = this.view.getNumPlayers();
+                int numPlayers = this.view.getNumPlayers();
                 this.model.initModel(numPlayers, boardXMLFilePath, cardsXMLFilePath);
                 initializationSuccessful = true; // If this line is reached, no exception was thrown
             } catch (IllegalArgumentException e) {
@@ -99,9 +99,9 @@ public class GameController{
         // cycle through each player's turn until only 1 scene is left
         while (this.model.getBoard().getNumScenesRemaining() > 1) {
             // manage the player's turn
-            playerTurn(this.currentPlayer);
-            // player starts at 1, move to the next player 2 through 8, then 1 through 8 repeatedly
-            this.currentPlayer = (this.currentPlayer % this.numPlayers) + 1;
+            playerTurn(this.model.getCurrentPlayer());
+            // set current player to the next player
+            this.model.setNextPlayerToCurrentPlayer();
         }
     }
 
@@ -136,8 +136,6 @@ public class GameController{
             if (command.equals("load")) {
                 // Reset the current player to the reloaded model's active player
                 player = this.model.getActivePlayer();
-                // Set the current player (int) to the reloaded model's active player ID
-                this.currentPlayer = player.getID();
             }
         }
         // Set player to inactive
