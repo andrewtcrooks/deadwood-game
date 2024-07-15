@@ -64,7 +64,13 @@ public class Deck {
      * @return the SceneCard with the given ID
      */
     public SceneCard getSceneCard(int sceneCardID) {
-        return this.cards.get(sceneCardID);
+        for (SceneCard card : this.cards) {
+            if (card.getID() == sceneCardID) {
+                return card;
+            }
+        }
+        // Return null if no card matches the given ID
+        return null; 
     }
     
 }
