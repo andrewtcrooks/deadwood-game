@@ -9,12 +9,21 @@ public class GameCLIView implements GameView {
     private Scanner scanner;
 
 
+/************************************************************
+ * Contructor
+ ************************************************************/
+
     /**
      * Constructs a new GameCLIView.
      */
     private GameCLIView() {
         this.scanner = new Scanner(System.in);
     }
+
+
+/************************************************************
+ * Singleton Pattern
+ ************************************************************/
 
     /**
      * Singleton instance of the GameCLIView.
@@ -36,6 +45,11 @@ public class GameCLIView implements GameView {
         instance = null;
     }
 
+
+/************************************************************
+ * Observer Pattern
+ ************************************************************/
+
     /**
      * Updates the view.
      * 
@@ -44,6 +58,11 @@ public class GameCLIView implements GameView {
     public void update(Object arg) {
         // TODO: complete this stub for update method
     }
+
+
+ /************************************************************
+ * View
+ ************************************************************/
 
     /**
      *  Get the number of players.
