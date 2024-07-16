@@ -85,8 +85,10 @@ public class GameController{
             playDay();
             // end day
             endDay();
-            // increment day by one
+            // increment day by one in model
             this.model.incrementDay();
+            // update day
+            day = this.model.getDay();
         }
     }
 
@@ -148,6 +150,10 @@ public class GameController{
     private void endDay() {
         // reset player locations
         model.resetPlayerLocations();
+        // reset player roles
+        model.resetPlayerRoles();
+        // reset player rehearsal tokens
+        model.resetPlayerRehearsalTokens();
         // get deck
         Deck deck = model.getDeck();
         // discard the one remaining scene card from the board

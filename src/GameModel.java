@@ -309,7 +309,23 @@ public class GameModel implements Subject {
         }
     }
 
+    /**
+     * Resets all player roles to null
+     */
+    public void resetPlayerRoles() {
+        for (Player player : this.players) {
+            this.board.setPlayerRole(player.getID(), null);
+        }
+    }
 
+    /**
+     * Resets all player rehearsal tokens to 0
+     */
+    public void resetPlayerRehearsalTokens() {
+        for (Player player : this.players) {
+            player.resetRehearsalTokens();
+        }
+    }
 /************************************************************
  * Game Element Accessors
  ************************************************************/

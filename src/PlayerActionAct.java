@@ -161,7 +161,9 @@ public class PlayerActionAct implements PlayerAction {
         if (anyPlayerOnCard) {
             view.showMessage("Bonus payout!");
         }
-        board.wrapScene(playersAtLocation, deck, location);
+        // get active player
+        Player activePlayer = model.getActivePlayer();
+        board.wrapScene(activePlayer, playersAtLocation, deck, location);
         view.showMessage("The scene is wrapped.");
     }
 
