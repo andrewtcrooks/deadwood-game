@@ -1,19 +1,45 @@
-## Getting Started
+# Java Program Setup Guide
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+Welcome to a java version of the game Deadwood by Cheapass Games! This guide will help you set up and run the program using Visual Studio Code (VS Code).
 
-## Folder Structure
+## Prerequisites
 
-The workspace contains two folders by default, where:
+Before you start, make sure you have the following installed:
+- Git
+- Java Development Kit (JDK)
+- Visual Studio Code
+- Java Extension Pack for Visual Studio Code
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+## Getting the Code
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+First, you need to clone the Deadwood game repository from GitHub:
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+1. Open the terminal.
+2. Navigate to the directory where you want to clone the repository.
+3. Run `git clone https://github.com/andrewtcrooks/deadwood.git`.
+4. Once cloned, open the project folder in Visual Studio Code by running `code deadwood`.
 
-## Dependency Management
+## Project Structure
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
-# deadwood-game
+Our project is organized into several key folders:
+- `src`: Contains all Java source files.
+- `lib`: Contains required libraries.
+- `bin`: The default directory for compiled bytecode files (.class files).
+
+## Compiling the Program
+
+To compile the Java program, follow these steps:
+1. Open the project in Visual Studio Code.
+2. Open the Command Palette (`Ctrl+Shift+P` on Windows/Linux, `Cmd+Shift+P` on macOS).
+3. Type `Java: Compile Workspace` and press Enter. This compiles the source files and places the output in the `bin` folder.
+
+## Running the Program
+
+After compiling, you can run the program within VS Code:
+1. Find the Deadwood.java class in the `src` folder and open it.
+2. Click on the `Run` button (green triangle) at the top right of the editor window.
+
+Alternatively, you can run the program from the integrated terminal:
+1. Open the integrated terminal in VS Code (`Ctrl+`` on Windows/Linux, ``Cmd+`` on macOS).
+2. Navigate to the `bin` directory with `cd bin`.
+3. Execute the program with `java Deadwood`.
