@@ -44,6 +44,7 @@ public class PlayerActionUpgrade implements PlayerAction {
      * Checks if the player is at the Casting Office.
      * 
      * @param player the player
+     * @param board the game board
      * @param view the game view
      * @return true if the player is at the Casting Office, false otherwise
      */

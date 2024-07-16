@@ -23,6 +23,7 @@ public class PlayerActionMove implements PlayerAction {
      * Checks if the player has no role.
      *
      * @param player the player
+     * @param board the game board
      * @param view the game view
      * @return true if the player has no role, false otherwise
      */
