@@ -8,8 +8,6 @@ import java.util.*;
 public class GameController{
     private GameModel model;
     private GameView view;
-    // private int currentPlayer;
-    // private int numPlayers;
     private static final HashMap<String, PlayerAction> actionMap = new HashMap<>();
     static {
         actionMap.put("who", new PlayerActionWho());
@@ -51,7 +49,6 @@ public class GameController{
      */
     public void initializeGame(GameModel model, GameView view, String boardXMLFilePath, String cardsXMLFilePath) {
         // Initialize current player, player actions, model, and view
-        // this.currentPlayer = 1; // Player 1 starts the game
         this.model = model;
         this.view = view;
         

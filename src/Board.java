@@ -207,32 +207,32 @@ public class Board {
         return playerLocation.get(player.getID());
     }
 
-/**
- * Returns the players at a location.
- * 
- * @param location The location to check.
- * @return The players at the location.
- */
-public List<Player> getLocationPlayers(List<Player> players, Location location) {
-    // Create a list to store the players at the location
-    List<Player> playersAtLocation = new ArrayList<>();
-    // Iterate over the playerLocation map to find players at the location
-    for (Map.Entry<Integer, String> entry : playerLocation.entrySet()) {
-        if (entry.getValue().equals(location.getName())) {
-            // Assuming getID returns the player's ID as an Integer
-            Integer playerId = entry.getKey();
-            // Assuming getPlayerById(int id) is a method that returns a Player object given a player's ID
-            Player player = players.stream()
-                .filter(p -> Integer.valueOf(p.getID()).equals(playerId))
-                .findFirst()
-                .orElse(null);
-            if (player != null) {
-                playersAtLocation.add(player);
+    /**
+     * Returns the players at a location.
+     * 
+     * @param location The location to check.
+     * @return The players at the location.
+     */
+    public List<Player> getLocationPlayers(List<Player> players, Location location) {
+        // Create a list to store the players at the location
+        List<Player> playersAtLocation = new ArrayList<>();
+        // Iterate over the playerLocation map to find players at the location
+        for (Map.Entry<Integer, String> entry : playerLocation.entrySet()) {
+            if (entry.getValue().equals(location.getName())) {
+                // Assuming getID returns the player's ID as an Integer
+                Integer playerId = entry.getKey();
+                // Assuming getPlayerById(int id) is a method that returns a Player object given a player's ID
+                Player player = players.stream()
+                    .filter(p -> Integer.valueOf(p.getID()).equals(playerId))
+                    .findFirst()
+                    .orElse(null);
+                if (player != null) {
+                    playersAtLocation.add(player);
+                }
             }
         }
+        return playersAtLocation;
     }
-    return playersAtLocation;
-}
 
 
 /************************************************************

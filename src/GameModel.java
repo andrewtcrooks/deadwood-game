@@ -102,7 +102,7 @@ public class GameModel implements Subject {
     }
 
     /**
-     * Initializes the players.
+     * Initializes the list of players.
      *
      * @param numPlayers The number of players.
      * @param playerRank The rank of the players.
@@ -327,6 +327,8 @@ public class GameModel implements Subject {
             player.resetRehearsalTokens();
         }
     }
+
+    
 /************************************************************
  * Game Element Accessors
  ************************************************************/

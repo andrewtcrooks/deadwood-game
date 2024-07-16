@@ -3,6 +3,7 @@ import java.util.Scanner;
 
 /**
  * Represents the command line interface view for the Deadwood game.
+ * 
  */
 public class GameCLIView implements GameView {
     private static GameCLIView instance;
@@ -37,7 +38,7 @@ public class GameCLIView implements GameView {
         return instance;
     }
 
-    // // TODO: comment out unless running Unit Tests
+    // // TODO: uncomment to run Unit Tests
     // /**
     //  * Resets the instance of the GameCLIView.
     //  */
