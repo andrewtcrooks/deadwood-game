@@ -132,7 +132,8 @@ public class GameController{
             }
             // Validate and potentially execute the action
             if (action.validate(player, model, view)) {
-                endTurn = action.execute(player, model, view); // If execute returns true, the turn ends
+                // If execute returns true, the turn ends
+                endTurn = action.execute(player, model, view); 
             }
             // If command was "load", set the current player to the model's active player
             if (command.equals("load")) {
@@ -148,7 +149,7 @@ public class GameController{
      * Ends the day by resetting the board for the next day.
      */
     private void endDay() {
-        // reset player locations
+        // reset player locations to Trailer
         model.resetPlayerLocations();
         // reset player roles
         model.resetPlayerRoles();
@@ -160,7 +161,8 @@ public class GameController{
         deck.discardLastDrawnCard();
         // get locations
         Map<String, Location> locations = model.getLocations();
-        // reset the board for the next day
+        // reset the board for the next day by resetting shot counters 
+        // and dealing enw scene cards
         model.getBoard().resetBoard(deck, locations);
     }
 

@@ -6,7 +6,6 @@ import java.util.stream.Stream;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 /*
  * Represents the save action for the player.
  */
