@@ -47,4 +47,4 @@ Alternatively, you can run the program from the integrated terminal:
 
 ## Accessing the Help Menu
 
-While playing the game, you can access the help menu at any time by typing `help` in the game console. This will display a list of available commands and instructions on how to play the game.
+While playing the game, you can access the help menu at any time after entering the number of players by typing `help` in the game console. This will display a list of available commands and instructions on how to play the game.
