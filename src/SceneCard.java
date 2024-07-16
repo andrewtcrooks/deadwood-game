@@ -10,8 +10,7 @@ public class SceneCard {
     private String image;
     private int budget;
     private List<Role> roles;
-    // private boolean drawn = false;
-    // private boolean discarded = false;
+
 
     /**
      * Initializes a new SceneCard with the given ID, title, description, image, budget, and roles.
@@ -30,8 +29,6 @@ public class SceneCard {
         this.id = id;
         this.desc = desc;
         this.roles = roles;
-        // this.drawn = false;
-        // this.discarded = false;
     }
 
     /**
@@ -87,37 +84,5 @@ public class SceneCard {
     public List<Role> getRoles() {
         return this.roles;
     }
-
-    // /**
-    //  * Returns whether the SceneCard has been drawn.
-    //  * 
-    //  * @return true if the SceneCard has been drawn, false otherwise
-    //  */
-    // public boolean isDrawn() {
-    //     return this.drawn;
-    // }
-
-    // /**
-    //  * Draws the SceneCard.
-    //  */
-    // public void draw() {
-    //     this.drawn = true;
-    // }
-
-    // /**
-    //  * Returns whether the SceneCard has been discarded.
-    //  * 
-    //  * @return true if the SceneCard has been discarded, false otherwise
-    //  */
-    // public boolean isDiscarded() {
-    //     return this.discarded;
-    // }
-
-    // /**
-    //  * Discards the SceneCard.
-    //  */
-    // public void discard() {
-    //     this.discarded = true;
-    // }
 
 }
