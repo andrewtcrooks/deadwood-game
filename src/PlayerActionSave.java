@@ -3,6 +3,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 /*
@@ -45,17 +47,22 @@ public class PlayerActionSave implements PlayerAction {
      * @param view
      */
     private void displaySavedGames(GameView view) {
+        // Display a header to indicate the start of the saved games list
         view.showMessage("Current saved games:");
         try (Stream<Path> paths = Files.walk(Paths.get("./saved"))) {
-            paths.filter(Files::isRegularFile)
-                 .map(Path::toFile)
-                 .filter(file -> file.getName().endsWith(".json"))
-                 .forEach(file -> {
-                     String filename = file.getName();
-                     String trimmedFilename = filename.substring(0, filename.length() - ".json".length());
-                     view.showMessage(trimmedFilename);
-                 });
+            // Create a sorted list of saved game names by processing each file in the "./saved" directory
+            List<String> sortedFileNames = paths
+                .filter(Files::isRegularFile) // Ensure we only deal with files (not directories)
+                .map(Path::toFile) // Convert Path to File for easier manipulation
+                .filter(file -> file.getName().endsWith(".json")) // Filter to include only JSON files
+                .map(file -> file.getName().substring(0, file.getName().length() - ".json".length())) // Remove the ".json" extension from the file name
+                .sorted() // Sort the file names alphabetically
+                .collect(Collectors.toList()); // Collect the results into a list
+            
+            // Display each file name in the sorted list
+            sortedFileNames.forEach(view::showMessage);
         } catch (IOException e) {
+            // Handle any IO exceptions that occur during directory traversal or file processing
             e.printStackTrace();
         }
     }
