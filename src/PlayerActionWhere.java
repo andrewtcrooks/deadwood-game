@@ -39,7 +39,7 @@ public class PlayerActionWhere implements PlayerAction {
             view.showMessage("You are at the Casting Office");
         } else {
             int sceneCardID = board.getLocationSceneCardID(locationName);
-            SceneCard card = deck.getSceneCard(sceneCardID);
+            SceneCard card = deck.getDrawnCard(sceneCardID);
             String sceneTitle = card.getTitle();
             view.showMessage(locationName + " shooting " + sceneTitle + " (scene " + sceneCardID + ")");
         }

@@ -150,6 +150,8 @@ public class GameController{
         model.resetPlayerLocations();
         // get deck
         Deck deck = model.getDeck();
+        // discard the one remaining scene card from the board
+        deck.discardLastDrawnCard();
         // get locations
         Map<String, Location> locations = model.getLocations();
         // reset the board for the next day

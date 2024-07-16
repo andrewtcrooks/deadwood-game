@@ -112,8 +112,15 @@ public class Location {
     /**
      * Wraps the Location.
      */
-    public void setSceneWrapped() {
+    public void setWrapped() {
         this.wrapped = true;
+    }
+
+    /**
+     * Unwraps the Location.
+     */
+    public void setUnwrapped() {
+        this.wrapped = false;
     }
 
     /**

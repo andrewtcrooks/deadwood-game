@@ -22,7 +22,7 @@ public class PlayerActionWork implements PlayerAction {
         return isNotInCastingOffice(player, board, view) && // true if not in Casting Office
                isNotInTrailer(player, board, view) && // true if not in Trailer
                isAtUnwrappedLocation(player, board, model, view) && // true if location is not wrapped
-               playerHasNoRole(player, deck, board, view); // true if player has no role
+               playerHasNoRole(player, deck, board, model, view); // true if player has no role
     }
     
     /**
@@ -84,11 +84,13 @@ public class PlayerActionWork implements PlayerAction {
      * @param view the game view
      * @return true if the player has no role, false otherwise
      */
-    private boolean playerHasNoRole(Player player, Deck deck, Board board, GameView view) {
+    private boolean playerHasNoRole(Player player, Deck deck, Board board, GameModel model, GameView view) {
         // Get player location Name
         String locationName = board.getPlayerLocationName(player);
-        // Get location scene card
-        List<Role> roles = board.getLocationSceneCardRoles(locationName, deck);
+        // Create new ArrayList containing the roles at the location
+        List<Role> roles = new ArrayList<Role>(model.getLocation(locationName).getRoles());
+        // Add the SCeneCard roles to roles
+        roles.addAll(board.getLocationSceneCardRoles(locationName, deck));
         // Get player role by finding which role in the list of roles matches the players role
         Role role = roles.stream()
                 .filter(r -> r.getName().equals(board.getPlayerRole(player.getID())))

@@ -38,18 +38,18 @@ public class PlayerActionAct implements PlayerAction {
         Deck deck = model.getDeck();
         Board board = model.getBoard();
         Location location = model.getLocation(board.getPlayerLocationName(player));
-        int budget = getSceneBudget(player, board, model);
+        int budget = getSceneBudget(player, deck, board, model);
         int roll = performDiceRoll(player);
         // Check if the player succeeded
         if (roll >= budget) {
-            processSuccess(player, roll, board, model, view);
+            processSuccess(player, roll, deck, board, model, view);
             location.removeShotCounter();
         } else {
-            processFailure(player,roll, board, model, view);
+            processFailure(player,roll, deck, board, model, view);
         }
         // Check if the scene is ready to be wrapped
         if (noShotsRemain(player, board, model)) {
-            wrapLocationScene(player, deck, board, model, view);
+            wrapLocationScene(player, location, deck, board, model, view);
         }
         return true;
     }
@@ -60,10 +60,10 @@ public class PlayerActionAct implements PlayerAction {
      * @param player the player
      * @return the budget of the scene
      */
-    private int getSceneBudget(Player player, Board board, GameModel model) {
+    private int getSceneBudget(Player player, Deck deck, Board board, GameModel model) {
         String locationName = board.getPlayerLocationName(player);
         Integer sceneCardID = board.getLocationSceneCardID(locationName);
-        SceneCard sceneCard = model.getDeckSceneCard(sceneCardID);
+        SceneCard sceneCard = deck.getDrawnCard(sceneCardID);
         return sceneCard.getBudget();
     }
 
@@ -88,10 +88,11 @@ public class PlayerActionAct implements PlayerAction {
      * @param model the game model
      * @param view the game view
      */
-    private void processSuccess(Player player, int roll, Board board, GameModel model, GameView view) {
+    private void processSuccess(Player player, int roll, Deck deck, Board board, GameModel model, GameView view) {
         view.showMessage("You rolled a " + roll + ". Success!");
         String locationName = board.getPlayerLocationName(player);
-        SceneCard sceneCard = model.getDeckSceneCard(board.getLocationSceneCardID(locationName));
+        Integer sceneCardID = board.getLocationSceneCardID(locationName);
+        SceneCard sceneCard = deck.getDrawnCard(sceneCardID);
         // Check if player has a role that matches a role on the SceneCard
         if (sceneCard.getRoles().stream().anyMatch(r -> r.getName().equals(board.getPlayerRole(player.getID())))) {
             player.addCredits(2);
@@ -109,12 +110,13 @@ public class PlayerActionAct implements PlayerAction {
      * @param board the game board
      * @param view the game view
      */
-    private void processFailure(Player player, int roll, Board board, GameModel model, GameView view) {
+    private void processFailure(Player player, int roll, Deck deck, Board board, GameModel model, GameView view) {
         view.showMessage("You rolled a " + roll + ". Failure.");
         String locationName = board.getPlayerLocationName(player);
-        SceneCard sceneCard = model.getDeckSceneCard(board.getLocationSceneCardID(locationName));
-        // Check if the player is on-card
-        if (sceneCard.getRoles().stream().anyMatch(r -> r.getName().equals(board.getPlayerRole(player.getID())))) {
+        Integer sceneCardID = board.getLocationSceneCardID(locationName);
+        SceneCard sceneCard = deck.getDrawnCard(sceneCardID);
+        // Check if the player is off-card
+        if (!sceneCard.getRoles().stream().anyMatch(r -> r.getName().equals(board.getPlayerRole(player.getID())))) {
             player.addMoney(1);
         }
     }
@@ -144,18 +146,22 @@ public class PlayerActionAct implements PlayerAction {
      * @param model the game model
      * @param view the game view
      */
-    private void wrapLocationScene(Player player, Deck deck, Board board, GameModel model, GameView view) {
-        String locationName = board.getPlayerLocationName(player);
-        Location location = model.getLocation(locationName);
+    private void wrapLocationScene(Player player, Location location, Deck deck, Board board, GameModel model, GameView view) {
+        String locationName = location.getName();
+        // Get all players
         List<Player> players = model.getPlayers();
-        // Check if any player has an on-card role
-        boolean anyPlayerOnCard = players.stream().anyMatch(p -> board.getLocationSceneCardRoles(locationName, deck).stream()
+        // Get just the players at the location
+        List<Player> playersAtLocation = players.stream()
+                .filter(p -> board.getPlayerLocationName(p).equals(locationName))
+                .toList();
+        // Check if any player at the location has an on-card role
+        boolean anyPlayerOnCard = playersAtLocation.stream().anyMatch(p -> board.getLocationSceneCardRoles(locationName, deck).stream()
                 .anyMatch(r -> r.getName().equals(board.getPlayerRole(p.getID()))));
         // Display bonus payout message if there are any players on-card
         if (anyPlayerOnCard) {
             view.showMessage("Bonus payout!");
         }
-        board.wrapScene(players, deck, location);
+        board.wrapScene(playersAtLocation, deck, location);
         view.showMessage("The scene is wrapped.");
     }
 

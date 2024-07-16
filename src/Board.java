@@ -63,7 +63,12 @@ public class Board {
      * Resets the board to its initial state.
      */
     public void resetBoard(Deck deck, Map<String,Location> locations) {
+        // Unwrap all locations
+        for (Location location : locations.values()) {
+            location.setUnwrapped();
+        }
         dealSceneCardsToLocations(deck, locations);
+        resetNumScenesRemaining();
     }
 
     /**
@@ -104,7 +109,7 @@ public class Board {
         List<Player> playersAtLocation = getLocationPlayers(players, location);
         // Get the scene card at the location
         int sceneCardID = getLocationSceneCardID(location.getName());
-        SceneCard sceneCard = deck.getSceneCard(sceneCardID);
+        SceneCard sceneCard = deck.getDrawnCard(sceneCardID);
         // Get a list of the names of the on card roles
         List<String> roleNamesOnCard = sceneCard.getRoles().stream()
             .map(Role::getName)
@@ -130,10 +135,12 @@ public class Board {
         playersAtLocation.forEach(player -> player.resetRehearsalTokens());
         // Reset takes
         location.resetTakes();
-        // Clear the scene card        
+        // Clear the scene card from the location
         setLocationSceneCard(location.getName(), null);
+        // set the scene card to discarded
+        deck.discardCard(sceneCardID);
         // set wrapped to true
-        location.setSceneWrapped();
+        location.setWrapped();
         // decrement the number of scenes remaining
         decrementNumScenesRemaining();
     }
@@ -279,10 +286,9 @@ public List<Player> getLocationPlayers(List<Player> players, Location location) 
      * @return The roles for the scene card at the location.
      */
     public List<Role> getLocationSceneCardRoles(String locationName, Deck deck) {
-        // Get the scene card ID
-        Integer sceneCardID = getLocationSceneCardID(locationName);
-        // Get the scene card
-        SceneCard sceneCard = deck.getSceneCard(sceneCardID);
+        // Get the scene card at the location
+        int sceneCardID = getLocationSceneCardID(locationName);
+        SceneCard sceneCard = deck.getDrawnCard(sceneCardID);
         // Get the roles for the scene card
         return sceneCard.getRoles();
     }
@@ -298,7 +304,7 @@ public List<Player> getLocationPlayers(List<Player> players, Location location) 
     private void payOutBonus(List<Player> playersOnCard, List<Player> playersOffCard, Deck deck, Location location) {
         // Get the scene card at the location
         int sceneCardID = getLocationSceneCardID(location.getName());
-        SceneCard sceneCard = deck.getSceneCard(sceneCardID);
+        SceneCard sceneCard = deck.getDrawnCard(sceneCardID);
         // Get the movie budget
         int movieBudget = sceneCard.getBudget();
         // Roll a number of dice equal to the budget

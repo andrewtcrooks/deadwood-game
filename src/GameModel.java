@@ -351,16 +351,6 @@ public class GameModel implements Subject {
     }
 
     /**
-     * Returns the scene card with the given ID.
-     *
-     * @param sceneCardID The ID of the scene card.
-     * @return The scene card with the given ID.
-     */
-    public SceneCard getDeckSceneCard(int sceneCardID) {
-        return deck.getSceneCard(sceneCardID);
-    }
-
-    /**
      * Returns the location with the given name.
      *
      * @param name The name of the location.
