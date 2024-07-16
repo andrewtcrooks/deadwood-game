@@ -5,7 +5,8 @@ import java.util.Properties;
 /*
  * Deadwood by Andrew Crooks
  *  
- * This class is the main class for the Deadwood application.
+ * This is the main class for the Deadwood application.
+ * 
  * It creates the model, view, and controller for the game.
  * It also initializes the controller and runs the application.
  */

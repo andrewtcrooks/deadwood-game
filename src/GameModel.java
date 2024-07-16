@@ -4,6 +4,7 @@ import org.w3c.dom.Document;
 
 /**
  * Represents the model of the game.
+ * 
  * It manages the game state and data.
  * It initializes the game board, locations, deck, and players.
  * It also provides global access to the game state and data.

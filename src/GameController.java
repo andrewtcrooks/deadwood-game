@@ -1,7 +1,8 @@
 import java.util.*;
 
 /**
- * This class represents the game controller for the game.
+ * Represents the game controller for the game.
+ * 
  * It manages the game flow.
  */
 public class GameController{
