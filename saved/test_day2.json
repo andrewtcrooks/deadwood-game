@@ -1,0 +1,2648 @@
+{
+  "numDays": 3,
+  "currentDay": 2,
+  "numPlayers": 2,
+  "currentPlayer": 2,
+  "players": [
+    {
+      "id": 1,
+      "rank": 4,
+      "money": 10,
+      "credits": 14,
+      "rehearsalTokens": 0,
+      "active": false,
+      "hasMoved": false,
+      "hasWorked": false,
+      "hasUpgraded": false
+    },
+    {
+      "id": 2,
+      "rank": 3,
+      "money": 3,
+      "credits": 8,
+      "rehearsalTokens": 0,
+      "active": true,
+      "hasMoved": false,
+      "hasWorked": false,
+      "hasUpgraded": false
+    }
+  ],
+  "deck": {
+    "undrawnCards": [
+      {
+        "id": 27,
+        "title": "My Years on the Prairie",
+        "desc": "Louise takes instruction from Henry, the neighbor boy, in an absurdly\n      suggestive explanation of how to plow a field.",
+        "image": "29.png",
+        "budget": 5,
+        "roles": [
+          {
+            "name": "Willard",
+            "rank": 2,
+            "area": {
+              "x": 20,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Ain\u0027t that a sight?",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Leprechaun",
+            "rank": 3,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Begorrah!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Startled Ox",
+            "rank": 5,
+            "area": {
+              "x": 145,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Mrr?",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 19,
+        "title": "Swing \u0027em Wide",
+        "desc": "Black Jack invites Dixon and The Captain to a late-night poker\n      game. Little do they know that Gertrude and Isabella await them at the\n      table.",
+        "image": "32.png",
+        "budget": 6,
+        "roles": [
+          {
+            "name": "Thrifty Mike",
+            "rank": 1,
+            "area": {
+              "x": 20,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Call!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Sober Physician",
+            "rank": 3,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Raise!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Man on Floor",
+            "rank": 5,
+            "area": {
+              "x": 145,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Fold!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 40,
+        "title": "Custer\u0027s Other Stands",
+        "desc": "General George Armstrong Custer clinches another victory at the battle of\n      Little Sands. His trusty steed Cairo is not so lucky.",
+        "image": "40.png",
+        "budget": 5,
+        "roles": [
+          {
+            "name": "Farmer",
+            "rank": 2,
+            "area": {
+              "x": 20,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Git off a that!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Exploding Horse",
+            "rank": 4,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Boom!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Jack",
+            "rank": 6,
+            "area": {
+              "x": 145,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Here we go again!\"",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 17,
+        "title": "Thirteen the Hard Way",
+        "desc": "After operating for only six minutes, the Pony Express disbands and gives\n      way to the international Telegraph and Railroad systems. Little boys cry.",
+        "image": "37.png",
+        "budget": 5,
+        "roles": [
+          {
+            "name": "Very Wet Man",
+            "rank": 2,
+            "area": {
+              "x": 20,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Sheesh!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Dejected Housewife",
+            "rank": 4,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Its time had come.",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Man with Box",
+            "rank": 5,
+            "area": {
+              "x": 145,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Progress!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 14,
+        "title": "Ol\u0027 Shooter and Little Doll",
+        "desc": "Shooter discovers that he has been proceeding for days with no trousers.\n      This causes him no small embarrassment as he searches for them with Little\n      Doll.",
+        "image": "10.png",
+        "budget": 4,
+        "roles": [
+          {
+            "name": "Sleeping Man",
+            "rank": 1,
+            "area": {
+              "x": 20,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Snnkkk snnkk snnkk.",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Man with Pig",
+            "rank": 2,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Tally-Hooo!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Shooter",
+            "rank": 4,
+            "area": {
+              "x": 145,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Where\u0027s my britches?",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "Disaster at Flying J",
+        "desc": "After the mine explosion, the traveling circus takes time out to get drunk\n      and start a fight.",
+        "image": "17.png",
+        "budget": 5,
+        "roles": [
+          {
+            "name": "Piano Player",
+            "rank": 2,
+            "area": {
+              "x": 20,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "It\u0027s a nocturne!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Man in Turban",
+            "rank": 3,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "My stars!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Falls on Hoe",
+            "rank": 4,
+            "area": {
+              "x": 145,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Ow!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Trials of the First Pioneers",
+        "desc": "A fire breaks out in the town livery. Before long, the surrounding\n      buildings are engulfed in flame. The world falls into chaos.",
+        "image": "34.png",
+        "budget": 4,
+        "roles": [
+          {
+            "name": "Burning Man",
+            "rank": 2,
+            "area": {
+              "x": 20,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Make it stop!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Cheese Vendor",
+            "rank": 4,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Opa!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Hit with Table",
+            "rank": 5,
+            "area": {
+              "x": 145,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Ow! A table?",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 14,
+        "title": "Jesse James: Man of Action",
+        "desc": "A hail of gunfire results when Jesse\u0027s friend Barton marries Jesse\u0027s\n      childhood sweetheart.",
+        "image": "25.png",
+        "budget": 5,
+        "roles": [
+          {
+            "name": "Shot in Head",
+            "rank": 1,
+            "area": {
+              "x": 20,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Arrrgh!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Leaps Out of Cake",
+            "rank": 4,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Oh, for Pete\u0027s sake!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Shot Three Times",
+            "rank": 6,
+            "area": {
+              "x": 145,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Ow! Ow! Ow!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 32,
+        "title": "My Years on the Prairie",
+        "desc": "Virgil and Stacy set out at midnight to track down the stray cows, unaware\n      that they are being pursued by inch-high aliens from outer space.",
+        "image": "04.png",
+        "budget": 5,
+        "roles": [
+          {
+            "name": "Drunk",
+            "rank": 3,
+            "area": {
+              "x": 20,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Where\u0027s Willard?",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Librarian",
+            "rank": 4,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Shhhhh!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Man with Hay",
+            "rank": 6,
+            "area": {
+              "x": 145,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Hey!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 35,
+        "title": "Swing \u0027em Wide",
+        "desc": "Hector makes a surprising discovery behind the Chinese grocery store.",
+        "image": "33.png",
+        "budget": 6,
+        "roles": [
+          {
+            "name": "Liberated Nun",
+            "rank": 3,
+            "area": {
+              "x": 20,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Let me have it!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Witch Doctor",
+            "rank": 5,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Oogie Boogie!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Voice of Reason",
+            "rank": 6,
+            "area": {
+              "x": 145,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Come on, now!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "How They Get Milk",
+        "desc": "Josie asks the Milkman how they get milk. After a thoughtful pause, he\n      begins. \"Not like you\u0027d expect!\"",
+        "image": "28.png",
+        "budget": 4,
+        "roles": [
+          {
+            "name": "Cow",
+            "rank": 2,
+            "area": {
+              "x": 20,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Moo.",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "St. Clement of Alexandria",
+            "rank": 3,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Peace be with you, child!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Josie",
+            "rank": 4,
+            "area": {
+              "x": 145,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Yikes!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "title": "How the Grinch Stole Texas",
+        "desc": "The doe-eyed citizens of El Paso gather together around a warm fire and\n      pray for the safety of those poor souls in Oklahoma. It almost works.",
+        "image": "35.png",
+        "budget": 5,
+        "roles": [
+          {
+            "name": "Detective",
+            "rank": 3,
+            "area": {
+              "x": 20,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "I have a hunch.",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "File Clerk",
+            "rank": 4,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "My stapler!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Cindy Lou",
+            "rank": 5,
+            "area": {
+              "x": 145,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Dear Lord!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 31,
+        "title": "Davy Crockett: A Drunkard\u0027s Tale",
+        "desc": "Robert enlists the aid of several farm animals in order to ascertain the\n      efficacy of his new hangover remedy.",
+        "image": "07.png",
+        "budget": 4,
+        "roles": [
+          {
+            "name": "The Duck",
+            "rank": 4,
+            "area": {
+              "x": 53,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Waaaak!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "His Brother",
+            "rank": 6,
+            "area": {
+              "x": 115,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Waaaaaaaak!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 21,
+        "title": "One False Step for Mankind",
+        "desc": "After a dozen failed attempts, one rocket carries Horatio and his six\n      children to the Moon, where they enjoy a picnic and a spirited game of\n      badminton.",
+        "image": "26.png",
+        "budget": 6,
+        "roles": [
+          {
+            "name": "Flustered Man",
+            "rank": 1,
+            "area": {
+              "x": 20,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Well, I never!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Space Monkey",
+            "rank": 2,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Ook!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Cowbot Dan",
+            "rank": 5,
+            "area": {
+              "x": 145,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Bzzzzzt!\"",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 34,
+        "title": "The Way the West Was Run",
+        "desc": "Jose explains patiently, but with thinly veiled contempt, the intricacies\n      of Arizona bureaucracy, as though speaking to a simple and distracted child.",
+        "image": "08.png",
+        "budget": 4,
+        "roles": [
+          {
+            "name": "Town Drunk",
+            "rank": 2,
+            "area": {
+              "x": 20,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Even me!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Squinting Miner",
+            "rank": 4,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Sure we can!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Poltergeist",
+            "rank": 5,
+            "area": {
+              "x": 145,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Wooooo!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "title": "How They Get Milk",
+        "desc": "Josie is thoroughly off milk at this point. The Milkman shows her one more\n      way that she might not have heard of before.",
+        "image": "38.png",
+        "budget": 4,
+        "roles": [
+          {
+            "name": "Marksman",
+            "rank": 4,
+            "area": {
+              "x": 20,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Pull!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Postal Worker",
+            "rank": 5,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "It\u0027s about time!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "A Horse",
+            "rank": 6,
+            "area": {
+              "x": 145,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Yes Sir!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 15,
+        "title": "Thirteen the Hard Way",
+        "desc": "After some delay, the Pony Express arrives. Isaac, Gwen, Francis, Terry,\n      Conrad, Brooke, Jerry, Howard, MacNeill, Jones, Spike, Cornwall and\n      Crawford are all there.",
+        "image": "27.png",
+        "budget": 5,
+        "roles": [
+          {
+            "name": "Man in Poncho",
+            "rank": 1,
+            "area": {
+              "x": 20,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Howdy, Jones!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Ecstatic Housewife",
+            "rank": 3,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "This is fine!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Isaac",
+            "rank": 5,
+            "area": {
+              "x": 145,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "The mail!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 24,
+        "title": "Down in the Valley",
+        "desc": "A tripped waiter is the spark igniting a brawl of cataclysmic\n      proportions.  Walter is injured in the neck.",
+        "image": "09.png",
+        "budget": 3,
+        "roles": [
+          {
+            "name": "Angry Barber",
+            "rank": 1,
+            "area": {
+              "x": 20,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Hold him still!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Woman with Board",
+            "rank": 3,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Nonsense, Frank!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Man in Fire",
+            "rank": 5,
+            "area": {
+              "x": 145,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "It burns!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 25,
+        "title": "Gun! The Musical",
+        "desc": "A song and dance extravaganza, \"Hunka Hunka Burnin\u0027 Lead.\"",
+        "image": "21.png",
+        "budget": 6,
+        "roles": [
+          {
+            "name": "Looks like Elvis",
+            "rank": 4,
+            "area": {
+              "x": 20,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Thankyouverymuch.",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Singing Dead Man",
+            "rank": 5,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Yeah!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Apothecary",
+            "rank": 6,
+            "area": {
+              "x": 145,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Such drugs I have.",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 16,
+        "title": "Humor at the Expense of Others",
+        "desc": "Phil and his cohort of unfeeling smart-mouths make fun of Sancho and his\n      great big hat.",
+        "image": "22.png",
+        "budget": 5,
+        "roles": [
+          {
+            "name": "Jailer",
+            "rank": 2,
+            "area": {
+              "x": 20,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "You there!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Mephistopheles",
+            "rank": 4,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Be not afraid!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Breaks a Window",
+            "rank": 5,
+            "area": {
+              "x": 145,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Oops!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      }
+    ],
+    "drawnCards": [
+      {
+        "id": 19,
+        "title": "Breakin\u0027 in Trick Ponies",
+        "desc": "Uncle Stewart reveals what to do when all else fails.",
+        "image": "39.png",
+        "budget": 3,
+        "roles": [
+          {
+            "name": "Fraternity Pledge",
+            "rank": 2,
+            "area": {
+              "x": 53,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Beer me!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Man with Sword",
+            "rank": 6,
+            "area": {
+              "x": 115,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "None shall pass!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 1,
+        "title": "Picante Sauce Commercial",
+        "desc": "A dozen grizzled cowboys surround a fire. Suddenly, they exclaim, \"That\u0027s\n      not mayonnaise!\"",
+        "image": "24.png",
+        "budget": 2,
+        "roles": [
+          {
+            "name": "Bewhisker\u0027d Cowpoke",
+            "rank": 3,
+            "area": {
+              "x": 53,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Oh, sweet Lord!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Dog",
+            "rank": 6,
+            "area": {
+              "x": 115,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Wurf!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "title": "Davy Crockett: A Drunkard\u0027s Tale",
+        "desc": "In an absurd dream sequence, Crockett recalls an episode of fear and chaos\n      in which his childhood friend Timmy was trapped at the bottom of a well.",
+        "image": "30.png",
+        "budget": 4,
+        "roles": [
+          {
+            "name": "Voice of God",
+            "rank": 2,
+            "area": {
+              "x": 20,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Grab hold, son!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Hands of God",
+            "rank": 3,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Jack Kemp",
+            "rank": 4,
+            "area": {
+              "x": 145,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "America!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "title": "Jesse James: Man of Action",
+        "desc": "Jesse\u0027s brothers Jed and Henry throw him a surprise birthday party.\n      Jesse\u0027s nerves get the better of him when the birthday cake explodes.",
+        "image": "16.png",
+        "budget": 5,
+        "roles": [
+          {
+            "name": "Shot in Back",
+            "rank": 2,
+            "area": {
+              "x": 20,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Arrrggh!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Shot in Leg",
+            "rank": 4,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Ooh, lordy!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Leaps into Cake",
+            "rank": 5,
+            "area": {
+              "x": 145,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Dangit, Jesse!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "title": "The Search for Maggie White",
+        "desc": "Alone in the wilderness, Maggie makes the best of her situation. In what\n      seems like no time at all, she constructs a sturdy two-story house from\n      branches and mud.",
+        "image": "23.png",
+        "budget": 6,
+        "roles": [
+          {
+            "name": "Film Critic",
+            "rank": 5,
+            "area": {
+              "x": 53,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Implausible!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Hobo with Bat",
+            "rank": 6,
+            "area": {
+              "x": 115,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Nice house!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 19,
+        "title": "The Robbers of Trains",
+        "desc": "Coogan confronts the toughest thug in his gang, Big Jake, in an\n      abbreviated knife fight.  Coogan settles the dispute with fearless guile\n      and a kick in the family jewels.",
+        "image": "11.png",
+        "budget": 4,
+        "roles": [
+          {
+            "name": "Buster",
+            "rank": 1,
+            "area": {
+              "x": 20,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "One two three go!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Man Reading Paper",
+            "rank": 4,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Ouchie!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Fat Pete",
+            "rank": 5,
+            "area": {
+              "x": 145,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Nick kick, boss!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 13,
+        "title": "J. Robert Lucky, Man of Substance",
+        "desc": "Horace and Mathilde discover that the mysterious orange powder filling\n      Doctor Lucky\u0027s air vents is neither Agent Orange nor weaponized Tang, but\n      a rare form of cheese mold.",
+        "image": "36.png",
+        "budget": 4,
+        "roles": [
+          {
+            "name": "Man with Rope",
+            "rank": 1,
+            "area": {
+              "x": 20,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Look out below!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Svetlana",
+            "rank": 2,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Says who?",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Accidental Victim",
+            "rank": 5,
+            "area": {
+              "x": 145,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Ow! My spine!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 20,
+        "title": "Law and the Old West",
+        "desc": "Charlie \"Three Guns\" Henderson cooperates with Johnny Law and reluctantly\n      enters the witless protection program.",
+        "image": "02.png",
+        "budget": 3,
+        "roles": [
+          {
+            "name": "Rug Merchant",
+            "rank": 1,
+            "area": {
+              "x": 20,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Don\u0027t leave my store!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Banker",
+            "rank": 2,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Trust me.",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Talking Mule",
+            "rank": 4,
+            "area": {
+              "x": 145,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Nice work, Johnny!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 16,
+        "title": "A Man Called \u0027Cow\u0027",
+        "desc": "Nothing will settle the debates among the skeptical locals, short of a\n      demonstration of Hector\u0027s special talents.",
+        "image": "13.png",
+        "budget": 3,
+        "roles": [
+          {
+            "name": "Preacher",
+            "rank": 3,
+            "area": {
+              "x": 53,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "My word!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Amused Witness",
+            "rank": 6,
+            "area": {
+              "x": 115,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Tee hee hee!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      }
+    ],
+    "discardedCards": [
+      {
+        "id": 7,
+        "title": "Evil Wears a Hat",
+        "desc": "Calhoun is separated from the group during a white-knuckled chase near Desperation Bluff.",
+        "image": "01.png",
+        "budget": 4,
+        "roles": [
+          {
+            "name": "Defrocked Priest",
+            "rank": 2,
+            "area": {
+              "x": 20,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Look out below!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Marshal Canfield",
+            "rank": 3,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Hold fast!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "One-Eyed Man",
+            "rank": 4,
+            "area": {
+              "x": 145,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Balderdash!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 30,
+        "title": "Go West, You!",
+        "desc": "Susan and Peter encounter some of the perils of the Badlands: rutted mud\n      roads, torrential rain storms, and a bad case of \"grumbly tummy.\"",
+        "image": "19.png",
+        "budget": 3,
+        "roles": [
+          {
+            "name": "Ex-Convict",
+            "rank": 4,
+            "area": {
+              "x": 53,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Never again!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Man with Onion",
+            "rank": 6,
+            "area": {
+              "x": 115,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Fresh Onions!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 23,
+        "title": "Shakespear in Lubbock",
+        "desc": "William decides that it is time to be movin\u0027 on.  Julia convinces him to\n      stick around just long enough to get into big trouble.",
+        "image": "18.png",
+        "budget": 3,
+        "roles": [
+          {
+            "name": "Falls from Tree",
+            "rank": 1,
+            "area": {
+              "x": 20,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "What ho!",
+            "onCard": true,
+            "occupied": true
+          },
+          {
+            "name": "Laughing Woman",
+            "rank": 3,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Tis to laugh!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Man with Whistle",
+            "rank": 4,
+            "area": {
+              "x": 145,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Tweeeeet!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Gum Commercial",
+        "desc": "Inspector Pete speaks to a riveted audience about the many hidden dangers\n      of taffy, not the least of which is that taffy can kill you stone dead.",
+        "image": "15.png",
+        "budget": 2,
+        "roles": [
+          {
+            "name": "Surprised Bison",
+            "rank": 2,
+            "area": {
+              "x": 53,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Mmrrrrrph!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Man with Horn",
+            "rank": 4,
+            "area": {
+              "x": 115,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Ta daaaa!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 14,
+        "title": "Square Deal City",
+        "desc": "Douglas and Katherine confront Aunt Martha about her missing pies.  Devin\n      sulks quietly in a side room.",
+        "image": "06.png",
+        "budget": 6,
+        "roles": [
+          {
+            "name": "Squaking Boy",
+            "rank": 2,
+            "area": {
+              "x": 20,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "I\u0027ll say!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Pharaoh Imhotep",
+            "rank": 4,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Attack, soldiers!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Aunt Martha",
+            "rank": 6,
+            "area": {
+              "x": 145,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "You got nothin\u0027!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 15,
+        "title": "The Life and Times of John Skywater",
+        "desc": "John discovers his long-lost sister Marcie, and instructs her in the ways\n      of gunfighting and whiskey distillation.",
+        "image": "20.png",
+        "budget": 5,
+        "roles": [
+          {
+            "name": "Staggering Man",
+            "rank": 3,
+            "area": {
+              "x": 20,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "You never know!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Woman with Beer",
+            "rank": 5,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Howdy, stranger!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Marcie",
+            "rank": 6,
+            "area": {
+              "x": 145,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Welcome home!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 25,
+        "title": "Czechs in the Sonora",
+        "desc": "Bob reverts to his ancestral ways in a short fight\n      over a disembodied hand.",
+        "image": "31.png",
+        "budget": 4,
+        "roles": [
+          {
+            "name": "Opice (Monkey)",
+            "rank": 5,
+            "area": {
+              "x": 53,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Ukk! (Ook)!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Man with Gun",
+            "rank": 6,
+            "area": {
+              "x": 115,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Hold it right there!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 22,
+        "title": "The Life and Times of John Skywater",
+        "desc": "Disheartened by his lack of business acumen and his poor choice of\n      investment partners, John Skywater sets off into the Cree Nation to\n      convince them to kidnap his wife.",
+        "image": "03.png",
+        "budget": 5,
+        "roles": [
+          {
+            "name": "Auctioneer",
+            "rank": 5,
+            "area": {
+              "x": 53,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Going once!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "General Custer",
+            "rank": 6,
+            "area": {
+              "x": 115,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Go West!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Taffy Commercial",
+        "desc": "Jackson encourages the children to eat only taffy, because gum can kill\n      them stone dead.",
+        "image": "14.png",
+        "budget": 2,
+        "roles": [
+          {
+            "name": "Curious girl",
+            "rank": 3,
+            "area": {
+              "x": 53,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Are you sure?",
+            "onCard": true,
+            "occupied": true
+          },
+          {
+            "name": "Ghost of Plato",
+            "rank": 4,
+            "area": {
+              "x": 115,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "It happened to me!",
+            "onCard": true,
+            "occupied": true
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "title": "Beyond the Pail: Life without Lactose",
+        "desc": "Henry discovers for the first time that his ability to digest cream has\n      disappeared along with his hair.  Other cowboys attempt to console him.",
+        "image": "12.png",
+        "budget": 2,
+        "roles": [
+          {
+            "name": "Martin",
+            "rank": 6,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Have you tried soy cheese?",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "title": "Buffalo Bill: The Lost Years",
+        "desc": "Buffalo Bill\u0027s companion Marty disappears in a freak electrical storm.\n      Bill enlists the aid of the Sidekick Friends network.",
+        "image": "05.png",
+        "budget": 4,
+        "roles": [
+          {
+            "name": "Hollering Boy",
+            "rank": 2,
+            "area": {
+              "x": 20,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Over here, mister!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Drink Farmer",
+            "rank": 3,
+            "area": {
+              "x": 83,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "Git outta me barn!",
+            "onCard": true,
+            "occupied": false
+          },
+          {
+            "name": "Meek Little Sarah",
+            "rank": 5,
+            "area": {
+              "x": 145,
+              "y": 47,
+              "h": 40,
+              "w": 40
+            },
+            "line": "He\u0027s so cute!",
+            "onCard": true,
+            "occupied": false
+          }
+        ]
+      }
+    ]
+  },
+  "locations": {
+    "Church": {
+      "name": "Church",
+      "neighbors": [
+        "Secret Hideout",
+        "Bank",
+        "Hotel"
+      ],
+      "area": {
+        "x": 623,
+        "y": 734,
+        "h": 115,
+        "w": 205
+      },
+      "takes": [
+        {
+          "number": 2,
+          "area": {
+            "x": 623,
+            "y": 675,
+            "h": 47,
+            "w": 47
+          },
+          "wrapped": false
+        },
+        {
+          "number": 1,
+          "area": {
+            "x": 682,
+            "y": 675,
+            "h": 47,
+            "w": 47
+          },
+          "wrapped": false
+        }
+      ],
+      "wrapped": false,
+      "locationRoles": [
+        {
+          "name": "Dead Man",
+          "rank": 1,
+          "area": {
+            "x": 857,
+            "y": 730,
+            "h": 46,
+            "w": 46
+          },
+          "line": "....",
+          "onCard": false,
+          "occupied": false
+        },
+        {
+          "name": "Crying Woman",
+          "rank": 2,
+          "area": {
+            "x": 858,
+            "y": 809,
+            "h": 46,
+            "w": 46
+          },
+          "line": "Oh, the humanity!",
+          "onCard": false,
+          "occupied": false
+        }
+      ]
+    },
+    "General Store": {
+      "name": "General Store",
+      "neighbors": [
+        "Ranch",
+        "Train Station",
+        "Jail",
+        "Saloon"
+      ],
+      "area": {
+        "x": 370,
+        "y": 282,
+        "h": 115,
+        "w": 205
+      },
+      "takes": [
+        {
+          "number": 2,
+          "area": {
+            "x": 313,
+            "y": 277,
+            "h": 47,
+            "w": 47
+          },
+          "wrapped": false
+        },
+        {
+          "number": 1,
+          "area": {
+            "x": 313,
+            "y": 330,
+            "h": 47,
+            "w": 47
+          },
+          "wrapped": false
+        }
+      ],
+      "wrapped": false,
+      "locationRoles": [
+        {
+          "name": "Man in Overalls",
+          "rank": 1,
+          "area": {
+            "x": 236,
+            "y": 276,
+            "h": 46,
+            "w": 46
+          },
+          "line": "Looks like a storm\u0027s comin\u0027 in.",
+          "onCard": false,
+          "occupied": true
+        },
+        {
+          "name": "Mister Keach",
+          "rank": 3,
+          "area": {
+            "x": 236,
+            "y": 358,
+            "h": 46,
+            "w": 46
+          },
+          "line": "Howdy, stranger.",
+          "onCard": false,
+          "occupied": true
+        }
+      ]
+    },
+    "Bank": {
+      "name": "Bank",
+      "neighbors": [
+        "Saloon",
+        "Church",
+        "Ranch",
+        "Hotel"
+      ],
+      "area": {
+        "x": 623,
+        "y": 475,
+        "h": 115,
+        "w": 205
+      },
+      "takes": [
+        {
+          "number": 1,
+          "area": {
+            "x": 840,
+            "y": 549,
+            "h": 47,
+            "w": 47
+          },
+          "wrapped": false
+        }
+      ],
+      "wrapped": false,
+      "locationRoles": [
+        {
+          "name": "Suspicious Gentleman",
+          "rank": 2,
+          "area": {
+            "x": 911,
+            "y": 554,
+            "h": 46,
+            "w": 46
+          },
+          "line": "Can you be more specific?",
+          "onCard": false,
+          "occupied": false
+        },
+        {
+          "name": "Flustered Teller",
+          "rank": 3,
+          "area": {
+            "x": 911,
+            "y": 470,
+            "h": 46,
+            "w": 46
+          },
+          "line": "Would you like a large bill, sir?",
+          "onCard": false,
+          "occupied": false
+        }
+      ]
+    },
+    "Ranch": {
+      "name": "Ranch",
+      "neighbors": [
+        "office",
+        "General Store",
+        "Secret Hideout",
+        "Bank"
+      ],
+      "area": {
+        "x": 252,
+        "y": 478,
+        "h": 115,
+        "w": 205
+      },
+      "takes": [
+        {
+          "number": 2,
+          "area": {
+            "x": 472,
+            "y": 473,
+            "h": 47,
+            "w": 47
+          },
+          "wrapped": false
+        },
+        {
+          "number": 1,
+          "area": {
+            "x": 525,
+            "y": 473,
+            "h": 47,
+            "w": 47
+          },
+          "wrapped": false
+        }
+      ],
+      "wrapped": false,
+      "locationRoles": [
+        {
+          "name": "Shot in Leg",
+          "rank": 1,
+          "area": {
+            "x": 412,
+            "y": 608,
+            "h": 46,
+            "w": 46
+          },
+          "line": "Ow! Me Leg!",
+          "onCard": false,
+          "occupied": false
+        },
+        {
+          "name": "Saucy Fred",
+          "rank": 2,
+          "area": {
+            "x": 488,
+            "y": 608,
+            "h": 46,
+            "w": 46
+          },
+          "line": "That\u0027s what she said.",
+          "onCard": false,
+          "occupied": true
+        },
+        {
+          "name": "Man Under Horse",
+          "rank": 3,
+          "area": {
+            "x": 488,
+            "y": 525,
+            "h": 46,
+            "w": 46
+          },
+          "line": "A little help here!",
+          "onCard": false,
+          "occupied": true
+        }
+      ]
+    },
+    "Secret Hideout": {
+      "name": "Secret Hideout",
+      "neighbors": [
+        "Church",
+        "Ranch",
+        "office"
+      ],
+      "area": {
+        "x": 27,
+        "y": 732,
+        "h": 115,
+        "w": 205
+      },
+      "takes": [
+        {
+          "number": 3,
+          "area": {
+            "x": 244,
+            "y": 764,
+            "h": 47,
+            "w": 47
+          },
+          "wrapped": false
+        },
+        {
+          "number": 2,
+          "area": {
+            "x": 299,
+            "y": 764,
+            "h": 47,
+            "w": 47
+          },
+          "wrapped": false
+        },
+        {
+          "number": 1,
+          "area": {
+            "x": 354,
+            "y": 764,
+            "h": 47,
+            "w": 47
+          },
+          "wrapped": false
+        }
+      ],
+      "wrapped": false,
+      "locationRoles": [
+        {
+          "name": "Clumsy Pit Fighter",
+          "rank": 1,
+          "area": {
+            "x": 435,
+            "y": 719,
+            "h": 46,
+            "w": 46
+          },
+          "line": "Hit me!",
+          "onCard": false,
+          "occupied": true
+        },
+        {
+          "name": "Thug with Knife",
+          "rank": 2,
+          "area": {
+            "x": 521,
+            "y": 719,
+            "h": 46,
+            "w": 46
+          },
+          "line": "Meet Suzy, my murderin\u0027 knife.",
+          "onCard": false,
+          "occupied": false
+        },
+        {
+          "name": "Dangerous Tom",
+          "rank": 3,
+          "area": {
+            "x": 435,
+            "y": 808,
+            "h": 46,
+            "w": 46
+          },
+          "line": "There\u0027s two ways we can do this....",
+          "onCard": false,
+          "occupied": false
+        },
+        {
+          "name": "Penny, who is lost",
+          "rank": 4,
+          "area": {
+            "x": 521,
+            "y": 808,
+            "h": 46,
+            "w": 46
+          },
+          "line": "Oh, wow! for I am lost!",
+          "onCard": false,
+          "occupied": false
+        }
+      ]
+    },
+    "Main Street": {
+      "name": "Main Street",
+      "neighbors": [
+        "trailer",
+        "Jail",
+        "Saloon"
+      ],
+      "area": {
+        "x": 969,
+        "y": 28,
+        "h": 115,
+        "w": 205
+      },
+      "takes": [
+        {
+          "number": 3,
+          "area": {
+            "x": 912,
+            "y": 23,
+            "h": 47,
+            "w": 47
+          },
+          "wrapped": false
+        },
+        {
+          "number": 2,
+          "area": {
+            "x": 858,
+            "y": 23,
+            "h": 47,
+            "w": 47
+          },
+          "wrapped": false
+        },
+        {
+          "number": 1,
+          "area": {
+            "x": 804,
+            "y": 23,
+            "h": 47,
+            "w": 47
+          },
+          "wrapped": false
+        }
+      ],
+      "wrapped": true,
+      "locationRoles": [
+        {
+          "name": "Railroad Worker",
+          "rank": 1,
+          "area": {
+            "x": 637,
+            "y": 22,
+            "h": 46,
+            "w": 46
+          },
+          "line": "Hit me!",
+          "onCard": false,
+          "occupied": true
+        },
+        {
+          "name": "Falls off Roof",
+          "rank": 2,
+          "area": {
+            "x": 720,
+            "y": 22,
+            "h": 46,
+            "w": 46
+          },
+          "line": "Aaaaiiiigggghh!",
+          "onCard": false,
+          "occupied": true
+        },
+        {
+          "name": "Woman in Black Dress",
+          "rank": 2,
+          "area": {
+            "x": 637,
+            "y": 105,
+            "h": 46,
+            "w": 46
+          },
+          "line": "Well, I\u0027ll be!",
+          "onCard": false,
+          "occupied": false
+        },
+        {
+          "name": "Mayor McGinty",
+          "rank": 4,
+          "area": {
+            "x": 720,
+            "y": 105,
+            "h": 46,
+            "w": 46
+          },
+          "line": "People of Deadwood!",
+          "onCard": false,
+          "occupied": true
+        }
+      ]
+    },
+    "Jail": {
+      "name": "Jail",
+      "neighbors": [
+        "Main Street",
+        "General Store",
+        "Train Station"
+      ],
+      "area": {
+        "x": 281,
+        "y": 27,
+        "h": 115,
+        "w": 205
+      },
+      "takes": [
+        {
+          "number": 1,
+          "area": {
+            "x": 442,
+            "y": 156,
+            "h": 47,
+            "w": 47
+          },
+          "wrapped": false
+        }
+      ],
+      "wrapped": false,
+      "locationRoles": [
+        {
+          "name": "Prisoner In Cell",
+          "rank": 2,
+          "area": {
+            "x": 519,
+            "y": 25,
+            "h": 46,
+            "w": 46
+          },
+          "line": "Zzzzzzz...Whiskey!",
+          "onCard": false,
+          "occupied": false
+        },
+        {
+          "name": "Feller in Irons",
+          "rank": 3,
+          "area": {
+            "x": 519,
+            "y": 105,
+            "h": 46,
+            "w": 46
+          },
+          "line": "Ah kilt the wrong man!",
+          "onCard": false,
+          "occupied": false
+        }
+      ]
+    },
+    "Casting Office": {
+      "name": "Casting Office",
+      "neighbors": [
+        "Train Station",
+        "Ranch",
+        "Secret Hideout"
+      ],
+      "area": {
+        "x": 0,
+        "y": 0,
+        "h": 0,
+        "w": 0
+      },
+      "takes": [],
+      "wrapped": false,
+      "locationRoles": []
+    },
+    "Saloon": {
+      "name": "Saloon",
+      "neighbors": [
+        "Main Street",
+        "General Store",
+        "Bank",
+        "trailer"
+      ],
+      "area": {
+        "x": 632,
+        "y": 280,
+        "h": 115,
+        "w": 205
+      },
+      "takes": [
+        {
+          "number": 2,
+          "area": {
+            "x": 626,
+            "y": 216,
+            "h": 47,
+            "w": 47
+          },
+          "wrapped": false
+        },
+        {
+          "number": 1,
+          "area": {
+            "x": 679,
+            "y": 216,
+            "h": 47,
+            "w": 47
+          },
+          "wrapped": false
+        }
+      ],
+      "wrapped": false,
+      "locationRoles": [
+        {
+          "name": "Reluctant Farmer",
+          "rank": 1,
+          "area": {
+            "x": 877,
+            "y": 352,
+            "h": 46,
+            "w": 46
+          },
+          "line": "I ain\u0027t so sure about that!",
+          "onCard": false,
+          "occupied": true
+        },
+        {
+          "name": "Woman in Red Dress",
+          "rank": 2,
+          "area": {
+            "x": 877,
+            "y": 276,
+            "h": 46,
+            "w": 46
+          },
+          "line": "Come up and see me!",
+          "onCard": false,
+          "occupied": false
+        }
+      ]
+    },
+    "Train Station": {
+      "name": "Train Station",
+      "neighbors": [
+        "Jail",
+        "General Store",
+        "office"
+      ],
+      "area": {
+        "x": 21,
+        "y": 69,
+        "h": 115,
+        "w": 205
+      },
+      "takes": [
+        {
+          "number": 3,
+          "area": {
+            "x": 36,
+            "y": 11,
+            "h": 47,
+            "w": 47
+          },
+          "wrapped": false
+        },
+        {
+          "number": 2,
+          "area": {
+            "x": 89,
+            "y": 11,
+            "h": 47,
+            "w": 47
+          },
+          "wrapped": false
+        },
+        {
+          "number": 1,
+          "area": {
+            "x": 141,
+            "y": 11,
+            "h": 47,
+            "w": 47
+          },
+          "wrapped": false
+        }
+      ],
+      "wrapped": false,
+      "locationRoles": [
+        {
+          "name": "Crusty Prospector",
+          "rank": 1,
+          "area": {
+            "x": 114,
+            "y": 227,
+            "h": 46,
+            "w": 46
+          },
+          "line": "Aww, peaches!",
+          "onCard": false,
+          "occupied": true
+        },
+        {
+          "name": "Dragged by Train",
+          "rank": 1,
+          "area": {
+            "x": 51,
+            "y": 268,
+            "h": 46,
+            "w": 46
+          },
+          "line": "Omgeezers!",
+          "onCard": false,
+          "occupied": false
+        },
+        {
+          "name": "Preacher with Bag",
+          "rank": 2,
+          "area": {
+            "x": 114,
+            "y": 320,
+            "h": 46,
+            "w": 46
+          },
+          "line": "The Lord will provide.",
+          "onCard": false,
+          "occupied": false
+        },
+        {
+          "name": "Cyrus the Gunfighter",
+          "rank": 4,
+          "area": {
+            "x": 49,
+            "y": 356,
+            "h": 46,
+            "w": 46
+          },
+          "line": "Git to fightin\u0027 or git away!",
+          "onCard": false,
+          "occupied": false
+        }
+      ]
+    },
+    "Hotel": {
+      "name": "Hotel",
+      "neighbors": [
+        "trailer",
+        "Bank",
+        "Church"
+      ],
+      "area": {
+        "x": 969,
+        "y": 740,
+        "h": 115,
+        "w": 205
+      },
+      "takes": [
+        {
+          "number": 3,
+          "area": {
+            "x": 1005,
+            "y": 683,
+            "h": 47,
+            "w": 47
+          },
+          "wrapped": false
+        },
+        {
+          "number": 2,
+          "area": {
+            "x": 1058,
+            "y": 683,
+            "h": 47,
+            "w": 47
+          },
+          "wrapped": false
+        },
+        {
+          "number": 1,
+          "area": {
+            "x": 1111,
+            "y": 683,
+            "h": 47,
+            "w": 47
+          },
+          "wrapped": false
+        }
+      ],
+      "wrapped": false,
+      "locationRoles": [
+        {
+          "name": "Sleeping Drunkard",
+          "rank": 1,
+          "area": {
+            "x": 1111,
+            "y": 469,
+            "h": 46,
+            "w": 46
+          },
+          "line": "Zzzzzzz...Whiskey!",
+          "onCard": false,
+          "occupied": false
+        },
+        {
+          "name": "Faro Player",
+          "rank": 1,
+          "area": {
+            "x": 1044,
+            "y": 509,
+            "h": 46,
+            "w": 46
+          },
+          "line": "Hit me!",
+          "onCard": false,
+          "occupied": true
+        },
+        {
+          "name": "Falls from Balcony",
+          "rank": 2,
+          "area": {
+            "x": 1111,
+            "y": 557,
+            "h": 46,
+            "w": 46
+          },
+          "line": "Arrrgghh!",
+          "onCard": false,
+          "occupied": false
+        },
+        {
+          "name": "Australian Bartender",
+          "rank": 3,
+          "area": {
+            "x": 1046,
+            "y": 596,
+            "h": 46,
+            "w": 46
+          },
+          "line": "What\u0027ll it be, mate?",
+          "onCard": false,
+          "occupied": false
+        }
+      ]
+    },
+    "Trailer": {
+      "name": "Trailer",
+      "neighbors": [
+        "Main Street",
+        "Saloon",
+        "Hotel"
+      ],
+      "area": {
+        "x": 0,
+        "y": 0,
+        "h": 0,
+        "w": 0
+      },
+      "takes": [],
+      "wrapped": false,
+      "locationRoles": []
+    }
+  },
+  "board": {
+    "numScenesRemaining": 9,
+    "playerLocation": {
+      "1": "Main Street",
+      "2": "Main Street"
+    },
+    "playerRole": {},
+    "locationScene": {
+      "Bank": 1,
+      "Jail": 19,
+      "Church": 19,
+      "General Store": 12,
+      "Ranch": 12,
+      "Secret Hideout": 8,
+      "Saloon": 13,
+      "Train Station": 20,
+      "Hotel": 16
+    }
+  }
+}
