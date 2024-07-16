@@ -23,6 +23,7 @@ public class PlayerActionUpgrade implements PlayerAction {
         creditCosts.put(6, 25); // 25 credits for rank 6
     }
 
+    
     /**
      * Validates the upgrade action for the player.
      *

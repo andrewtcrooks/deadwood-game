@@ -7,7 +7,6 @@ import java.util.stream.Stream;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 /*
  * Represents the load action for the player.
  */
