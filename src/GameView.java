@@ -2,8 +2,8 @@
  * GameView interface
  */
 public interface GameView extends Observer{
-    String getPlayerInput();
-    int getNumPlayers();
-    void showMessage(String message);
-    void update(Object arg);
+    public String getPlayerInput();
+    public int getNumPlayers();
+    public void showMessage(String message);
+    public void update(Object arg);
 }
