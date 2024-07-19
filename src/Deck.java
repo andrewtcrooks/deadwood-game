@@ -1,5 +1,4 @@
 import java.util.*;
-import org.w3c.dom.Document;
 
 /**
  * Represents a shuffled deck of SceneCard objects.
@@ -17,14 +16,11 @@ public class Deck {
      *
      * @param xmlFilePath The path to the XML file containing the card data.
      */
-    public Deck(String xmlFilePath) {
+    public Deck(String cardsXMLFilePath) {
         ParseCardsXML parser = new ParseCardsXML();
         try {
-            Document doc = parser.getDocFromFile(xmlFilePath);
-            // Parse the data from the XML file
-            parser.readData(doc);
             // Get the cards from the parser
-            this.undrawnCards = parser.getCards();
+            this.undrawnCards = parser.getCards(cardsXMLFilePath);
             // Shuffle the deck
             this.shuffle();
         } catch (Exception e) {
