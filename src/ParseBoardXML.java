@@ -21,7 +21,7 @@ public class ParseBoardXML extends AbstractParseXML {
      * Reads the data from the given Document object.
      * 
      * @param d The Document object to read data from.
-     * @return void
+     * @return Element
      * @throws Exception
      */
     @Override
@@ -34,6 +34,7 @@ public class ParseBoardXML extends AbstractParseXML {
      * Parses the locations from the given NodeList object.
      * 
      * @param locationsList
+     * @return the map of parsed locations
      */
     private Map<String, Location> parseLocations(NodeList locationsList) {
         Map<String, Location> locations = new HashMap<>();
