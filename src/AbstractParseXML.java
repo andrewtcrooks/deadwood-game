@@ -24,7 +24,7 @@ public abstract class AbstractParseXML {
      * Reads the data from the given Document object.
      * @param d
      */
-    abstract void readData(Document d) throws Exception;
+    public abstract void readData(Document d) throws Exception;
 
     
 /************************************************************
@@ -37,7 +37,7 @@ public abstract class AbstractParseXML {
      * @return Document
      * @throws Exception
      */
-    Document getDocFromFile(String filename) throws Exception {
+    public Document getDocFromFile(String filename) throws Exception {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         InputStream is = getClass().getClassLoader().getResourceAsStream(filename);
@@ -54,7 +54,7 @@ public abstract class AbstractParseXML {
      * @param element
      * @return String
      */
-    String parseName(Element element) {
+    public String parseName(Element element) {
         return element.getAttribute("name");
     }
 
@@ -64,7 +64,7 @@ public abstract class AbstractParseXML {
      * @param areaElement
      * @return Area
      */
-    Area parseArea(Element areaElement) {
+    public Area parseArea(Element areaElement) {
         int x = Integer.parseInt(areaElement.getAttribute("x"));
         int y = Integer.parseInt(areaElement.getAttribute("y"));
         int h = Integer.parseInt(areaElement.getAttribute("h"));
@@ -78,7 +78,7 @@ public abstract class AbstractParseXML {
      * @param parentElement
      * @return List<Role>
      */
-    List<Role> parseRoles(Element parentElement, boolean isCard) {
+    public List<Role> parseRoles(Element parentElement, boolean isCard) {
         List<Role> roles = new ArrayList<>();
         NodeList partsList = parentElement.getElementsByTagName("part");
         for (int j = 0; j < partsList.getLength(); j++) {
@@ -94,7 +94,7 @@ public abstract class AbstractParseXML {
      * @param partElement
      * @return Role
      */
-    Role parseRole(Element partElement, boolean isCard) {
+    public Role parseRole(Element partElement, boolean isCard) {
         String roleName = partElement.getAttribute("name");
         int roleLevel = Integer.parseInt(partElement.getAttribute("level"));
         // Parse the Area

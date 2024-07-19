@@ -107,7 +107,7 @@ public class ParseBoardXML extends AbstractParseXML {
      * @param takeElement
      * @return Take
      */
-    Take parseTake(Element takeElement) {
+    private Take parseTake(Element takeElement) {
         int number = Integer.parseInt(takeElement.getAttribute("number"));
         Element areaElement = (Element) takeElement.getElementsByTagName("area").item(0);
         Area area = parseArea(areaElement);
