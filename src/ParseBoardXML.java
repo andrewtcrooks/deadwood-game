@@ -21,7 +21,7 @@ public class ParseBoardXML extends AbstractParseXML {
      * Returns a NodeList object of the Element objects from the given filename.
      * 
      * @param d The Document object to read data from.
-     * @return the root Element
+     * @return the NodeList object of the Element objects
      * @throws Exception
      */
     @Override
