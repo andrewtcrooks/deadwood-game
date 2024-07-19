@@ -33,7 +33,7 @@ public class ParseCardsXML extends AbstractParseXML {
     }
     
     /**
-     * Parses the scene cards from the given NodeList object.
+     * Returns a list of the scene cards from the given NodeList object.
      * 
      * @param cardsList
      * @return the list of parsed scene cards
@@ -116,7 +116,7 @@ public class ParseCardsXML extends AbstractParseXML {
     }
 
     /**
-     * Returns the parsed scene cards.
+     * Returns a list of the parsed scene cards from the given filename.
      * 
      * @param filename
      * @return the list of parsed scene cards
