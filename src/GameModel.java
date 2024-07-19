@@ -212,10 +212,12 @@ public class GameModel implements Subject {
  ************************************************************/
 
     /**
-     * Increments the current day.
+     * Returns the number of days.
+     *
+     * @return The number of days.
      */
-    public void incrementDay() {
-        this.currentDay++;
+    public int getNumDays() {
+        return this.numDays;
     }
 
     /**
@@ -227,7 +229,14 @@ public class GameModel implements Subject {
         return this.currentDay;
     }
 
+    /**
+     * Increments the current day.
+     */
+    public void incrementDay() {
+        this.currentDay++;
+    }
 
+    
 /************************************************************
  * Player Management
  ************************************************************/
@@ -267,7 +276,7 @@ public class GameModel implements Subject {
      * @return The player with the given ID.
      * @throws IllegalArgumentException If no player with the given ID is found.
      */
-    Player getPlayer(int ID) {
+    public Player getPlayer(int ID) {
         for (Player player : players) {
             if (Integer.valueOf(player.getID()).equals(ID)) {
                 return player;
@@ -328,7 +337,7 @@ public class GameModel implements Subject {
         }
     }
 
-    
+
 /************************************************************
  * Game Element Accessors
  ************************************************************/
@@ -340,6 +349,20 @@ public class GameModel implements Subject {
      */
     public Deck getDeck() {
         return deck;
+    }
+
+    /**
+     * Returns the location with the given name.
+     *
+     * @param name The name of the location.
+     * @return The location with the given name.
+     * @throws IllegalArgumentException If no location with the given name is found.
+     */
+    Location getLocation(String name) {
+        if (locations.containsKey(name)) {
+            return locations.get(name);
+        }
+        throw new IllegalArgumentException("No location " + name);
     }
 
     /**
@@ -358,29 +381,6 @@ public class GameModel implements Subject {
      */
     public Board getBoard() {
         return board;
-    }
-
-    /**
-     * Returns the number of days.
-     *
-     * @return The number of days.
-     */
-    public int getNumDays() {
-        return this.numDays;
-    }
-
-    /**
-     * Returns the location with the given name.
-     *
-     * @param name The name of the location.
-     * @return The location with the given name.
-     * @throws IllegalArgumentException If no location with the given name is found.
-     */
-    Location getLocation(String name) {
-        if (locations.containsKey(name)) {
-            return locations.get(name);
-        }
-        throw new IllegalArgumentException("No location " + name);
     }
 
 
