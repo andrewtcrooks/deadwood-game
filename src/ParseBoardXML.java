@@ -18,10 +18,10 @@ public class ParseBoardXML extends AbstractParseXML {
     }
 
     /**
-     * Reads the data from the given Document object.
+     * Returns the root Element from the given Document object.
      * 
      * @param d The Document object to read data from.
-     * @return Element
+     * @return the root Element
      * @throws Exception
      */
     @Override
@@ -31,7 +31,7 @@ public class ParseBoardXML extends AbstractParseXML {
     }
 
     /**
-     * Parses the locations from the given NodeList object.
+     * Returns a map of the parsed locations from the given NodeList object.
      * 
      * @param locationsList
      * @return the map of parsed locations
@@ -50,7 +50,7 @@ public class ParseBoardXML extends AbstractParseXML {
      * Parses a location from the given Element object.
      * 
      * @param setElement
-     * @return Location
+     * @return the parsed location
      */
     private Location parseLocation(Element setElement) {
         // Parse name
@@ -72,7 +72,7 @@ public class ParseBoardXML extends AbstractParseXML {
      * Parses the neighbors from the given Element object.
      * 
      * @param setElement
-     * @return List<String>
+     * @return the list of parsed neighbors as strings
      */
     private List<String> parseNeighbors(Element setElement) {
         List<String> neighbors = new ArrayList<>();
@@ -88,7 +88,7 @@ public class ParseBoardXML extends AbstractParseXML {
      * Parses the takes from the given Element object.
      * 
      * @param setElement
-     * @return int
+     * @return the list of parsed takes
      */
     private List<Take> parseTakes(Element setElement) {
         NodeList takesList = setElement.getElementsByTagName("take");
@@ -105,7 +105,7 @@ public class ParseBoardXML extends AbstractParseXML {
      * Parses a take from the given Element object.
      * 
      * @param takeElement
-     * @return Take
+     * @return the parsed take
      */
     private Take parseTake(Element takeElement) {
         int number = Integer.parseInt(takeElement.getAttribute("number"));
@@ -115,9 +115,10 @@ public class ParseBoardXML extends AbstractParseXML {
     }
 
     /**
-     * Returns the parsed locations.
+     * Returns a map of the parsed locations from the given file.
      * 
-     * @return Map<String, Location>
+     * @param filename
+     * @return the map of parsed locations
      */
     public Map<String, Location> getLocations(String filename) {
         Map<String, Location> locations = null;
