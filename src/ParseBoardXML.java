@@ -18,16 +18,18 @@ public class ParseBoardXML extends AbstractParseXML {
     }
 
     /**
-     * Returns the root Element from the given Document object.
+     * Returns a NodeList object of the Element objects from the given filename.
      * 
      * @param d The Document object to read data from.
      * @return the root Element
      * @throws Exception
      */
     @Override
-    public Element readData(Document d) throws Exception {
+    public NodeList readData(String fileName) throws Exception {
+        Document d = getDocFromFile(fileName);
         Element root = d.getDocumentElement();
-        return root;
+        NodeList locationsNodeList = root.getElementsByTagName("set");
+        return locationsNodeList;
     }
 
     /**
@@ -120,13 +122,11 @@ public class ParseBoardXML extends AbstractParseXML {
      * @param filename
      * @return the map of parsed locations
      */
-    public Map<String, Location> getLocations(String filename) {
+    public Map<String, Location> getLocations(String fileName) {
         Map<String, Location> locations = null;
         try {
-            Document d = getDocFromFile(filename);
-            Element root = readData(d);
-            NodeList locationsList = root.getElementsByTagName("set");
-            locations = parseLocations(locationsList);
+            NodeList locationsNodeList = readData(fileName);
+            locations = parseLocations(locationsNodeList);
         } catch (Exception e) {
             e.printStackTrace();
         }

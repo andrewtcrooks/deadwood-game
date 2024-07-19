@@ -9,14 +9,12 @@ import java.util.*;
  * This class also provides a method for getting the parsed scene cards.
  */
 public class ParseCardsXML extends AbstractParseXML {
-    private List<SceneCard> cards;
 
     
     /**
      * Initializes a new ParseCardsXML object.
      */
     public ParseCardsXML() {
-        this.cards = new ArrayList<>();
     }
 
     /**
@@ -27,10 +25,11 @@ public class ParseCardsXML extends AbstractParseXML {
      * @throws Exception
      */
     @Override
-    public void readData(Document d) throws Exception {
+    public NodeList readData(String fileName) throws Exception {
+        Document d = getDocFromFile(fileName);
         Element root = d.getDocumentElement();
-        NodeList cardsList = root.getElementsByTagName("card");
-        parseCards(cardsList);
+        NodeList cardsNodeList = root.getElementsByTagName("card");
+        return cardsNodeList;
     }
     
     /**
@@ -38,12 +37,14 @@ public class ParseCardsXML extends AbstractParseXML {
      * 
      * @param cardsList
      */
-    private void parseCards(NodeList cardsList) {
+    private List<SceneCard> parseCards(NodeList cardsList) {
+        List<SceneCard> cards = new ArrayList<>();
         for (int i = 0; i < cardsList.getLength(); i++) {
             Node card = cardsList.item(i);
             SceneCard newCard = parseCard((Element) card);
             cards.add(newCard);
         }
+        return cards;
     }
 
     /**
@@ -118,7 +119,14 @@ public class ParseCardsXML extends AbstractParseXML {
      * 
      * @return List<SceneCard>
      */
-    public List<SceneCard> getCards() {
+    public List<SceneCard> getCards(String filename) {
+        List<SceneCard> cards = new ArrayList<>();
+        try {
+            NodeList cardsNodeList = readData(filename);
+            cards = parseCards(cardsNodeList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return cards;
     }
 
