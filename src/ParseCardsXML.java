@@ -11,6 +11,7 @@ import java.util.*;
 public class ParseCardsXML extends AbstractParseXML {
     private List<SceneCard> cards;
 
+    
     /**
      * Initializes a new ParseCardsXML object.
      */
@@ -52,37 +53,20 @@ public class ParseCardsXML extends AbstractParseXML {
      * @return SceneCard
      */
     private SceneCard parseCard(Element cardElement) {
-
         // Parse name
         String title = parseName(cardElement);
-
         // Parse image
         String image = parseImage(cardElement);
-
         // Parse budget
         int budget = parseBudget(cardElement);
-    
         // Parse scene ID
         int id = parseSceneID(cardElement);
-
         // Parse scene description
         String desc = parseSceneDescription(cardElement);
-    
         // Parse roles
-        List<Role> roles = parseRoles(cardElement);
-    
+        List<Role> roles = parseRoles(cardElement, true);
         // Create a new SceneCard object with the parsed attributes
         return new SceneCard(title, image, budget, id, desc, roles);
-    }
-    
-    /**
-     * Parses the name from the given Element object.
-     * 
-     * @param cardElement
-     * @return String
-     */
-    private String parseName(Element cardElement) {
-        return cardElement.getAttribute("name");
     }
 
     /**
@@ -130,59 +114,6 @@ public class ParseCardsXML extends AbstractParseXML {
     }
 
     /**
-     * Parses the roles from the given Element object.
-     * 
-     * @param cardElement
-     * @return List<Role>
-     */
-    private List<Role> parseRoles(Element cardElement) {
-        List<Role> roles = new ArrayList<>();
-        NodeList partsList = cardElement.getElementsByTagName("part");
-        for (int j = 0; j < partsList.getLength(); j++) {
-            Node partNode = partsList.item(j);
-            Role role = parseRole((Element) partNode);
-            roles.add(role);
-        }
-        return roles;
-    }
-    
-    /**
-     * Parses a role from the given Element object.
-     * 
-     * @param partElement
-     * @return Role
-     */
-    private Role parseRole(Element partElement) {
-        String roleName = partElement.getAttribute("name");
-        int roleLevel = Integer.parseInt(partElement.getAttribute("level"));
-    
-        // Parse the Area
-        Element areaElement = (Element) partElement.getElementsByTagName("area").item(0);
-        Area roleArea = parseArea(areaElement);
-
-        // Get the line text
-        Element lineElement = (Element) partElement.getElementsByTagName("line").item(0);
-        String lineText = lineElement.getTextContent().trim();
-    
-        // Create Role object
-        return new Role(roleName, roleLevel, roleArea, lineText, true);
-    }
-
-    /**
-     * Parses an area from the given Element object.
-     * 
-     * @param areaElement
-     * @return Area
-     */
-    private Area parseArea(Element areaElement) {
-        int x = Integer.parseInt(areaElement.getAttribute("x"));
-        int y = Integer.parseInt(areaElement.getAttribute("y"));
-        int h = Integer.parseInt(areaElement.getAttribute("h"));
-        int w = Integer.parseInt(areaElement.getAttribute("w"));
-        return new Area(x, y, h, w);
-    }
-
-    /**
      * Returns the parsed scene cards.
      * 
      * @return List<SceneCard>
@@ -190,4 +121,5 @@ public class ParseCardsXML extends AbstractParseXML {
     public List<SceneCard> getCards() {
         return cards;
     }
+
 }

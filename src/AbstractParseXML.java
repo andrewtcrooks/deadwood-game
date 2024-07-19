@@ -1,5 +1,9 @@
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import java.util.List;
+import java.util.ArrayList;
 import org.w3c.dom.Document;
 import java.io.InputStream;
 
@@ -10,6 +14,23 @@ import java.io.InputStream;
  * This class also provides an abstract method for reading data from a Document object.
  */
 public abstract class AbstractParseXML {
+
+
+/************************************************************
+ * Abstract Methods
+ ************************************************************/
+
+    /**
+     * Reads the data from the given Document object.
+     * @param d
+     */
+    abstract void readData(Document d) throws Exception;
+
+    
+/************************************************************
+ * Shared methods for ParseBoardXML and ParseCardsXML
+ ************************************************************/
+    
     /**
      * Returns a Document object from the given filename.
      * @param filename
@@ -26,13 +47,64 @@ public abstract class AbstractParseXML {
         Document doc = db.parse(is);
         return doc;
     }
-
-
-    // Abstract methods
+        
+    /**
+     * Parses the name from the given Element object.
+     * 
+     * @param element
+     * @return String
+     */
+    String parseName(Element element) {
+        return element.getAttribute("name");
+    }
 
     /**
-     * Reads the data from the given Document object.
-     * @param d
+     * Parses the area from the given Element object.
+     * 
+     * @param areaElement
+     * @return Area
      */
-    abstract void readData(Document d) throws Exception;
+    Area parseArea(Element areaElement) {
+        int x = Integer.parseInt(areaElement.getAttribute("x"));
+        int y = Integer.parseInt(areaElement.getAttribute("y"));
+        int h = Integer.parseInt(areaElement.getAttribute("h"));
+        int w = Integer.parseInt(areaElement.getAttribute("w"));
+        return new Area(x, y, h, w);
+    }
+
+    /**
+     * Parses roles from the given Element object.
+     * 
+     * @param parentElement
+     * @return List<Role>
+     */
+    List<Role> parseRoles(Element parentElement, boolean isCard) {
+        List<Role> roles = new ArrayList<>();
+        NodeList partsList = parentElement.getElementsByTagName("part");
+        for (int j = 0; j < partsList.getLength(); j++) {
+            Element partElement = (Element) partsList.item(j);
+            roles.add(parseRole(partElement, isCard));
+        }
+        return roles;
+    }
+
+    /**
+     * Parses a role from the given Element object.
+     * 
+     * @param partElement
+     * @return Role
+     */
+    Role parseRole(Element partElement, boolean isCard) {
+        String roleName = partElement.getAttribute("name");
+        int roleLevel = Integer.parseInt(partElement.getAttribute("level"));
+        // Parse the Area
+        Element areaElement = (Element) partElement.getElementsByTagName("area").item(0);
+        Area roleArea = parseArea(areaElement);
+        // Get the line text
+        Element lineElement = (Element) partElement.getElementsByTagName("line").item(0);
+        String lineText = lineElement.getTextContent().trim();
+        // Create Role object
+        return new Role(roleName, roleLevel, roleArea, lineText, isCard);
+    }
+
 }

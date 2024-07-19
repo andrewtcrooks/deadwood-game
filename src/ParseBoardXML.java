@@ -11,6 +11,7 @@ import java.util.*;
 public class ParseBoardXML extends AbstractParseXML {
     private Map<String, Location> locations;
 
+
     /**
      * Initializes a new ParseBoardXML object.
      */
@@ -52,34 +53,19 @@ public class ParseBoardXML extends AbstractParseXML {
      * @return Location
      */
     private Location parseLocation(Element setElement) {
-        
         // Parse name
         String name = parseName(setElement);
-
         // Parse neighbors
         List<String> neighbors = parseNeighbors(setElement);
-    
         // Parse area
         Element areaElement = (Element) setElement.getElementsByTagName("area").item(0);
         Area area = parseArea(areaElement);
-
         // Parse takes
         List<Take> takes = parseTakes(setElement);
-    
         // Parse parts
-        List<Role> roles = parseRoles(setElement);
-    
+        List<Role> roles = parseRoles(setElement, false);
+        // Create a new Location object with the parsed attributes
         return new Location(name, neighbors, area, takes,  roles);
-    }
-
-    /**
-     * Parses the name from the given Element object.
-     * 
-     * @param setElement
-     * @return String
-     */
-    private String parseName(Element setElement) {
-        return setElement.getAttribute("name");
     }
 
     /**
@@ -115,7 +101,7 @@ public class ParseBoardXML extends AbstractParseXML {
         return takes;
     }
     
-    /*
+    /**
      * Parses a take from the given Element object.
      * 
      * @param takeElement
@@ -129,59 +115,6 @@ public class ParseBoardXML extends AbstractParseXML {
     }
 
     /**
-     * Parses the roles from the given Element object.
-     * 
-     * @param setElement
-     * @return List<Role>
-     */
-    private List<Role> parseRoles(Element setElement) {
-        List<Role> roles = new ArrayList<>();
-        NodeList partsList = setElement.getElementsByTagName("part");
-        for (int j = 0; j < partsList.getLength(); j++) {
-            Node partNode = partsList.item(j);
-            Role role = parseRole((Element) partNode);
-            roles.add(role);
-        }
-        return roles;
-    }
-    
-    /**
-     * Parses a role from the given Element object.
-     * 
-     * @param partElement
-     * @return Role
-     */
-    private Role parseRole(Element partElement) {
-        String roleName = partElement.getAttribute("name");
-        int roleLevel = Integer.parseInt(partElement.getAttribute("level"));
-    
-        // Parse the Area
-        Element areaElement = (Element) partElement.getElementsByTagName("area").item(0);
-        Area roleArea = parseArea(areaElement);
-
-        // Get the line text
-        Element lineElement = (Element) partElement.getElementsByTagName("line").item(0);
-        String lineText = lineElement.getTextContent().trim();
-    
-        // Create Role object
-        return new Role(roleName, roleLevel, roleArea, lineText, false);
-    }
-
-    /**
-     * Parses an area from the given Element object.
-     * 
-     * @param areaElement
-     * @return Area
-     */
-    private Area parseArea(Element areaElement) {
-        int x = Integer.parseInt(areaElement.getAttribute("x"));
-        int y = Integer.parseInt(areaElement.getAttribute("y"));
-        int h = Integer.parseInt(areaElement.getAttribute("h"));
-        int w = Integer.parseInt(areaElement.getAttribute("w"));
-        return new Area(x, y, h, w);
-    }
-
-    /**
      * Returns the parsed locations.
      * 
      * @return Map<String, Location>
@@ -189,4 +122,5 @@ public class ParseBoardXML extends AbstractParseXML {
     public Map<String, Location> getLocations() {
         return locations;
     }
+
 }
