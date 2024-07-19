@@ -110,7 +110,7 @@ public class GameController{
      * 
      * @param ID The ID of the player whose turn it is.
      */
-    public void playerTurn(int ID) {
+    private void playerTurn(int ID) {
         boolean endTurn = false;
         Player player = this.model.getPlayer(ID);
         player.setActive(true);
