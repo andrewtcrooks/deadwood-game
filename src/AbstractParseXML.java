@@ -10,8 +10,8 @@ import java.io.InputStream;
 /**
  * Represents an abstract class for parsing XML files.
  * 
- * This class provides a method for getting a Document object from a given filename.
- * This class also provides an abstract method for reading data from a Document object.
+ * This class provides abstract methods for reading data from a Document object.
+ * This class also provides shared methods for parsing XML files.
  */
 public abstract class AbstractParseXML {
 
