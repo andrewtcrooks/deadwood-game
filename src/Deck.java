@@ -16,16 +16,11 @@ public class Deck {
      *
      * @param xmlFilePath The path to the XML file containing the card data.
      */
-    public Deck(String cardsXMLFilePath) {
-        ParseCardsXML parser = new ParseCardsXML();
-        try {
-            // Get the cards from the parser
-            this.undrawnCards = parser.getCards(cardsXMLFilePath);
-            // Shuffle the deck
-            this.shuffle();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public Deck(List<SceneCard> cards) {
+        // populate the list of undrawn cards
+        this.undrawnCards = cards;
+        // shuffle the deck of undrawn cards
+        this.shuffle();
     }
 
     /**

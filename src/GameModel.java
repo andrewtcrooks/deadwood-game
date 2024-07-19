@@ -124,7 +124,16 @@ public class GameModel implements Subject {
      * @param cardsXMLFilePath The XML file path for the cards.
      */
     private void initDeck(String cardsXMLFilePath) {
-        this.deck = new Deck(cardsXMLFilePath);
+        List<SceneCard> cards = new ArrayList<>();
+        ParseCardsXML parser = new ParseCardsXML();
+        try {
+            // Get the cards from the parser
+            cards = parser.getCards(cardsXMLFilePath);
+            // Create a new deck with the cards
+            this.deck = new Deck(cards);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

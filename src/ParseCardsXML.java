@@ -18,10 +18,10 @@ public class ParseCardsXML extends AbstractParseXML {
     }
 
     /**
-     * Reads the data from the given Document object.
+     * Returns a NodeList object of the Element objects from the given filename.
      * 
      * @param d The Document object to read data from.
-     * @return void
+     * @return the NodeList object of the Element objects
      * @throws Exception
      */
     @Override
@@ -36,6 +36,7 @@ public class ParseCardsXML extends AbstractParseXML {
      * Parses the scene cards from the given NodeList object.
      * 
      * @param cardsList
+     * @return the list of parsed scene cards
      */
     private List<SceneCard> parseCards(NodeList cardsList) {
         List<SceneCard> cards = new ArrayList<>();
@@ -51,7 +52,7 @@ public class ParseCardsXML extends AbstractParseXML {
      * Parses a scene card from the given Element object.
      * 
      * @param cardElement
-     * @return SceneCard
+     * @return the parsed scene card
      */
     private SceneCard parseCard(Element cardElement) {
         // Parse name
@@ -74,7 +75,7 @@ public class ParseCardsXML extends AbstractParseXML {
      * Parses the image from the given Element object.
      * 
      * @param cardElement
-     * @return String
+     * @return the parsed image as a string
      */
     private String parseImage(Element cardElement) {
         return cardElement.getAttribute("img");
@@ -84,7 +85,7 @@ public class ParseCardsXML extends AbstractParseXML {
      * Parses the budget from the given Element object.
      * 
      * @param cardElement
-     * @return int
+     * @return the parsed budget as an integer
      */
     private int parseBudget(Element cardElement) {
         return Integer.parseInt(cardElement.getAttribute("budget"));
@@ -94,7 +95,7 @@ public class ParseCardsXML extends AbstractParseXML {
      * Parses the scene ID from the given Element object.
      * 
      * @param cardElement
-     * @return int
+     * @return the parsed scene ID as an integer
      */
     private int parseSceneID(Element cardElement) {
         Element sceneElement = (Element) cardElement.getElementsByTagName("scene").item(0);
@@ -106,7 +107,7 @@ public class ParseCardsXML extends AbstractParseXML {
      * Parses the scene description from the given Element object.
      * 
      * @param cardElement
-     * @return String
+     * @return the parsed scene description as a string
      */
     private String parseSceneDescription(Element cardElement) {
         Element sceneElement = (Element) cardElement.getElementsByTagName("scene").item(0);
@@ -117,7 +118,8 @@ public class ParseCardsXML extends AbstractParseXML {
     /**
      * Returns the parsed scene cards.
      * 
-     * @return List<SceneCard>
+     * @param filename
+     * @return the list of parsed scene cards
      */
     public List<SceneCard> getCards(String filename) {
         List<SceneCard> cards = new ArrayList<>();
