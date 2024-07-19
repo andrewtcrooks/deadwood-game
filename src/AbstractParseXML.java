@@ -21,10 +21,9 @@ public abstract class AbstractParseXML {
  ************************************************************/
 
     /**
-     * Reads the root Element from the given Document object.
-     * @param d
+     * Reads and returns a NodeList object of the Element objects from the given filename.
      */
-    public abstract Element readData(Document d) throws Exception;
+    public abstract NodeList readData(String fileName) throws Exception;
 
     
 /************************************************************
