@@ -21,10 +21,10 @@ public abstract class AbstractParseXML {
  ************************************************************/
 
     /**
-     * Reads the data from the given Document object.
+     * Reads the root Element from the given Document object.
      * @param d
      */
-    public abstract void readData(Document d) throws Exception;
+    public abstract Element readData(Document d) throws Exception;
 
     
 /************************************************************

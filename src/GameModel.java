@@ -1,6 +1,5 @@
 import java.io.IOException;
 import java.util.*;
-import org.w3c.dom.Document;
 
 /**
  * Represents the model of the game.
@@ -137,9 +136,7 @@ public class GameModel implements Subject {
     private void initLocations(String boardXMLFilePath) {
         ParseBoardXML parser = new ParseBoardXML();
         try {
-            Document doc = parser.getDocFromFile(boardXMLFilePath);
-            parser.readData(doc);
-            this.locations = parser.getLocations();
+            this.locations = parser.getLocations(boardXMLFilePath);
         } catch (Exception e) {
             e.printStackTrace();
         }

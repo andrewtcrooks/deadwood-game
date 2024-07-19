@@ -9,14 +9,12 @@ import java.util.*;
  * This class also provides a method for getting the parsed locations.
  */
 public class ParseBoardXML extends AbstractParseXML {
-    private Map<String, Location> locations;
 
 
     /**
      * Initializes a new ParseBoardXML object.
      */
     public ParseBoardXML() {
-        this.locations = new HashMap<String, Location>();
     }
 
     /**
@@ -27,10 +25,9 @@ public class ParseBoardXML extends AbstractParseXML {
      * @throws Exception
      */
     @Override
-    public void readData(Document d) throws Exception {
+    public Element readData(Document d) throws Exception {
         Element root = d.getDocumentElement();
-        NodeList locationsList = root.getElementsByTagName("set");
-        parseLocations(locationsList);
+        return root;
     }
 
     /**
@@ -38,12 +35,14 @@ public class ParseBoardXML extends AbstractParseXML {
      * 
      * @param locationsList
      */
-    private void parseLocations(NodeList locationsList) {
+    private Map<String, Location> parseLocations(NodeList locationsList) {
+        Map<String, Location> locations = new HashMap<>();
         for (int i = 0; i < locationsList.getLength(); i++) {
             Node location = locationsList.item(i);
             Location newLocation = parseLocation((Element) location);
             locations.put(newLocation.getName(), newLocation);
         }
+        return locations;
     }
 
     /**
@@ -119,7 +118,16 @@ public class ParseBoardXML extends AbstractParseXML {
      * 
      * @return Map<String, Location>
      */
-    public Map<String, Location> getLocations() {
+    public Map<String, Location> getLocations(String filename) {
+        Map<String, Location> locations = null;
+        try {
+            Document d = getDocFromFile(filename);
+            Element root = readData(d);
+            NodeList locationsList = root.getElementsByTagName("set");
+            locations = parseLocations(locationsList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return locations;
     }
 
