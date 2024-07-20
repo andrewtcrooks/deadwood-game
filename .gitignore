@@ -1,7 +1,5 @@
 .DS_Store
 .gitignore
-.classpath
-.vscode
 bin/
 deadwood.code-workspace
 src/test/java/*
