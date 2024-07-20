@@ -52,7 +52,7 @@ public class GameModel implements Subject {
         return instance;
     }
 
-    //TODO: comment out unless running Unit Tests
+    // TODO: uncomment to run Unit Tests
     /**
      * Resets the instance of the Model.
      */
