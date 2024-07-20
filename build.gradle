@@ -4,43 +4,64 @@ plugins {
     id 'application'
 }
 
+// Project metadata
 group = 'com.example'
 version = '1.0-SNAPSHOT'
 
+// Java version compatibility
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
+// Repository configuration
 repositories {
     mavenCentral()
 }
 
+// Dependencies
 dependencies {
-    // Use JUnit test framework
+    // JUnit test framework dependencies
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    // Add this line for JUnit Jupiter Params
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.8.1'
+    
     // Include all JAR files from the 'lib' directory
     implementation fileTree(dir: 'lib', include: ['*.jar'])
-
 }
 
+// Application configuration
 application {
     mainClass = 'Deadwood'
 }
 
+// Test configuration
 test {
     useJUnitPlatform()
 }
 
+// Additional task configurations
 tasks.named('test') {
     useJUnitPlatform()
 }
 
 tasks.named('run', JavaExec) {
     standardInput = System.in
+    // Uncomment the following lines to capture standard output and error logs
     // logging.captureStandardOutput LogLevel.QUIET
     // logging.captureStandardError LogLevel.QUIET
 }
+
+// Task to generate classpath
+task generateClasspath {
+    doLast {
+        def classpathFile = file('.classpath')
+        classpathFile.text = ''
+        configurations.compileClasspath.each { File file ->
+            classpathFile << file.absolutePath + '\n'
+        }
+    }
+}
+
+// Ensure generateClasspath runs as part of the build process
+build.dependsOn generateClasspath
