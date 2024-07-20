@@ -1,5 +1,7 @@
+// Groovy DSL
 plugins {
     id 'java'
+    id 'application'
 }
 
 group 'com.example'
@@ -7,10 +9,26 @@ version '1.0-SNAPSHOT'
 
 sourceCompatibility = '1.8'
 
+mainClassName = 'main.java.Deadwood'
+
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testImplementation 'junit:junit:4.13.2'
+    // Use JUnit test framework
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    // Include all JAR files from the 'lib' directory
+    implementation fileTree(dir: 'lib', include: ['*.jar'])
+    // Add this line for JUnit Jupiter Params
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.8.1'
+}
+
+application {
+    mainClass = 'main.java.Deadwood'
+}
+
+test {
+    useJUnitPlatform()
 }
