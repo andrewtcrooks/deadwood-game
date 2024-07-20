@@ -4,12 +4,13 @@ plugins {
     id 'application'
 }
 
-group 'com.example'
-version '1.0-SNAPSHOT'
+group = 'com.example'
+version = '1.0-SNAPSHOT'
 
-sourceCompatibility = '1.8'
-
-mainClassName = 'main.java.Deadwood'
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
 
 repositories {
     mavenCentral()
@@ -17,18 +18,29 @@ repositories {
 
 dependencies {
     // Use JUnit test framework
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
-    // Include all JAR files from the 'lib' directory
-    implementation fileTree(dir: 'lib', include: ['*.jar'])
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     // Add this line for JUnit Jupiter Params
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.8.1'
+    // Include all JAR files from the 'lib' directory
+    implementation fileTree(dir: 'lib', include: ['*.jar'])
+
 }
 
 application {
-    mainClass = 'main.java.Deadwood'
+    mainClass = 'Deadwood'
 }
 
 test {
     useJUnitPlatform()
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+tasks.named('run', JavaExec) {
+    standardInput = System.in
+    // logging.captureStandardOutput LogLevel.QUIET
+    // logging.captureStandardError LogLevel.QUIET
 }
