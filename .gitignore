@@ -6,6 +6,5 @@ bin/
 deadwood.code-workspace
 src/test/java/*
 src/test/reouserces/*
-lib/*
 .gradle/*
 build
