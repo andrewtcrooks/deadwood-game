@@ -38,13 +38,13 @@ public class GameCLIView implements GameView {
         return instance;
     }
 
-    // // TODO: uncomment to run Unit Tests
-    // /**
-    //  * Resets the instance of the GameCLIView.
-    //  */
-    // public static synchronized void reset() {
-    //     instance = null;
-    // }
+    // TODO: uncomment to run Unit Tests
+    /**
+     * Resets the instance of the GameCLIView.
+     */
+    public static synchronized void reset() {
+        instance = null;
+    }
 
 
  /************************************************************
