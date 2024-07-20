@@ -1,9 +1,9 @@
 .DS_Store
 .gitignore
-.gradle/
 .classpath
-.vscode/
+.vscode
 bin/
 deadwood.code-workspace
-test/*
+src/test/*
 lib/*
+.gradle/*
