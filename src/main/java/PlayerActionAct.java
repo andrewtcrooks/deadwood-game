@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.stream.Collectors;
 
 /*
  * Represents the act action for the player.
@@ -153,7 +154,7 @@ public class PlayerActionAct implements PlayerAction {
         // Get just the players at the location
         List<Player> playersAtLocation = players.stream()
                 .filter(p -> board.getPlayerLocationName(p).equals(locationName))
-                .toList();
+                .collect(Collectors.toList());
         // Check if any player at the location has an on-card role
         boolean anyPlayerOnCard = playersAtLocation.stream().anyMatch(p -> board.getLocationSceneCardRoles(locationName, deck).stream()
                 .anyMatch(r -> r.getName().equals(board.getPlayerRole(p.getID()))));
