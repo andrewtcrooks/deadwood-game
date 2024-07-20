@@ -1,3 +1,5 @@
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -36,14 +38,14 @@ public class Deadwood {
      * Load the configuration file.
      */
     private static void loadConfiguration() {
-        try (InputStream input = Deadwood.class.getClassLoader().getResourceAsStream("resources/config.properties")) {
+        try (InputStream input = Deadwood.class.getClassLoader().getResourceAsStream("config.properties")) {
             if (input == null) {
                 throw new IOException("Unable to find config.properties");
             }
             // Load the config.properties file
             config.load(input);
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("Error loading config.properties: " + e.getMessage());
         }
     }
 
