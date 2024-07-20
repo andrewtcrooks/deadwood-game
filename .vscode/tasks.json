@@ -1,0 +1,66 @@
+// {
+// 	"version": "2.0.0",
+// 	"tasks": [
+// 		{
+// 			"type": "java (build)",
+// 			"paths": [
+// 				"${workspace}"
+// 			],
+// 			"isFullBuild": true,
+// 			"group": "build",
+// 			"problemMatcher": [],
+// 			"label": "java (build): Build Workspace",
+// 			"detail": "$(tools) Build all the Java projects in workspace."
+// 		}
+// 	]
+// }
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "clean",
+            "type": "shell",
+            // Use the Gradle Wrapper to execute the 'clean' task
+            "command": "./gradlew clean",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "build",
+            "type": "shell",
+            // Use the Gradle Wrapper to execute the 'build' task
+            // This assumes your project is set up to compile Java sources as part of the 'build' task
+            "command": "./gradlew build",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "build",
+            "dependsOn": "clean"
+        },
+        {
+            "label": "run",
+            "type": "shell",
+            
+            // Use the Gradle Wrapper to execute the 'run' task
+            // This assumes your project is set up to run the application as part of the 'run' task
+            "command": "./gradlew run",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "dependsOn": "build"
+        }
+
+    ]
+}
+
+
+

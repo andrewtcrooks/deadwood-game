@@ -1,0 +1,32 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch Deadwood",
+            "request": "launch",
+            "mainClass": "Deadwood",
+            "cwd": "${workspaceFolder}",
+            "classPaths": [
+                "${workspaceFolder}/build/classes/java/main",
+                "${workspaceFolder}/build/resources/main",
+                "${workspaceFolder}/lib/*"
+            ],
+            "args": "",
+            "vmArgs": "",
+            // "preLaunchTask": "build"
+        },
+        {
+            "type": "java",
+            "name": "Debug Deadwood",
+            "request": "launch",
+            "mainClass": "Deadwood",
+            "classPaths": [
+              "${workspaceFolder}/bin"
+            ],
+            "args": "",
+            "vmArgs": "",
+            "cwd": "${workspaceFolder}"
+          },
+    ]
+}
