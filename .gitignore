@@ -4,6 +4,7 @@
 .vscode
 bin/
 deadwood.code-workspace
-src/test/*
+src/test/java/*
+src/test/reouserces/*
 lib/*
 .gradle/*
