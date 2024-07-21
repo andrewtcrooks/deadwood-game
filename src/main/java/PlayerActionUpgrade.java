@@ -232,9 +232,9 @@ public class PlayerActionUpgrade implements PlayerAction {
      */
     private void processPayment(Player player, int chosenRank, String paymentMethod) {
         if ("money".equals(paymentMethod)) {
-            player.setMoney(player.getMoney() - dollarCosts.get(chosenRank));
+            player.decreaseMoney(dollarCosts.get(chosenRank));
         } else if ("credits".equals(paymentMethod)) {
-            player.setCredits(player.getCredits() - creditCosts.get(chosenRank));
+            player.decreaseCredits(creditCosts.get(chosenRank));
         }
     }
 
