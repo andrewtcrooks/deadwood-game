@@ -14,13 +14,6 @@ public class Deadwood {
     private static Properties config = new Properties();
 
     /**
-     * Private constructor to prevent instantiation.
-     */
-    private Deadwood(){
-        super();
-    }
-    
-    /**
      * The main method for Deadwood.
      * 
      * @param args the command line arguments
