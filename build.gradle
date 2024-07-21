@@ -38,17 +38,14 @@ application {
 // Test configuration
 test {
     useJUnitPlatform()
-}
-
-// Additional task configurations
-tasks.named('test') {
-    useJUnitPlatform()
+    
 }
 
 // Task to run the application
 tasks.named('run', JavaExec) {
     standardInput = System.in
 }
+
 // Task to generate classpath
 task generateClasspath {
     doLast {
