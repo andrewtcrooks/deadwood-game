@@ -1,5 +1,3 @@
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -15,6 +13,12 @@ import java.util.Properties;
 public class Deadwood {
     private static Properties config = new Properties();
 
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private Deadwood(){
+        super();
+    }
     
     /**
      * The main method for Deadwood.
