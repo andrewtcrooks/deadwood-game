@@ -2,7 +2,6 @@
 .gitignore
 bin/
 deadwood.code-workspace
-src/test/java/*
-src/test/reouserces/*
+src/test/java/*.java
 .gradle/*
 build
