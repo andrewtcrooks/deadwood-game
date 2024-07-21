@@ -2,5 +2,5 @@
  * Observer interface for the Observer pattern.
  */
 public interface Observer {
-    void update(Object arg);
+    public void update(Object arg);
 }
