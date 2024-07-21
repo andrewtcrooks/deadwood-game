@@ -45,13 +45,10 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+// Task to run the application
 tasks.named('run', JavaExec) {
     standardInput = System.in
-    // Uncomment the following lines to capture standard output and error logs
-    // logging.captureStandardOutput LogLevel.QUIET
-    // logging.captureStandardError LogLevel.QUIET
 }
-
 // Task to generate classpath
 task generateClasspath {
     doLast {
