@@ -4,22 +4,4 @@
             "${workspaceFolder}/src/test/java"
         ]
     }
-    // "java.test.config": {
-    //     "name": "JUnit 5",
-    //     "workingDirectory": "${workspaceFolder}",
-    //     "src": ["${workspaceFolder}/src"],
-    //     // "test": ["${workspaceFolder}/test"],
-    //     // "lib": [
-    //     //     // "${workspaceFolder}/lib/**/*.jar",
-    //     //     "${workspaceFolder}/lib/junit-platform-console-standalone-1.11.0-M2.jar" // Explicitly include the JUnit platform standalone jar
-    //     // ],
-    //     "include": ["**/test/**/*.java"], // Ensure tests in the test folder are included
-    //     "target": "${workspaceFolder}/bin",
-    //     // "classPaths": ["${workspaceFolder}/lib/*"],
-    //     "args": [],
-    //     "vmargs": [],
-    //     "env": {},
-    //     "preLaunchTask": "build",
-    //     "modulePaths": []
-    // }
 }

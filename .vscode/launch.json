@@ -13,7 +13,7 @@
                 "${workspaceFolder}/lib/gson-2.10.1.jar"
             ],
             "cwd": "${workspaceFolder}",
-            "preLaunchTask": "build"
+            // "preLaunchTask": "build"
         },
         {
             "type": "java",
@@ -27,7 +27,7 @@
                 "${workspaceFolder}/lib/gson-2.10.1.jar"
             ],
             "cwd": "${workspaceFolder}",
-            "preLaunchTask": "build",
+            // "preLaunchTask": "build",
           }
     ]
     
