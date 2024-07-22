@@ -83,7 +83,7 @@ public class Board {
     /**
      * Resets the number of scenes remaining in the game.
      */
-    public void resetNumScenesRemaining() {
+    private void resetNumScenesRemaining() {
         this.numScenesRemaining = 10;
     }
 
