@@ -12,6 +12,10 @@ public class Location {
     private List<Role> locationRoles;
 
 
+/************************************************************
+ * Contructor
+ ************************************************************/
+
     /**
      * Constructs a new Location with the given parameters.
      *
@@ -29,6 +33,11 @@ public class Location {
         this.wrapped = false;
         this.locationRoles = roles;
     }
+
+
+/************************************************************
+ * Location Management
+ ************************************************************/
 
     /**
      * Returns the name of the Location.
@@ -58,30 +67,26 @@ public class Location {
     }
 
     /**
-     * Returns the takes for the Location.
-     *
-     * @return the takes for the Location
-     */
-    public List<Take> getTakes() {
-        return takes;
-    }
-
-    /**
-     * Returns whether the Location is wrapped.
-     *
-     * @return whether the Location is wrapped
-     */
-    public boolean getIsWrapped() {
-        return wrapped;
-    }
-
-    /**
      * Returns the all roles for the Location and Scene.
      *
      * @return the all roles for the Location and Scene
      */
     public List<Role> getRoles() {
         return locationRoles;
+    }
+
+
+/************************************************************
+ * Takes/Shots Management
+ ************************************************************/
+
+     /**
+     * Returns the takes for the Location.
+     *
+     * @return the takes for the Location
+     */
+    public List<Take> getTakes() {
+        return takes;
     }
 
     /**
@@ -100,6 +105,15 @@ public class Location {
     }
 
     /**
+     * Returns whether the Location is wrapped.
+     *
+     * @return whether the Location is wrapped
+     */
+    public boolean getIsWrapped() {
+        return wrapped;
+    }
+
+    /**
      * Wraps the Location.
      */
     public void setWrapped() {
@@ -111,6 +125,25 @@ public class Location {
      */
     public void setUnwrapped() {
         this.wrapped = false;
+    }
+
+    /**
+     * Wraps the next available shot in the Location.
+     */
+    public void wrapShot() {
+        // wrap take with the lowest number from getNumber(), 
+        // the numbers can range from 1 up to 4
+        int lowest = 4;
+        Take lowestTake = null;
+        for (Take take : this.takes) {
+            if (take.getNumber() <= lowest && !take.isWrapped()) {
+                lowest = take.getNumber();
+                lowestTake = take;
+            }
+        }
+        if (lowestTake != null) {
+            lowestTake.wrap();
+        }
     }
 
     /**
@@ -133,25 +166,6 @@ public class Location {
         }
     }
 
-    /**
-     * Wraps the next available shot in the Location.
-     */
-    public void wrapShot() {
-        // wrap take with the lowest number from getNumber(), 
-        // the numbers can range from 1 up to 4
-        int lowest = 4;
-        Take lowestTake = null;
-        for (Take take : this.takes) {
-            if (take.getNumber() <= lowest && !take.isWrapped()) {
-                lowest = take.getNumber();
-                lowestTake = take;
-            }
-        }
-        if (lowestTake != null) {
-            lowestTake.wrap();
-        }
-    }
-    
     /**
      * Resets all takes in the Location.
      */
