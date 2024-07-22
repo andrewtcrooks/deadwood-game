@@ -18,7 +18,7 @@ public class Role {
      * @param line The line for the Role.
      * @param onCard True if the Role is from a SceneCard, false if Role is from a Location.
      */
-    Role(String name, int rank, Area area, String line, boolean onCard) {
+    public Role(String name, int rank, Area area, String line, boolean onCard) {
         this.name = name;
         this.rank = rank;
         this.area = area;
