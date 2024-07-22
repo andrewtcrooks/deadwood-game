@@ -12,7 +12,7 @@ public class Take {
      * @param number The number of the Take.
      * @param area The area of the Take.
      */
-    Take(int number, Area area) {
+    public Take(int number, Area area) {
         this.number = number;
         this.area = area;
     }
