@@ -6,7 +6,7 @@ import java.util.*;
 public class SceneCard {
     private int id;
     private String title;
-    private String desc;
+    private String desc; // description
     private String image;
     private int budget;
     private List<Role> roles;
@@ -22,7 +22,7 @@ public class SceneCard {
      * @param desc The description of the SceneCard.
      * @param roles The list of roles on the SceneCard.
      */
-    SceneCard(String title, String image, int budget, int id, String desc, List<Role> roles) {
+    public SceneCard(String title, String image, int budget, int id, String desc, List<Role> roles) {
         this.title = title;
         this.image = image;
         this.budget = budget;
