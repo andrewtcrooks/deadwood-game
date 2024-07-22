@@ -85,16 +85,6 @@ public class Location {
     }
 
     /**
-     * Sets the roles for the Location.
-     *
-     * @param roles the roles for the Location
-     */
-    
-    public void setRoles(List<Role> roles) {
-        this.locationRoles = roles;
-    }
-
-    /**
      * Returns the number of shots left in the Location.
      *
      * @return the number of shots left in the Location
