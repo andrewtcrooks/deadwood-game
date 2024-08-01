@@ -106,7 +106,7 @@ public class GameCLIView implements GameView {
      * @param arg The argument to update the view
      */
     public void update(Object arg) {
-        // TODO: complete this stub for update method
+        // There is nothing to update in CLI View so this does nothing
     }
 
 }
