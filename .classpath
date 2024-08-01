@@ -44,17 +44,17 @@
 			<attribute name="gradle.buildServer" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/andrew/Library/CloudStorage/GoogleDrive-andrewtcrooks@gmail.com/My Drive/WWU/Classes/2024 Spring/CSCI 345/Assignments/Assignment2/java/deadwood/lib/junit-jupiter-api-5.8.1.jar">
+	<classpathentry kind="lib" path="/Users/andrew/Library/CloudStorage/GoogleDrive-andrewtcrooks@gmail.com/My Drive/WWU/Classes/2024 Spring/CSCI 345/Assignments/Assignment3/deadwood-game/lib/gson-2.10.1.jar">
 		<attributes>
 			<attribute name="gradle.buildServer" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/andrew/Library/CloudStorage/GoogleDrive-andrewtcrooks@gmail.com/My Drive/WWU/Classes/2024 Spring/CSCI 345/Assignments/Assignment2/java/deadwood/lib/junit-jupiter-engine-5.8.1.jar">
+	<classpathentry kind="lib" path="/Users/andrew/Library/CloudStorage/GoogleDrive-andrewtcrooks@gmail.com/My Drive/WWU/Classes/2024 Spring/CSCI 345/Assignments/Assignment3/deadwood-game/lib/junit-jupiter-engine-5.8.1.jar">
 		<attributes>
 			<attribute name="gradle.buildServer" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/andrew/Library/CloudStorage/GoogleDrive-andrewtcrooks@gmail.com/My Drive/WWU/Classes/2024 Spring/CSCI 345/Assignments/Assignment2/java/deadwood/lib/gson-2.10.1.jar">
+	<classpathentry kind="lib" path="/Users/andrew/Library/CloudStorage/GoogleDrive-andrewtcrooks@gmail.com/My Drive/WWU/Classes/2024 Spring/CSCI 345/Assignments/Assignment3/deadwood-game/lib/junit-jupiter-api-5.8.1.jar">
 		<attributes>
 			<attribute name="gradle.buildServer" value="true"/>
 		</attributes>
