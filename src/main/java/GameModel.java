@@ -150,7 +150,7 @@ public class GameModel implements Subject {
             e.printStackTrace();
         }
         List<String> trailer_neighbors = Arrays.asList("Main Street", "Saloon", "Hotel");
-        Location trailer = new Location("Trailer", trailer_neighbors, new Area(0,0,0,0), Arrays.asList(), Arrays.asList());
+        Location trailer = new Location("Trailer", trailer_neighbors, new Area(995,326,115,115), Arrays.asList(), Arrays.asList());
         List<String> office_neighbors = Arrays.asList("Train Station", "Ranch", "Secret Hideout");
         Location office = new Location("Casting Office", office_neighbors, new Area(0,0,0,0), Arrays.asList(), Arrays.asList());
         this.locations.put("Trailer", trailer);
@@ -169,7 +169,7 @@ public class GameModel implements Subject {
         this.board = new Board(deck, locations);
         // Set all player locations to Trailer
         for (Player player : players) {
-            board.setPlayerLocation(player, "Trailer");
+            this.board.setPlayerLocation(player, "Trailer");
         }
     }
 
@@ -415,9 +415,9 @@ public class GameModel implements Subject {
     /**
      * Notifies all observers that the state has changed.
      */
-    public void notifyObservers() {
+    public void notifyObservers(String eventType, Object eventData) {
         for (Observer observer : observers) {
-            observer.update(this);
+            observer.update(eventType, eventData);
         }
     }
 
