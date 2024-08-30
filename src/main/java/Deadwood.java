@@ -20,10 +20,15 @@ public class Deadwood {
      */
     public static void main(String[] args) {
         loadConfiguration();
+        // Check if running on Mac and set the system property so File menu appears in the menu bar
+        if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+            System.setProperty("apple.laf.useScreenMenuBar", "true");
+        }
         try {
             GameView view = initializeView();
             GameModel model = initializeModel(view);
             GameController controller = initializeController(model, view);
+            view.setGameActionListener(controller);
             playGame(controller);
         } catch (Exception e) {
             System.err.println("An error occurred during initialization: " + e.getMessage());
