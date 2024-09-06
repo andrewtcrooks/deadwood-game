@@ -20,7 +20,8 @@ public class Deadwood {
      */
     public static void main(String[] args) {
         loadConfiguration();
-        // Check if running on Mac and set the system property so File menu appears in the menu bar
+        // Check if running on Mac and set the system property so 
+        // the File menu appears in the menu bar
         if (System.getProperty("os.name").toLowerCase().contains("mac")) {
             System.setProperty("apple.laf.useScreenMenuBar", "true");
         }
@@ -28,10 +29,12 @@ public class Deadwood {
             GameView view = initializeView();
             GameModel model = initializeModel(view);
             GameController controller = initializeController(model, view);
-            view.setGameActionListener(controller);
             playGame(controller);
         } catch (Exception e) {
-            System.err.println("An error occurred during initialization: " + e.getMessage());
+            System.err.println(
+                "An error occurred during initialization: " + 
+                e.getMessage()
+            );
             e.printStackTrace();
         }
     }
@@ -40,14 +43,21 @@ public class Deadwood {
      * Load the configuration file.
      */
     private static void loadConfiguration() {
-        try (InputStream input = Deadwood.class.getClassLoader().getResourceAsStream("config.properties")) {
+        try (InputStream input = Deadwood.class.getClassLoader()
+                                                .getResourceAsStream(
+                                                    "config.properties"
+                                                )
+        ) {
             if (input == null) {
                 throw new IOException("Unable to find config.properties");
             }
             // Load the config.properties file
             config.load(input);
         } catch (IOException e) {
-            System.out.println("Error loading config.properties: " + e.getMessage());
+            System.out.println(
+                "Error loading config.properties: " + 
+                e.getMessage()
+            );
         }
     }
 
@@ -81,13 +91,17 @@ public class Deadwood {
      * @param view the view to use
      * @return the initialized controller
      */
-    private static GameController initializeController(GameModel model, GameView view) {
+    private static GameController initializeController(
+        GameModel model, 
+        GameView view
+    ) {
         GameController controller = new GameController();
         controller.initializeGame(model, 
                                   view, 
                                   config.getProperty("boardXMLFilePath"), 
                                   config.getProperty("cardsXMLFilePath")
         );
+        // view.setGameActionListener(controller);
         return controller;
     }
 

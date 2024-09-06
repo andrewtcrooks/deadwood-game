@@ -72,7 +72,11 @@ public class GameModel implements Subject {
      * @param boardXMLFilePath The file path to the board XML file.
      * @param cardsXMLFilePath The file path to the cards XML file.
      */
-    public void initModel(int numPlayers, String boardXMLFilePath, String cardsXMLFilePath) {
+    public void initModel(
+        int numPlayers, 
+        String boardXMLFilePath, 
+        String cardsXMLFilePath
+    ) {
         this.numPlayers = numPlayers;
         initPlayers(numPlayers);
         initDeck(cardsXMLFilePath);
@@ -84,18 +88,21 @@ public class GameModel implements Subject {
      * Initializes the players.
      * 
      * @param numPlayers The number of players.
-     * @throws IllegalArgumentException If the number of players is not between 2 and 8.
+     * @throws IllegalArgumentException If the numPlayers is not between 2 & 8.
      */
     private void initPlayers(int numPlayers) {
         // Check if the number of players is between 2 and 8
         if (numPlayers < 2 || numPlayers > 8) {
-            throw new IllegalArgumentException("Number of players must be between 2 and 8");
+            throw new IllegalArgumentException(
+                "Number of players must be between 2 and 8"
+            );
         }
-        int playerRank = numPlayers < 7 ? 1 : 2; // 1 if numPlayers are less than 7, otherwise 2
-        int playerCredits = (numPlayers == 5) ? 2 : (numPlayers == 6) ? 4 : 0; // 2 if numPlayers are 5, 
-                                                                                // 4 if numPlayers are 6,
-                                                                                // otherwise 0
-        this.numDays = numPlayers < 4 ? 3 : 4; // 3 if numPlayers are less than 4, otherwise 4
+        // rank is 1 if numPlayers are less than 7, otherwise 2
+        int playerRank = numPlayers < 7 ? 1 : 2; 
+        // credits are 2 if numPlayers are 5, 4 if numPlayers are 6, otherwise 0
+        int playerCredits = (numPlayers == 5) ? 2 : (numPlayers == 6) ? 4 : 0; 
+        // days are 3 if numPlayers are less than 4, otherwise 4
+        this.numDays = numPlayers < 4 ? 3 : 4; 
         // Initialize the players
         this.players = initPlayersList(numPlayers, playerRank, playerCredits);
     }
@@ -108,11 +115,14 @@ public class GameModel implements Subject {
      * @param playerCredits The credits of the players.
      * @return The list of players.
      */
-    private List<Player> initPlayersList(int numPlayers, int playerRank, int playerCredits) {
+    private List<Player> initPlayersList(
+        int numPlayers, 
+        int playerRank, 
+        int playerCredits
+    ) {
         List<Player> players = new ArrayList<>();
         for (int i = 0; i < numPlayers; i++) {
             Player newPlayer = new Player(i + 1, playerRank, playerCredits);
-            // newPlayer.setLocation(null); //placeholder until initBoard is run
             players.add(newPlayer);
         }
         return players;
@@ -149,10 +159,28 @@ public class GameModel implements Subject {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        List<String> trailer_neighbors = Arrays.asList("Main Street", "Saloon", "Hotel");
-        Location trailer = new Location("Trailer", trailer_neighbors, new Area(995,326,115,115), Arrays.asList(), Arrays.asList());
-        List<String> office_neighbors = Arrays.asList("Train Station", "Ranch", "Secret Hideout");
-        Location office = new Location("Casting Office", office_neighbors, new Area(0,0,0,0), Arrays.asList(), Arrays.asList());
+        List<String> trailer_neighbors = Arrays.asList(
+            "Main Street", "Saloon", "Hotel"
+        );
+        Location trailer = new Location(
+            "Trailer", 
+            trailer_neighbors, 
+            new Area(995,326,115,115), 
+            Arrays.asList(), 
+            Arrays.asList()
+        );
+        List<String> office_neighbors = Arrays.asList(
+            "Train Station",
+            "Ranch",
+            "Secret Hideout"
+        );
+        Location office = new Location(
+            "Casting Office", 
+            office_neighbors, 
+            new Area(0,0,0,0), 
+            Arrays.asList(), 
+            Arrays.asList()
+        );
         this.locations.put("Trailer", trailer);
         this.locations.put("Casting Office", office);
     }
@@ -164,7 +192,11 @@ public class GameModel implements Subject {
      * @param deck The deck of cards.
      * @param locations The map of locations.
      */
-    private void initBoard(List<Player> players, Deck deck, Map<String, Location> locations) {
+    private void initBoard(
+        List<Player> players, 
+        Deck deck, 
+        Map<String, Location> locations
+    ) {
         // Create a new board
         this.board = new Board(deck, locations);
         // Set all player locations to Trailer
@@ -188,7 +220,10 @@ public class GameModel implements Subject {
     public static synchronized boolean loadFromJson(String jsonFilePath) {
         try {
             // Load the new state from the JSON file
-            GameModel newModel = JsonUtil.loadFromJsonFile(jsonFilePath, GameModel.class);
+            GameModel newModel = JsonUtil.loadFromJsonFile(
+                jsonFilePath, 
+                GameModel.class
+            );
             // Reset the singleton instance with the new state
             getInstance().loadModel(newModel);
             return true;
@@ -362,7 +397,7 @@ public class GameModel implements Subject {
      *
      * @param name The name of the location.
      * @return The location with the given name.
-     * @throws IllegalArgumentException If no location with the given name is found.
+     * @throws IllegalArgumentException If no location with this name is found.
      */
     Location getLocation(String name) {
         if (locations.containsKey(name)) {

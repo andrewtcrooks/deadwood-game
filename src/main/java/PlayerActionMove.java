@@ -1,4 +1,6 @@
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /*
  * Represents the move action for the player.
@@ -71,6 +73,15 @@ public class PlayerActionMove implements PlayerAction {
         }
         movePlayerToLocation(player, board, view, location);
         player.setHasMoved(true);
+
+        // Create a map with player ID and new location's Area
+        Map<Integer, Area> moveDetails = new HashMap<>();
+        Area newArea = model.getLocation(location).getArea();
+        moveDetails.put(player.getID(), newArea);
+
+        // Notify observers with the map
+        model.notifyObservers("PLAYER_MOVE", moveDetails);
+        
         return player.getHasUpgraded();
     }
 
