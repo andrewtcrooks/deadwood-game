@@ -105,8 +105,17 @@ public class GameCLIView implements GameView {
      * 
      * @param arg The argument to update the view
      */
-    public void update(Object arg) {
+    public void update(String name, Object arg) {
         // There is nothing to update in CLI View so this does nothing
+    }
+
+    /**
+     * Sets the game action listener.
+     * 
+     * @param listener The game action listener
+     */
+    public void setGameActionListener(GameActionListener listener) {
+        // There is no game action listener in CLI View so this does nothing
     }
 
 }
