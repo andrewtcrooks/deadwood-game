@@ -11,10 +11,10 @@ Ensure you have the following installed before proceeding:
   ```
   brew install git
   ```
-- OpenJDK 8.0
+- Eclipse Temurin Java Development Kit 17 (currently 17.0.12)
 
   ```
-  brew install --cask corretto@8
+  brew install --cask temurin@17
   ```
 
 ## Additional Prerequisites for VS Code (in addition to CLI prereqs)
