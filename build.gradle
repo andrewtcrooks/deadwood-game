@@ -1,7 +1,7 @@
 // Groovy DSL
 plugins {
     id 'java'
-    id 'application'
+    id 'application' 
 }
 
 // Project metadata
@@ -10,8 +10,8 @@ version = '1.0-SNAPSHOT'
 
 // Java version compatibility
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 // Repository configuration
@@ -26,13 +26,23 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.8.1'
     
-    // Include all JAR files from the 'lib' directory
-    implementation fileTree(dir: 'lib', include: ['*.jar'])
+    // Include all JAR files from the 'lib' directory and its subdirectories
+    implementation fileTree(dir: 'lib', include: ['**/*.jar'])
+
+    // // JavaFX dependencies (pulls from Maven repo, use direct file above)# settings.json
+    // implementation 'org.openjfx:javafx-controls:20.0.2'
+    // implementation 'org.openjfx:javafx-fxml:20.0.2'
 }
 
 // Application configuration
 application {
     mainClass = 'Deadwood'
+    
+    // VM options to include JavaFX modules
+    applicationDefaultJvmArgs = [
+        '--module-path', 'lib/javafx-sdk-17.0.12/lib',
+        '--add-modules', 'javafx.controls,javafx.fxml'
+    ]
 }
 
 // Test configuration
