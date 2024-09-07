@@ -1,11 +1,32 @@
-/Users/andrew/Library/CloudStorage/GoogleDrive-andrewtcrooks@gmail.com/My Drive/WWU/Classes/2024 Spring/CSCI 345/Assignments/Assignment3/deadwood-game/lib/javafx-sdk-17.0.12/lib/javafx.fxml.jar
-/Users/andrew/Library/CloudStorage/GoogleDrive-andrewtcrooks@gmail.com/My Drive/WWU/Classes/2024 Spring/CSCI 345/Assignments/Assignment3/deadwood-game/lib/javafx-sdk-17.0.12/lib/javafx-swt.jar
-/Users/andrew/Library/CloudStorage/GoogleDrive-andrewtcrooks@gmail.com/My Drive/WWU/Classes/2024 Spring/CSCI 345/Assignments/Assignment3/deadwood-game/lib/javafx-sdk-17.0.12/lib/javafx.media.jar
-/Users/andrew/Library/CloudStorage/GoogleDrive-andrewtcrooks@gmail.com/My Drive/WWU/Classes/2024 Spring/CSCI 345/Assignments/Assignment3/deadwood-game/lib/javafx-sdk-17.0.12/lib/javafx.graphics.jar
-/Users/andrew/Library/CloudStorage/GoogleDrive-andrewtcrooks@gmail.com/My Drive/WWU/Classes/2024 Spring/CSCI 345/Assignments/Assignment3/deadwood-game/lib/javafx-sdk-17.0.12/lib/javafx.swing.jar
-/Users/andrew/Library/CloudStorage/GoogleDrive-andrewtcrooks@gmail.com/My Drive/WWU/Classes/2024 Spring/CSCI 345/Assignments/Assignment3/deadwood-game/lib/javafx-sdk-17.0.12/lib/javafx.web.jar
-/Users/andrew/Library/CloudStorage/GoogleDrive-andrewtcrooks@gmail.com/My Drive/WWU/Classes/2024 Spring/CSCI 345/Assignments/Assignment3/deadwood-game/lib/javafx-sdk-17.0.12/lib/javafx.controls.jar
-/Users/andrew/Library/CloudStorage/GoogleDrive-andrewtcrooks@gmail.com/My Drive/WWU/Classes/2024 Spring/CSCI 345/Assignments/Assignment3/deadwood-game/lib/javafx-sdk-17.0.12/lib/javafx.base.jar
-/Users/andrew/Library/CloudStorage/GoogleDrive-andrewtcrooks@gmail.com/My Drive/WWU/Classes/2024 Spring/CSCI 345/Assignments/Assignment3/deadwood-game/lib/junit-jupiter-engine-5.8.1.jar
-/Users/andrew/Library/CloudStorage/GoogleDrive-andrewtcrooks@gmail.com/My Drive/WWU/Classes/2024 Spring/CSCI 345/Assignments/Assignment3/deadwood-game/lib/gson-2.10.1.jar
-/Users/andrew/Library/CloudStorage/GoogleDrive-andrewtcrooks@gmail.com/My Drive/WWU/Classes/2024 Spring/CSCI 345/Assignments/Assignment3/deadwood-game/lib/junit-jupiter-api-5.8.1.jar
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="bin/main" path="src/main/java">
+		<attributes>
+			<attribute name="gradle_scope" value="main"/>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" output="bin/main" path="src/main/resources">
+		<attributes>
+			<attribute name="gradle_scope" value="main"/>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" output="bin/test" path="src/test/java">
+		<attributes>
+			<attribute name="gradle_scope" value="test"/>
+			<attribute name="gradle_used_by_scope" value="test"/>
+			<attribute name="test" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" output="bin/test" path="src/test/resources">
+		<attributes>
+			<attribute name="gradle_scope" value="test"/>
+			<attribute name="gradle_used_by_scope" value="test"/>
+			<attribute name="test" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17/"/>
+	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
+	<classpathentry kind="output" path="bin/default"/>
+</classpath>
