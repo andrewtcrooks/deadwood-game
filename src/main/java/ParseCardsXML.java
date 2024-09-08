@@ -4,7 +4,7 @@ import java.util.*;
 /**
  * Represents a class for parsing scene cards from an XML file.
  * This class extends the AbstractParseXML class.
- * 
+ * <p>
  * This class provides a method for reading data from a Document object.
  * This class also provides a method for getting the parsed scene cards.
  */

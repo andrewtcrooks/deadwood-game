@@ -3,7 +3,7 @@ import java.util.*;
 
 /**
  * Represents the model of the game.
- * 
+ * <p>
  * It manages the game state and data.
  * It initializes the game board, locations, deck, and players.
  * It also provides global access to the game state and data.
@@ -21,9 +21,8 @@ public class GameModel implements Subject {
     private Board board;
 
 
-/************************************************************
- * Contructor
- ************************************************************/
+// Constructor
+
 
     /**
      * Initializes a new Model.
@@ -36,9 +35,8 @@ public class GameModel implements Subject {
     }
 
 
-/************************************************************
- * Singleton Pattern
- ************************************************************/
+// Singleton Pattern
+
 
     /**
      * Returns the instance of the Model.
@@ -61,9 +59,8 @@ public class GameModel implements Subject {
     }
 
 
-/************************************************************
- * Initialization
- ************************************************************/
+// Initialization
+
 
     /**
      * Initializes the model with the given number of players and XML file path.
@@ -206,9 +203,8 @@ public class GameModel implements Subject {
     }
 
     
-/************************************************************
- * Model State Management
- ************************************************************/
+// Model State Management
+
 
     /**
      * Loads the model state from a JSON file.
@@ -248,9 +244,8 @@ public class GameModel implements Subject {
     }
 
 
-/************************************************************
- * Day Management
- ************************************************************/
+// Day Management
+
 
     /**
      * Returns the number of days.
@@ -278,9 +273,8 @@ public class GameModel implements Subject {
     }
 
     
-/************************************************************
- * Player Management
- ************************************************************/
+// Player Management
+
 
     /**
      * Returns the number of players.
@@ -379,9 +373,8 @@ public class GameModel implements Subject {
     }
 
 
-/************************************************************
- * Game Element Accessors
- ************************************************************/
+// Game Element Accessors
+
 
     /**
      * Returns the deck.
@@ -425,9 +418,8 @@ public class GameModel implements Subject {
     }
 
 
-/************************************************************
- * Observer Pattern
- ************************************************************/
+// Observer Pattern
+
 
     /**
      * Registers an observer with the model.

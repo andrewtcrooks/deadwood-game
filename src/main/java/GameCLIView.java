@@ -10,9 +10,8 @@ public class GameCLIView implements GameView {
     private Scanner scanner;
 
 
-/************************************************************
- * Contructor
- ************************************************************/
+// Contructor
+
 
     /**
      * Constructs a new GameCLIView.
@@ -22,9 +21,8 @@ public class GameCLIView implements GameView {
     }
 
 
-/************************************************************
- * Singleton Pattern
- ************************************************************/
+// Singleton Pattern
+
 
     /**
      * Singleton instance of the GameCLIView.
@@ -47,9 +45,8 @@ public class GameCLIView implements GameView {
     }
 
 
- /************************************************************
-  * View
-  ************************************************************/
+ // View
+
 
     /**
      * Get the player's input.
@@ -96,9 +93,8 @@ public class GameCLIView implements GameView {
     }
 
 
-/************************************************************
- * Observer Pattern
- ************************************************************/
+// Observer Pattern
+
 
     /**
      * Updates the view.

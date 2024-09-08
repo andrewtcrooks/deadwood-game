@@ -12,9 +12,8 @@ public class Location {
     private List<Role> locationRoles;
 
 
-/************************************************************
- * Contructor
- ************************************************************/
+// Contructor
+
 
     /**
      * Constructs a new Location with the given parameters.
@@ -35,9 +34,8 @@ public class Location {
     }
 
 
-/************************************************************
- * Location Management
- ************************************************************/
+// Location Management
+
 
     /**
      * Returns the name of the Location.
@@ -76,10 +74,9 @@ public class Location {
     }
 
 
-/************************************************************
- * Takes/Shots Management
- ************************************************************/
+// Takes/Shots Management
 
+    
      /**
      * Returns the takes for the Location.
      *

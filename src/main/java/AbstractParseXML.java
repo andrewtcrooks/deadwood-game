@@ -9,16 +9,15 @@ import java.io.InputStream;
 
 /**
  * Represents an abstract class for parsing XML files.
- * 
+ * <p>
  * This class provides abstract methods for reading data from a Document object.
  * This class also provides shared methods for parsing XML files.
  */
 public abstract class AbstractParseXML {
 
 
-/************************************************************
- * Abstract Methods
- ************************************************************/
+// Abstract Methods
+
 
     /**
      * Reads and returns a NodeList object of the Element objects from the given filename.
@@ -26,10 +25,9 @@ public abstract class AbstractParseXML {
     public abstract NodeList readData(String fileName) throws Exception;
 
     
-/************************************************************
- * Shared methods for ParseBoardXML and ParseCardsXML
- ************************************************************/
-    
+// Shared methods for ParseBoardXML and ParseCardsXML
+
+
     /**
      * Returns a Document object from the given filename.
      * @param filename

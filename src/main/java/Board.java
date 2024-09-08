@@ -14,9 +14,8 @@ public class Board {
     private Map<String, Integer> locationScene;
 
 
-/************************************************************
- * Contructor and Initialization
- ************************************************************/
+// Contructor and Initialization
+
 
     /**
      * Constructs a new Board with the given deck and locations.
@@ -55,9 +54,8 @@ public class Board {
     }
 
 
-/************************************************************
- * Game State Management
- ************************************************************/
+// Game State Management
+
 
     /**
      * Resets the board to its initial state.
@@ -97,9 +95,8 @@ public class Board {
     }
 
 
-/************************************************************
- * Scene and Location Management
- ************************************************************/
+// Scene and Location Management
+
 
     /**
      * Wraps the scene in the Location.
@@ -183,9 +180,8 @@ public class Board {
     }
 
 
-/************************************************************
- * Player Location and Movement Management
- ************************************************************/
+// Player Location and Movement Management
+
 
     /**
      * Sets a player's location on the board.
@@ -235,9 +231,8 @@ public class Board {
     }
 
 
-/************************************************************
- * Role and Scene Management
- ************************************************************/
+// Role and Scene Management
+
 
     /**
      * Sets a player's role.
@@ -294,9 +289,8 @@ public class Board {
     }
 
 
-/************************************************************
- * Bonus and Payout Management
- ************************************************************/
+// Bonus and Payout Management
+
 
     /**
      * Pays out the bonus to all players at the Location.
