@@ -1,11 +1,12 @@
+import javafx.application.Platform;
+import javafx.scene.control.TextArea;
 import java.io.OutputStream;
-import javax.swing.JTextArea;
 
 /**
  * Custom output stream for the console.
  */
 class ConsoleOutputStream extends OutputStream {
-    private final JTextArea textArea;
+    private final TextArea textArea;
 
 
     /**
@@ -13,7 +14,7 @@ class ConsoleOutputStream extends OutputStream {
      * 
      * @param textArea the text area
      */
-    public ConsoleOutputStream(JTextArea textArea) {
+    public ConsoleOutputStream(TextArea textArea) {
         this.textArea = textArea;
     }
 
@@ -24,8 +25,9 @@ class ConsoleOutputStream extends OutputStream {
      */
     @Override
     public void write(int b) {
-        textArea.append(String.valueOf((char) b));
-        textArea.setCaretPosition(textArea.getDocument().getLength());
+        Platform.runLater(() -> {
+            textArea.appendText(String.valueOf((char) b));
+        });
     }
 
 }

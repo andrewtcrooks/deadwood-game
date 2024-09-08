@@ -1,6 +1,9 @@
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import javafx.application.Application;
+import javafx.stage.Stage;
+import javafx.application.Platform;
 
 /*
  * Deadwood by Andrew Crooks
@@ -10,8 +13,9 @@ import java.util.Properties;
  * It creates the model, view, and controller for the game.
  * It also initializes the controller and runs the application.
  */
-public class Deadwood {
-    private static Properties config = new Properties();
+public class Deadwood extends Application{
+
+    private static final Properties config = new Properties();
 
     /**
      * The main method for Deadwood.
@@ -19,6 +23,32 @@ public class Deadwood {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        // This makes sure the macOS menu bar and other UI elements behave properly
+        System.setProperty("apple.awt.application.name", "Deadwood");
+        // Start the JavaFX application lifecycle
+        launch(args);  
+    }
+
+    /**
+     * Starts the Deadwood application.
+     */
+    @Override
+    public void start(Stage primaryStage) {
+        try {
+            // Initialize the Deadwood game with the primaryStage
+            initialize(primaryStage);  
+        } catch (Exception e) {
+            System.err.println("An error occurred during initialization: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Initializes the game with the provided stage.
+     * 
+     * @param primaryStage the main stage of the application
+     */
+    private void initialize(Stage primaryStage) {
         loadConfiguration();
         // Check if running on Mac and set the system property so 
         // the File menu appears in the menu bar
@@ -26,10 +56,19 @@ public class Deadwood {
             System.setProperty("apple.laf.useScreenMenuBar", "true");
         }
         try {
-            GameView view = initializeView();
+            GameView view = initializeView(primaryStage);
             GameModel model = initializeModel(view);
             GameController controller = initializeController(model, view);
-            playGame(controller);
+            Platform.runLater(() -> {
+                
+            // // Delay game execution until initialization is complete
+            // controller.setOnGameInitialized(() -> {
+                // After initialization completes, call playDays() and scoreGame()
+            
+                controller.playDays();
+                controller.scoreGame();
+            });
+            // });
         } catch (Exception e) {
             System.err.println(
                 "An error occurred during initialization: " + 
@@ -66,9 +105,12 @@ public class Deadwood {
      * 
      * @return the initialized view
      */
-    private static GameView initializeView() {
+    private static GameView initializeView(Stage primaryStage) {
         GameView view = GameGUIView.getInstance();
-        // view.showMessage("Welcome to Deadwood! Let's play!");
+        // Only set the stage if this is the GUI view (GameGUIView)
+        if (view instanceof GameGUIView) {
+            ((GameGUIView) view).setStage(primaryStage);
+        }
         return view;
     }
 
@@ -96,23 +138,24 @@ public class Deadwood {
         GameView view
     ) {
         GameController controller = new GameController();
-        controller.initializeGame(model, 
-                                  view, 
-                                  config.getProperty("boardXMLFilePath"), 
-                                  config.getProperty("cardsXMLFilePath")
+        controller.initializeGame(
+            model, 
+            view, 
+            config.getProperty("boardXMLFilePath"), 
+            config.getProperty("cardsXMLFilePath")
         );
         // view.setGameActionListener(controller);
         return controller;
     }
 
-    /**
-     * Plays a game of Deadwood.
-     * 
-     * @param controller the controller to use
-     */
-    private static void playGame(GameController controller) {
-        controller.playDays();
-        controller.scoreGame();
-    }
+//    /**
+//     * Plays a game of Deadwood.
+//     *
+//     * @param controller the controller to use
+//     */
+//    private static void playGame(GameController controller) {
+//        controller.playDays();
+//        controller.scoreGame();
+//    }
 
 }

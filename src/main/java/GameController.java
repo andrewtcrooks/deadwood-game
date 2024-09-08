@@ -1,13 +1,22 @@
 import java.util.*;
+import javafx.application.Platform;
+// import javafx.scene.input.MouseEvent;
+// import javafx.scene.input.MouseButton;
+// import javafx.scene.Node;
+// import javafx.scene.control.Button;
+// import javafx.scene.control.Label;
+// import javafx.scene.layout.Pane;
+// import javafx.scene.layout.StackPane;
+// import javafx.scene.layout.VBox;
 
 /**
  * Represents the game controller for the game.
- * 
  * It manages the game flow.
  */
 public class GameController implements GameActionListener{
     private GameModel model;
     private GameView view;
+    private Runnable onGameInitialized;
     private List<Area> areasWithListeners;
     private static final HashMap<String, PlayerAction> actionMap = 
         new HashMap<>();
@@ -28,86 +37,159 @@ public class GameController implements GameActionListener{
     }
 
 
-/************************************************************
- * Contructor and Initialization
- ************************************************************/
+// Constructor and Initialization
+
 
     /**
      * Constructs a new GameController.
      */
     public GameController () {
+        super();
         this.model = null;
         this.view = null;
         this.areasWithListeners = new ArrayList<>();
     }
 
     /**
-     * Initializes the game with the necessary settings, including setting up 
-     * the model and view,and getting the number of players to initialize in the 
+     * Initializes the game with the necessary settings, including setting up
+     * the model and view, and getting the number of players to initialize in the
      * model.
      * 
-     * @param model The game model to be used.
-     * @param view The game view to be used.
-     * @param boardXMLFilePath The file path to the board XML file.
-     * @param cardsXMLFilePath The file path to the cards XML file.
+     * @param model
+     * @param view
+     * @param boardXMLFilePath
+     * @param cardsXMLFilePath
      */
     public void initializeGame(
-        GameModel model, 
-        GameView view, 
-        String boardXMLFilePath, 
+        GameModel model,
+        GameView view,
+        String boardXMLFilePath,
         String cardsXMLFilePath
     ) {
-        // Initialize current player, player actions, model, and view
         this.model = model;
         this.view = view;
-        int numPlayers = 0;
-        
-        // Get the number of players and initialize the model
-        boolean initializationSuccessful = false;
-        while (!initializationSuccessful) {
-            try {
-                numPlayers = this.view.getNumPlayers();
-                initializationSuccessful = true; // no exception was thrown
-            } catch (IllegalArgumentException e) {
-                this.view.showMessage(
-                    "Invalid number of players: " + 
-                    e.getMessage()
-                );
-                this.model.notifyObservers(
-                    "SHOW_MESSAGE", 
-                    "Invalid command. Please try again."
-                );
-                // Loop will continue until valid number of players is provided
+    
+        // UI operations related to player input
+        Platform.runLater(() -> {
+            int numPlayers = this.view.getNumPlayers();  // Ask the user for the number of players
+    
+            // Start initialization after user input is valid
+            initializeModelAndGame(numPlayers, boardXMLFilePath, cardsXMLFilePath);
+        });
+    }
+
+    private void initializeModelAndGame(int numPlayers, String boardXMLFilePath, String cardsXMLFilePath) {
+        // Do non-UI game initialization in a separate thread
+        Platform.runLater(() -> {
+            // repaint the board
+            this.model.notifyObservers("SHOW_BOARD", null);
+
+            // Initialize the model
+            this.model.initModel(numPlayers, boardXMLFilePath, cardsXMLFilePath);
+
+            // Initialize player dice in the view (layer 3)
+            initializePlayerDice();
+
+            // Initialize location cards(layer 1) in the view underneath 
+            // cardbacks (layer 2)
+            initializeLocationCards();
+
+            // Create player stats table
+            this.model.notifyObservers("CREATE_PLAYER_STATS_TABLE", numPlayers);
+
+            // Update player stats
+            updateAllPlayerStats();
+
+            // Set the controller as the game action listener for the view
+            this.view.setGameActionListener(this);
+
+            // Notify that the game is ready to start
+            if (onGameInitialized != null) {
+                onGameInitialized.run();
             }
-        }
+        });
+    }
 
-        // reapint the board
-        this.model.notifyObservers("SHOW_BOARD", null);
-        
-        // Initialize the model
-        this.model.initModel(numPlayers, boardXMLFilePath, cardsXMLFilePath);
+    // public void initializeGame(
+    //     GameModel model, 
+    //     GameView view, 
+    //     String boardXMLFilePath, 
+    //     String cardsXMLFilePath
+    // ) {
+    //     this.model = model;
+    //     this.view = view;
 
-        // Initialize player dice in the view (layer 3)
-        initializePlayerDice();
+    //     // Do long-running work off the JavaFX thread
+    //     new Thread(() -> {
+            
+            
+    //         // Game initialization logic (off the main thread)
+    //         Platform.runLater(() -> {
+                
+    //             int numPlayers = 0;
 
-        // Initialize location cards(layer 1) in the view underneath 
-        // cardbacks (layer 2)
-        initializeLocationCards();
+    //             // Get the number of players and initialize the model
+    //             boolean initializationSuccessful = false;
+    //             while (!initializationSuccessful) {
+    //                 try {
+    //                     numPlayers = this.view.getNumPlayers();
+    //                     initializationSuccessful = true; // no exception was thrown
+    //                 } catch (IllegalArgumentException e) {
+    //                     this.view.showMessage(
+    //                         "Invalid number of players: " + 
+    //                         e.getMessage()
+    //                     );
+    //                     this.model.notifyObservers(
+    //                         "SHOW_MESSAGE", 
+    //                         "Invalid command. Please try again."
+    //                     );
+    //                     // Loop will continue until valid number of players is provided
+    //                 }
+    //             }
 
-        // Create player stats table
-        this.model.notifyObservers("CREATE_PLAYER_STATS_TABLE", numPlayers);
+    //             // repaint the board
+    //             this.model.notifyObservers("SHOW_BOARD", null);
+                
+    //             // Initialize the model
+    //             this.model.initModel(numPlayers, boardXMLFilePath, cardsXMLFilePath);
 
-        // Update player stats
-        updateAllPlayerStats();
+    //             // Initialize player dice in the view (layer 3)
+    //             initializePlayerDice();
 
-        // Set the controller as the game action listener for the view
-        this.view.setGameActionListener(this);
+    //             // Initialize location cards(layer 1) in the view underneath 
+    //             // cardbacks (layer 2)
+    //             initializeLocationCards();
+
+    //             // Create player stats table
+    //             this.model.notifyObservers("CREATE_PLAYER_STATS_TABLE", numPlayers);
+
+    //             // Update player stats
+    //             updateAllPlayerStats();
+
+    //             // Set the controller as the game action listener for the view
+    //             this.view.setGameActionListener(this);
+
+    //             // Notify that the game is ready to start
+    //             if (onGameInitialized != null) {
+    //                 onGameInitialized.run();
+    //             }
+
+    //         });
+    //     }).start();
+    // }
+
+    /**
+     * Sets the onGameInitialized Runnable.
+     * 
+     * @param onGameInitialized The Runnable to set.
+     */
+    public void setOnGameInitialized(Runnable onGameInitialized) {
+        this.onGameInitialized = onGameInitialized;
     }
 
 
-/************************************************************
- * Game Flow Management
- ************************************************************/
+// Game Flow Management
+
 
     /**
      * Starts the game and manages the game flow after the game is initialized.
@@ -172,7 +254,7 @@ public class GameController implements GameActionListener{
             if (view instanceof GameCLIView) {
                 endTurn = executeCommand(command, player);
             } else if (view instanceof GameGUIView) {
-                // don't worry about use executeComand to validate inputs
+                // don't worry about use executeCommand to validate inputs
                 onPlayerTurnEnd();
             }
 
@@ -207,7 +289,7 @@ public class GameController implements GameActionListener{
                 // addMoveListenersToNeighbors(currentPlayer);
             } else {
                 // Add location button to the current location
-                // addWorkListneresToAvailableRoles(currentPlayer);
+                // addWorkListenersToAvailableRoles(currentPlayer);
                 addMoveListenerToCurrentLocation(currentPlayer);
             }
 
@@ -236,7 +318,7 @@ public class GameController implements GameActionListener{
         // add data to eventData
         eventData.put("location", area);
         eventData.put("command", "rehearse");
-        // evetData.put("data", null);
+        // eventData.put("data", null);
 
 
         this.model.notifyObservers("ADD_CLICKABLE_AREAS", eventData);
@@ -355,9 +437,8 @@ public class GameController implements GameActionListener{
     }
 
 
-    /************************************************************
-     * Game Action Listener Methods
-     ************************************************************/
+// Game Action Listener Methods
+
 
     /**
      * Handles the Move action.
@@ -429,14 +510,11 @@ public class GameController implements GameActionListener{
         eventData.put("locationX", X);
         eventData.put("locationY", Y);
         this.model.notifyObservers("MOVE_TO_LOCATION", eventData);
-
-        int stophere = 1;
     }
 
 
-/************************************************************
- * Observer Pattern Methods
- ************************************************************/
+// Observer Pattern Methods
+
 
     private void initializePlayerDice() {
         // Constants for calculating player dice placement
@@ -556,10 +634,6 @@ public class GameController implements GameActionListener{
             new ArrayList<>(location.getNeighbors())
         );
     }
-
-
-
-
 
     public void addMoveListenerToPlayerDie(Player player) {
         // Get the player's location
