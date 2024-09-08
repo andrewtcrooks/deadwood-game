@@ -17,7 +17,6 @@ public class Deck {
      * @param xmlFilePath The path to the XML file containing the card data.
      */
     public Deck(List<SceneCard> cards) {
-        super();
         // populate the list of undrawn cards
         this.undrawnCards = cards;
         // shuffle the deck of undrawn cards
