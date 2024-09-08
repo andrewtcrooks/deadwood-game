@@ -23,7 +23,13 @@ public class PlayerActionUpgrade implements PlayerAction {
         creditCosts.put(6, 25); // 25 credits for rank 6
     }
 
-    
+    /**
+     * Constructs a PlayerActionUpgrade object.
+     */
+    public PlayerActionUpgrade() {
+        super();
+    }
+
     /**
      * Validates the upgrade action for the player.
      *
@@ -38,7 +44,7 @@ public class PlayerActionUpgrade implements PlayerAction {
         return isAtCastingOffice(player, board, view) && // true if at Casting Office
                hasNotAlreadyUpgraded(player, view) && // true if not already upgraded
                isNotAtHighestRank(player, view) && // true if not at highest rank
-               canAffordNextRank(player, view); // true if can afford next rank
+               canAffordNextRank(player, view); // true if player can afford next rank
     }
     
     /**

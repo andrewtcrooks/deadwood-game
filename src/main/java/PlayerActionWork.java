@@ -8,6 +8,13 @@ import java.util.ArrayList;
 public class PlayerActionWork implements PlayerAction {
 
     /**
+     * Constructs a PlayerActionWork object.
+     */
+    public PlayerActionWork() {
+        super();
+    }
+
+    /**
      * Validates the work action for the player.
      *
      * @param player the player

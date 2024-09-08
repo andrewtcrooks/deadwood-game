@@ -10,6 +10,13 @@ import java.util.stream.Collectors;
 public class PlayerActionBoard implements PlayerAction {
 
     /**
+     * Constructs a PlayerActionBoard object.
+     */
+    public PlayerActionBoard() {
+        super();
+    }
+
+    /**
      * Validates the board action for the player.
      *  
      * @param player the player

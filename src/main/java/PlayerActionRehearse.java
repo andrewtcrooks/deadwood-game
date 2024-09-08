@@ -4,6 +4,13 @@
 public class PlayerActionRehearse implements PlayerAction {
 
     /**
+     * Constructs a PlayerActionRehearse object.
+     */
+    public PlayerActionRehearse() {
+        super();
+    }
+
+    /**
      * Validates the rehearse action for the player.
      *  
      * @param player the player

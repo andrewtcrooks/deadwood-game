@@ -5,6 +5,13 @@ import java.util.stream.Collectors;
  * Represents the act action for the player.
  */
 public class PlayerActionAct implements PlayerAction {
+    
+    /**
+     * Constructs a PlayerActionAct object.
+     */
+    public PlayerActionAct() {
+        super();
+    }
 
     /**
      * Validates the act action for the player.
@@ -97,7 +104,7 @@ public class PlayerActionAct implements PlayerAction {
         // Check if player has a role that matches a role on the SceneCard
         if (sceneCard.getRoles().stream().anyMatch(r -> r.getName().equals(board.getPlayerRole(player.getID())))) {
             player.addCredits(2);
-        } else if (board.getPlayerRole(player.getID()) != null) { //check if player has a role (that must be off card))
+        } else if (board.getPlayerRole(player.getID()) != null) { //check if player has a role (that must be off card)
             player.addMoney(1);
             player.addCredits(1);
         }

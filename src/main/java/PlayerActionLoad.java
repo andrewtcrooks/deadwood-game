@@ -13,6 +13,13 @@ import java.util.stream.Collectors;
 public class PlayerActionLoad implements PlayerAction {
 
     /**
+     * Constructs a PlayerActionLoad object.
+     */
+    public PlayerActionLoad() {
+        super();
+    }
+
+    /**
      * Validates the load action for the player.
      *  
      * @param player the player

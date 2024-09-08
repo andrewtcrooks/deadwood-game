@@ -4,6 +4,13 @@
 public class PlayerActionEnd implements PlayerAction {
 
     /**
+     * Constructs a PlayerActionEnd object.
+     */
+    public PlayerActionEnd() {
+        super();
+    }
+
+    /**
      * Validates the end action for the player.
      *  
      * @param player the player

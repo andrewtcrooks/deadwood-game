@@ -4,6 +4,13 @@
 public class PlayerActionHelp implements PlayerAction {
 
     /**
+     * Constructs a PlayerActionHelp object.
+     */
+    public PlayerActionHelp() {
+        super();
+    }
+
+    /**
      * Validates the help action for the player.
      *  
      * @param player the player

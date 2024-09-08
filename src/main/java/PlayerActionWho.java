@@ -1,6 +1,7 @@
 /*
  * Represents the who action for the player.
  */
+@SuppressWarnings("GrazieInspection")
 public class PlayerActionWho implements PlayerAction{
 
     /**
