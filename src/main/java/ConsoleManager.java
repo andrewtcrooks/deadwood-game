@@ -37,21 +37,18 @@ public class ConsoleManager {
         console.setEditable(false);
 
         // Set console properties
-        ScrollPane scrollPane = new ScrollPane(console);
-        scrollPane.setLayoutX(X);
-        scrollPane.setLayoutY(Y);
-        scrollPane.setPrefSize(WIDTH, HEIGHT);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        console.setLayoutX(X);
+        console.setLayoutY(Y);
+        console.setPrefSize(WIDTH, HEIGHT);
         
-        // Scroll to the bottom when new text is added
+        // Enable automatic scrolling to the bottom when new text is added
         console.textProperty().addListener((obs, oldText, newText) -> {
             console.setScrollTop(Double.MAX_VALUE);
         });
 
-        // Add the console to the pane
-        pane.getChildren().add(scrollPane);
+        // Add the console directly to the pane (no ScrollPane needed)
+        pane.getChildren().add(console);
+
 
         // Redirect System.out to the console
         System.setOut(new PrintStream(new ConsoleOutputStream(console)));
