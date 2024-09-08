@@ -5,3 +5,4 @@ deadwood.code-workspace
 src/test/java/*.java
 .gradle/*
 build
+.idea/*
