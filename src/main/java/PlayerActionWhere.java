@@ -4,13 +4,6 @@
 public class PlayerActionWhere implements PlayerAction {
 
     /**
-     * Constructs a PlayerActionWhere object.
-     */
-    public PlayerActionWhere() {
-        super();
-    }
-
-    /**
      * Validates the where action for the player.
      *
      * @param player the player

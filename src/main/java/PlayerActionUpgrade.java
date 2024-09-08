@@ -24,13 +24,6 @@ public class PlayerActionUpgrade implements PlayerAction {
     }
 
     /**
-     * Constructs a PlayerActionUpgrade object.
-     */
-    public PlayerActionUpgrade() {
-        super();
-    }
-
-    /**
      * Validates the upgrade action for the player.
      *
      * @param player the player

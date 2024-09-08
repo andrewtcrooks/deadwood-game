@@ -12,13 +12,6 @@ import java.util.stream.Collectors;
 public class PlayerActionSave implements PlayerAction {
 
     /**
-     * Constructs a PlayerActionSave object.
-     */
-    public PlayerActionSave() {
-        super();
-    }
-
-    /**
      * Validates the save action for the player.
      *  
      * @param player the player

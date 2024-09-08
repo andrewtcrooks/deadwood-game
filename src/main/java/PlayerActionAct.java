@@ -5,13 +5,6 @@ import java.util.stream.Collectors;
  * Represents the act action for the player.
  */
 public class PlayerActionAct implements PlayerAction {
-    
-    /**
-     * Constructs a PlayerActionAct object.
-     */
-    public PlayerActionAct() {
-        super();
-    }
 
     /**
      * Validates the act action for the player.

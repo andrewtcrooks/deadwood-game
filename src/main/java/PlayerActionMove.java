@@ -8,13 +8,6 @@ import java.util.Map;
 public class PlayerActionMove implements PlayerAction {
 
     /**
-     * Constructs a PlayerActionMove object.
-     */
-    public PlayerActionMove() {
-        super();
-    }
-
-    /**
      * Validates the move action for the player.
      *
      * @param player the player

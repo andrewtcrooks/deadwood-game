@@ -4,13 +4,6 @@
 public class PlayerActionQuit implements PlayerAction {
 
     /**
-     * Constructs a PlayerActionQuit object.
-     */
-    public PlayerActionQuit() {
-        super();
-    }
-
-    /**
      * Validates the quit action for the player.
      *  
      * @param player the player
