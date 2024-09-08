@@ -4,7 +4,6 @@
         {
             "label": "clean",
             "type": "shell",
-            // Use the Gradle Wrapper to execute the 'clean' task
             "command": "./gradlew clean",
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -14,18 +13,16 @@
         {
             "label": "build",
             "type": "shell",
-            // Use the Gradle Wrapper to execute the 'build' task
             "command": "./gradlew build",
             "options": {
                 "cwd": "${workspaceFolder}"
             },
             "group": "build",
-            "dependsOn": "clean",
+            "dependsOn": "clean"
         },
         {
             "label": "run",
             "type": "shell",
-            // Use the Gradle Wrapper to execute the 'run' task
             "command": "./gradlew run",
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -37,7 +34,6 @@
             },
             "dependsOn": "build"
         }
-
     ]
 }
 

@@ -17,14 +17,14 @@
             "preLaunchTask": "build",
             "stepFilters": {
                 "skipClasses": [
-                "java.*", 
-                "javax.*", 
-                "sun.*", 
-                "com.sun.*", 
-                "jdk.internal.*",  // Added jdk.internal
-                "javafx.*",        // Add javafx internal classes
-                "java.base.*",      // Skip core base modules
-                "java.security.*"   // Skip security-related internal calls
+                "java.*",
+                "javax.*",
+                "sun.*",
+                "com.sun.*",
+                "jdk.internal.*",
+                "javafx.*",
+                "java.base.*",
+                "java.security.*"
                 ]
             }
         },
@@ -48,10 +48,10 @@
                 "javax.*", 
                 "sun.*", 
                 "com.sun.*", 
-                "jdk.internal.*",  // Added jdk.internal
-                "javafx.*",        // Add javafx internal classes
-                "java.base.*",      // Skip core base modules
-                "java.security.*"   // Skip security-related internal calls
+                "jdk.internal.*",
+                "javafx.*",
+                "java.base.*",
+                "java.security.*"
                 ]
             }
         }
