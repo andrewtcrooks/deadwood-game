@@ -3,57 +3,12 @@
     "configurations": [
         {
             "type": "java",
+            "request": "attach",
             "name": "Launch Deadwood",
-            "request": "launch",
-            "mainClass": "Deadwood",
-            "classPaths": [
-                "${workspaceFolder}/build/classes/java/main",
-                "${workspaceFolder}/build/resources/main",
-                "${workspaceFolder}/lib/gson-2.10.1.jar",
-                "${workspaceFolder}/lib/javafx-sdk-17.0.12/lib"
-            ],
-            "vmArgs": "--module-path \"${workspaceFolder}/lib/javafx-sdk-17.0.12/lib\" --add-modules javafx.controls,javafx.fxml",
-            "cwd": "${workspaceFolder}",
-            "preLaunchTask": "build",
-            "stepFilters": {
-                "skipClasses": [
-                "java.*",
-                "javax.*",
-                "sun.*",
-                "com.sun.*",
-                "jdk.internal.*",
-                "javafx.*",
-                "java.base.*",
-                "java.security.*"
-                ]
-            }
-        },
-        {
-            "type": "java",
-            "name": "Debug Deadwood",
-            "request": "launch",
-            "mainClass": "Deadwood",
-            "classPaths": [
-                "${workspaceFolder}/build/classes/java/main",
-                "${workspaceFolder}/build/resources/main",
-                "${workspaceFolder}/lib/gson-2.10.1.jar",
-                "${workspaceFolder}/lib/javafx-sdk-17.0.12/lib"
-            ],
-            "vmArgs": "--module-path \"${workspaceFolder}/lib/javafx-sdk-17.0.12/lib\" --add-modules javafx.controls,javafx.fxml",
-            "cwd": "${workspaceFolder}",
-            "preLaunchTask": "build",
-            "stepFilters": {
-                "skipClasses": [
-                "java.*", 
-                "javax.*", 
-                "sun.*", 
-                "com.sun.*", 
-                "jdk.internal.*",
-                "javafx.*",
-                "java.base.*",
-                "java.security.*"
-                ]
-            }
+            "hostName": "localhost",
+            "port": 5005,
+            "preLaunchTask": "gradleRunDebug",
+            "postDebugTask": "killGradleProcess"
         }
     ]
 }

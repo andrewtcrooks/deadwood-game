@@ -15,6 +15,7 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
+// JavaFX setup
 javafx {
     version = "17.0.12"
     modules = [ 'javafx.controls', 'javafx.fxml' ]
@@ -25,21 +26,19 @@ repositories {
     mavenCentral()
 }
 
-// Dependencies
+// Dependencies (pulls from Maven Central)
 dependencies {
+
     // JUnit test framework dependencies
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.8.1'
-    
-//    // Include all JAR files from the 'lib' directory and its subdirectories
-//    implementation fileTree(dir: 'lib', include: ['**/*.jar'])
 
-    // // JavaFX dependencies (pulls from Maven repo, use direct file above)# settings.json
+    // JavaFX dependencies
      implementation 'org.openjfx:javafx-controls:17.0.12'
      implementation 'org.openjfx:javafx-fxml:17.0.12'
 
-    // Gson library from Maven Central
+    // Gson library
     implementation 'com.google.code.gson:gson:2.10.1'
 }
 
@@ -49,9 +48,18 @@ application {
     
     // VM options to include JavaFX modules
     applicationDefaultJvmArgs = [
-//        '--module-path', 'lib/javafx-sdk-17.0.12/lib',
+        "--module-path", configurations.runtimeClasspath.asPath,
         '--add-modules', 'javafx.controls,javafx.fxml'
     ]
+}
+
+// Task to set up debugging for the application
+tasks.withType(JavaExec) {
+    if (project.hasProperty('debug')) {
+        jvmArgs = [
+            "-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005"
+        ]
+    }
 }
 
 // Test configuration
@@ -65,16 +73,32 @@ tasks.named('run', JavaExec) {
     standardInput = System.in
 }
 
-// Task to generate classpath
+// Task to run the application with debugging enabled
+task runWithDebug(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'Deadwood'  // Replace with your actual main class
+    jvmArgs = [ // Enable debugging on port 5005
+        '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005'  
+    ]
+}
+
+// Task to generate a .classpath file
 task generateClasspath {
     doLast {
-        def classpathFile = file('.classpath')
-        classpathFile.text = ''
-        configurations.compileClasspath.each { File file ->
-            classpathFile << file.absolutePath + '\n'
-        }
+        // Collect all classpaths (source sets + dependencies)
+        def classpathEntries = sourceSets.main.output.classesDirs.files +
+                configurations.compileClasspath.files
+
+        // Add parentheses around each classpath entry and join them into a single string
+        def classpathString = classpathEntries.collect{"\"${it.absolutePath}\""}
+                                              .join(File.pathSeparator)
+
+        // Define the output file (.classpath)
+        def classpathFile = file("$buildDir/.classpath")
+
+        // Write the classpath string to the file
+        classpathFile.text = classpathString
     }
 }
 
-// Ensure generateClasspath runs as part of the build process
-build.dependsOn generateClasspath
+build.finalizedBy(generateClasspath)

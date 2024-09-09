@@ -2,40 +2,21 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "clean",
+            "label": "gradleRunDebug",
             "type": "shell",
-            "command": "./gradlew clean",
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "build",
-            "type": "shell",
-            "command": "./gradlew build",
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "group": "build",
-            "dependsOn": "clean"
-        },
-        {
-            "label": "run",
-            "type": "shell",
-            "command": "./gradlew run",
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
+            "command": "./gradlew clean build run -Pdebug",
             "problemMatcher": [],
+            "isBackground": true,
             "group": {
                 "kind": "build",
                 "isDefault": true
-            },
-            "dependsOn": "build"
+            }
+        },
+        {
+            "label": "killGradleProcess",
+            "type": "shell",
+            "command": "kill $(lsof -ti :5005)",
+            "problemMatcher": [],
         }
     ]
 }
-
-
-
