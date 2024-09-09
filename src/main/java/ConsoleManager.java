@@ -1,4 +1,3 @@
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
 import java.io.PrintStream;
