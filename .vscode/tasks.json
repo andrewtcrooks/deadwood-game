@@ -4,7 +4,26 @@
         {
             "label": "gradleRunDebug",
             "type": "shell",
-            "command": "./gradlew clean build run -Pdebug",
+            "command": "sh",
+            "args": [
+                "-c",
+                "./gradlew clean build run -Pdebug"
+            ],
+            "problemMatcher": [],
+            "isBackground": true,
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "gradleRunDebugCLI",
+            "type": "shell",
+            "command": "sh",
+            "args": [
+                "-c",
+                "./gradlew clean build run -Pdebug --args='--cli'"
+            ],
             "problemMatcher": [],
             "isBackground": true,
             "group": {
@@ -15,8 +34,12 @@
         {
             "label": "killGradleProcess",
             "type": "shell",
-            "command": "kill $(lsof -ti :5005)",
-            "problemMatcher": [],
+            "command": "sh",
+            "args": [
+                "-c",
+                "kill $(lsof -ti :5005)"
+            ],
+            "problemMatcher": []
         }
     ]
 }
