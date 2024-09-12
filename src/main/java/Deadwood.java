@@ -179,9 +179,8 @@ public class Deadwood extends Application{
             // Set the title of the window (Stage)
             primaryStage.setTitle("Deadwood");
 
-            // Set the stage to the GameGUIView
-            GameGUIView guiView = GameGUIView.getInstance();
-            guiView.setStage(primaryStage);
+            // Initialize view (Sets the stage for the GameGUIView)
+            GameGUIView guiView = initializeView(primaryStage);
             
             // Ensure the board is created and displayed first
             guiView.createBoard();
@@ -206,7 +205,7 @@ public class Deadwood extends Application{
     private void initializeGame(Stage primaryStage) {
         try {
             
-            GameGUIView view = initializeView(primaryStage);
+            GameGUIView view = GameGUIView.getInstance();
 
             // If the view is GameGUIView, handle GUI initialization
             if (view instanceof GameGUIView) {
