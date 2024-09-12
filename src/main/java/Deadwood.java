@@ -1,9 +1,12 @@
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import javafx.application.Application;
-import javafx.stage.Stage;
-import javafx.application.Platform;
+
+
 
 /*
  * Deadwood by Andrew Crooks
@@ -16,6 +19,7 @@ import javafx.application.Platform;
 public class Deadwood extends Application{
 
     private static final Properties config = new Properties();
+    private static boolean isCLIMode = false;
 
     /**
      * The main method for Deadwood.
@@ -23,58 +27,30 @@ public class Deadwood extends Application{
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // This makes sure the macOS menu bar and other UI elements behave properly
-        System.setProperty("apple.awt.application.name", "Deadwood");
-        // Start the JavaFX application lifecycle
-        launch(args);  
-    }
-
-    /**
-     * Starts the Deadwood application.
-     */
-    @Override
-    public void start(Stage primaryStage) {
-        try {
-            // Initialize the Deadwood game with the primaryStage
-            initialize(primaryStage);  
-        } catch (Exception e) {
-            System.err.println("An error occurred during initialization: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Initializes the game with the provided stage.
-     * 
-     * @param primaryStage the main stage of the application
-     */
-    private void initialize(Stage primaryStage) {
         loadConfiguration();
-        // Check if running on Mac and set the system property so 
-        // the File menu appears in the menu bar
-        if (System.getProperty("os.name").toLowerCase().contains("mac")) {
-            System.setProperty("apple.laf.useScreenMenuBar", "true");
-        }
-        try {
-            GameView view = initializeView(primaryStage);
-            GameModel model = initializeModel(view);
-            GameController controller = initializeController(model, view);
-            Platform.runLater(() -> {
-                
-            // // Delay game execution until initialization is complete
-            // controller.setOnGameInitialized(() -> {
-                // After initialization completes, call playDays() and scoreGame()
-            
-                controller.playDays();
-                controller.scoreGame();
-            });
-            // });
-        } catch (Exception e) {
-            System.err.println(
-                "An error occurred during initialization: " + 
-                e.getMessage()
-            );
-            e.printStackTrace();
+
+        // Check for command-line arguments
+        if (args.length > 0) {
+            switch (args[0]) {
+                case "--cli":
+                    isCLIMode = true;
+                    startCLI();
+                    break;
+
+                case "--help":
+                    // Display the help menu and exit
+                    displayHelpMenu();
+                    System.exit(0);
+
+                default:
+                    System.out.println("Unknown option: " + args[0]);
+                    displayHelpMenu();
+                    System.exit(1);
+            }
+        } else {
+        
+            // Default to GUI mode if no --cli flag is provided
+            launch(args); // Launch JavaFX for GUI
         }
     }
 
@@ -101,23 +77,53 @@ public class Deadwood extends Application{
     }
 
     /**
-     * Initializes the game view.
+     * Display the help menu.
+     */
+    private static void displayHelpMenu() {
+        System.out.println("Usage: java Deadwood [OPTION]");
+        System.out.println("Options:");
+        System.out.println("  --cli      Run the game in Command Line " + 
+                           "Interface (CLI) mode.");
+        System.out.println("  --help     Display this help menu.");
+        System.out.println("\nIf no option is provided, the game will run in" + 
+                           " GUI mode by default.");
+    }
+
+
+// CLI Mode
+
+
+    /**
+     * Starts the Deadwood application in CLI mode.
+     */
+    private static void startCLI() {
+        try {
+            GameView view = initializeCLIView();
+            GameModel model = initializeModel(view);
+            GameController controller = initializeCLIController(model, view);
+            playGame(controller);
+        } catch (Exception e) {
+            System.err.println("An error occurred during CLI initialization: " + 
+                               e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Initializes the CLI view.
      * 
      * @return the initialized view
      */
-    private static GameView initializeView(Stage primaryStage) {
-        GameView view = GameGUIView.getInstance();
-        // Only set the stage if this is the GUI view (GameGUIView)
-        if (view instanceof GameGUIView) {
-            ((GameGUIView) view).setStage(primaryStage);
-        }
+    private static GameView initializeCLIView() {
+        GameView view = GameCLIView.getInstance();
+        view.showMessage("Welcome to Deadwood (CLI Mode). Let's play!");
         return view;
     }
 
     /**
-     * Initializes the game model.
+     * Initializes the game model for both CLI and GUI views.
      * 
-     * @param view the view to register as an observer
+     * @param view
      * @return the initialized model
      */
     private static GameModel initializeModel(GameView view) {
@@ -127,13 +133,13 @@ public class Deadwood extends Application{
     }
 
     /**
-     * Initializes the game controller.
+     * Initializes the CLI controller
      * 
-     * @param model the model to use
-     * @param view the view to use
+     * @param model 
+     * @param view 
      * @return the initialized controller
      */
-    private static GameController initializeController(
+    private static GameController initializeCLIController(
         GameModel model, 
         GameView view
     ) {
@@ -144,18 +150,138 @@ public class Deadwood extends Application{
             config.getProperty("boardXMLFilePath"), 
             config.getProperty("cardsXMLFilePath")
         );
-        // view.setGameActionListener(controller);
         return controller;
     }
 
-//    /**
-//     * Plays a game of Deadwood.
-//     *
-//     * @param controller the controller to use
-//     */
-//    private static void playGame(GameController controller) {
-//        controller.playDays();
-//        controller.scoreGame();
-//    }
+    /**
+     * Plays the game in CLI mode.
+     * @param controller
+     */
+    private static void playGame(GameController controller) {
+        controller.playDays();
+        controller.scoreGame();
+    }
+    
 
+// GUI Mode
+
+
+    /**
+     * Starts Deadwood as a JavaFX application in GUI mode.
+     * 
+     * @param primaryStage
+     */
+    @Override
+    public void start(Stage primaryStage) {
+        try {
+            System.out.println("Starting Deadwood game...");
+    
+            // Set the title of the window (Stage)
+            primaryStage.setTitle("Deadwood");
+
+            // Set the stage to the GameGUIView
+            GameGUIView guiView = GameGUIView.getInstance();
+            guiView.setStage(primaryStage);
+            
+            // Ensure the board is created and displayed first
+            guiView.createBoard();
+            guiView.showBoard();
+            System.out.println("Board should be visible now.");
+    
+            // Call the rest of the game initialization
+            initializeGame(primaryStage);
+    
+        } catch (Exception e) {
+            System.err.println("Error during game initialization: " + 
+                               e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Initialize and start the game in GUI mode
+     * 
+     * @param primaryStage
+     */
+    private void initializeGame(Stage primaryStage) {
+        try {
+            
+            GameGUIView view = initializeView(primaryStage);
+
+            // If the view is GameGUIView, handle GUI initialization
+            if (view instanceof GameGUIView) {
+                GameGUIView guiView = (GameGUIView) view;
+
+                // Step 1: Get the number of players asynchronously
+                guiView.getNumPlayersAsync().thenAccept(numPlayers -> {
+                    // Ensure everything runs on the JavaFX application thread
+                    Platform.runLater(() -> {
+                        // Step 2: Initialize the model with the numPlayers
+                        initializeAndStartGame(numPlayers, view);
+                    });
+                });
+            }
+            
+        } catch (Exception e) {
+            System.err.println("An error occurred during GUI initialization: " +
+                               e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Initializes the GameView in GUI mode.
+     * 
+     * @param primaryStage
+     * @return the initialized view
+     */
+    private GameGUIView initializeView(Stage primaryStage) {
+        GameGUIView view = null;
+        try {
+            view = GameGUIView.getInstance();
+            view.setStage(primaryStage);
+        } catch (Exception e) {
+            System.err.println("Error initializing GameGUIView: " + 
+                               e.getMessage());
+            e.printStackTrace();
+        }
+        return view;
+    }
+
+    /**
+     * Handle game initialization and start in GUI mode
+     * 
+     * @param numPlayers
+     * @param view
+     */
+    private void initializeAndStartGame(int numPlayers, GameView view) {
+        GameModel model = GameModel.getInstance();
+        model.initModel(
+            numPlayers, 
+            config.getProperty("boardXMLFilePath"), 
+            config.getProperty("cardsXMLFilePath")
+        );
+        GameController controller = new GameController();
+        controller.initializeGame(
+            model, 
+            view, 
+            config.getProperty("boardXMLFilePath"), 
+            config.getProperty("cardsXMLFilePath")
+        );
+
+        // Step 3: Create the board and all its elements based on the model
+        Platform.runLater(() -> {
+            controller.createBoardAndElements(() -> {
+                // Step 4: Run the controller's playDays method on JavaFX thread
+                Platform.runLater(() -> {
+                    controller.playDays();
+                    // Step 6: After playDays completes, run scoreGame method
+                    Platform.runLater(() -> {
+                        controller.scoreGame();
+                    });
+                });
+            });
+        });
+    }
+    
 }
