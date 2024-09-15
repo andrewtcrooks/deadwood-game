@@ -1,10 +1,14 @@
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.LinkedList;
 import java.util.Properties;
+import java.util.Queue;
+import java.util.concurrent.CompletableFuture;
 
 
 
@@ -21,6 +25,14 @@ public class Deadwood extends Application{
     private static final Properties config = new Properties();
     private static boolean isCLIMode = false;
 
+    // Task queue for sequential execution
+    private final Queue<Runnable> taskQueue = new LinkedList<>();
+    private boolean isProcessing = false;
+
+    private GameController controller;
+
+    private Integer numPlayers = null;
+    
     /**
      * The main method for Deadwood.
      * 
@@ -173,60 +185,50 @@ public class Deadwood extends Application{
      */
     @Override
     public void start(Stage primaryStage) {
-        try {
-            System.out.println("Starting Deadwood game...");
-    
+        try {    
             // Set the title of the window (Stage)
             primaryStage.setTitle("Deadwood");
 
-            // Initialize view (Sets the stage for the GameGUIView)
-            GameGUIView guiView = initializeView(primaryStage);
+            // Set the icon for the application
+            Image icon = new Image("deadwood_appicon.png");
+            primaryStage.getIcons().add(icon);
+
+            // Initialize GUI view (Sets the stage for the GameGUIView)
+            initializeView(primaryStage);
             
-            // Ensure the board is created and displayed first
-            guiView.createBoard();
-            guiView.showBoard();
-            System.out.println("Board should be visible now.");
-    
-            // Call the rest of the game initialization
-            initializeGame(primaryStage);
+            // Add all tasks to the queue
+            // Step 1: Get number of players
+            addTask(this::runGetNumPlayers); 
+            // Step 2: Initialize the model
+            addTask(this::runInitModel); 
+            // Step 3: Initialize the controller
+            addTask(this::runInitController); 
+            // Step 4: Show application window
+            addTask(this::runRefreshView); 
+            // Step 5: Refresh the board
+            addTask(this::runShowBoard); 
+            // Step 6: Add the board elements
+            addTask(() -> runCreateBoardElements(controller)); 
+            // Step 7: Refresh the board
+            addTask(this::runRefreshView); 
+            // Step 8: Play days
+            addTask(() -> runPlayDays(controller)); 
+            // Step 9: Score game
+            addTask(() -> runScoreGame(controller)); 
+
+            // Start processing the tasks in the queue
+            processNextTask();
     
         } catch (Exception e) {
-            System.err.println("Error during game initialization: " + 
-                               e.getMessage());
+            System.err.println(
+                "Error during game initialization: " + 
+                e.getMessage()
+            );
             e.printStackTrace();
         }
     }
 
-    /**
-     * Initialize and start the game in GUI mode
-     * 
-     * @param primaryStage
-     */
-    private void initializeGame(Stage primaryStage) {
-        try {
-            
-            GameGUIView view = GameGUIView.getInstance();
 
-            // If the view is GameGUIView, handle GUI initialization
-            if (view instanceof GameGUIView) {
-                GameGUIView guiView = (GameGUIView) view;
-
-                // Step 1: Get the number of players asynchronously
-                guiView.getNumPlayersAsync().thenAccept(numPlayers -> {
-                    // Ensure everything runs on the JavaFX application thread
-                    Platform.runLater(() -> {
-                        // Step 2: Initialize the model with the numPlayers
-                        initializeAndStartGame(numPlayers, view);
-                    });
-                });
-            }
-            
-        } catch (Exception e) {
-            System.err.println("An error occurred during GUI initialization: " +
-                               e.getMessage());
-            e.printStackTrace();
-        }
-    }
 
     /**
      * Initializes the GameView in GUI mode.
@@ -234,7 +236,7 @@ public class Deadwood extends Application{
      * @param primaryStage
      * @return the initialized view
      */
-    private GameGUIView initializeView(Stage primaryStage) {
+    private void initializeView(Stage primaryStage) {
         GameGUIView view = null;
         try {
             view = GameGUIView.getInstance();
@@ -244,43 +246,130 @@ public class Deadwood extends Application{
                                e.getMessage());
             e.printStackTrace();
         }
-        return view;
     }
 
     /**
-     * Handle game initialization and start in GUI mode
-     * 
-     * @param numPlayers
-     * @param view
+     * Run the getNumPlayers method on the JavaFX application thread.
      */
-    private void initializeAndStartGame(int numPlayers, GameView view) {
-        GameModel model = GameModel.getInstance();
-        model.initModel(
-            numPlayers, 
-            config.getProperty("boardXMLFilePath"), 
-            config.getProperty("cardsXMLFilePath")
-        );
-        GameController controller = new GameController();
-        controller.initializeGame(
-            model, 
-            view, 
-            config.getProperty("boardXMLFilePath"), 
-            config.getProperty("cardsXMLFilePath")
-        );
-
-        // Step 3: Create the board and all its elements based on the model
-        Platform.runLater(() -> {
-            controller.createBoardAndElements(() -> {
-                // Step 4: Run the controller's playDays method on JavaFX thread
-                Platform.runLater(() -> {
-                    controller.playDays();
-                    // Step 6: After playDays completes, run scoreGame method
-                    Platform.runLater(() -> {
-                        controller.scoreGame();
-                    });
-                });
-            });
+    private void runGetNumPlayers() {
+        CompletableFuture<Integer> numPlayersFuture = 
+            GameGUIView.getInstance().getNumPlayersFuture();
+        numPlayersFuture.thenAccept(players -> {
+            numPlayers = players; // Set the shared variable
+            processNextTask(); // Continue processing the queue
         });
     }
+
+    /**
+     * Run the initializeModel method on the JavaFX application thread.
+     */
+    private void runInitModel() {
+        // Register the GUI view as an observer of the model
+        GameModel.getInstance().registerObserver(GameGUIView.getInstance());
+        // Initialize the model
+        GameModel.getInstance().initModel(
+            numPlayers, 
+            config.getProperty("boardXMLFilePath"),
+            config.getProperty("cardsXMLFilePath")
+        );
+        processNextTask(); // Continue to the next task
     
+    }
+
+    /**
+     * Run the initializeGame method on the JavaFX application thread.
+     */
+    private void runInitController() {
+        controller = new GameController();
+        controller.initializeGame(
+            GameModel.getInstance(), 
+            GameGUIView.getInstance(), 
+            config.getProperty("boardXMLFilePath"), 
+            config.getProperty("cardsXMLFilePath")
+        );
+        processNextTask(); // Continue to the next task
+    }
+
+    /**
+     * Run the showBoard method on the JavaFX application thread.
+     * @param guiView
+     */
+    private void runShowBoard() {
+        GameGUIView.getInstance().showBoard();
+        processNextTask(); // Continue to the next task
+    }
+
+    /**
+     * Run the refreshView method on the JavaFX application thread.
+     * @param guiView
+     */
+    private void runRefreshView() {
+        GameGUIView.getInstance().refreshView();
+        processNextTask(); // Continue to the next task
+    }
+
+    /**
+     * Run the createBoardElements method on the JavaFX application thread.
+     * 
+     * @param controller
+     */
+    private void runCreateBoardElements(GameController controller) {
+        controller.createBoardElements();
+        
+        processNextTask(); // Continue to the next task
+    }
+
+    /**
+     * Run the playDays method on the JavaFX application thread.
+     * 
+     * @param controller
+     */
+    public void runPlayDays(GameController controller) {
+        CompletableFuture<Void> playDaysFuture = 
+            CompletableFuture.runAsync(() -> {
+                controller.getPlayDaysFuture();
+            });
+        playDaysFuture.join(); // block current thread until playDays completes
+        processNextTask(); // Continue to the next task
+    }
+
+    /**
+     * Run the scoreGame method on the JavaFX application thread.
+     * 
+     * @param controller
+     */
+    private void runScoreGame(GameController controller) {
+        controller.scoreGame();
+        System.out.println("scoreGame method should be running now.");
+    }
+    
+    /**
+     * Add a new task to the JavaFX application thread queue
+     * @param task
+     */
+    private void addTask(Runnable task) {
+        taskQueue.offer(task);
+    }
+
+    /**
+     * Process the next task in the JavaFX application thread queue
+     */
+    private void processNextTask() {
+        if (isProcessing) return; // Already processing a task
+        
+        Runnable nextTask = taskQueue.poll();
+        
+        if (nextTask != null) {
+            isProcessing = true;
+            Platform.runLater(() -> {
+                try {
+                    nextTask.run(); // Execute the current task
+                } finally {
+                    isProcessing = false; // Mark processing as finished
+                    processNextTask(); // Continue to the next task
+                }
+            });
+        }
+    }
+
 }
