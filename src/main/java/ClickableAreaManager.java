@@ -1,5 +1,5 @@
 import javafx.scene.control.Button;
-import javafx.scene.layout.Pane;
+import javafx.scene.Group;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,18 +8,30 @@ public class ClickableAreaManager {
     private ButtonManager buttonManager;
     private Map<Area, Button> areaButtons;
 
+    /**
+     * Constructor for the ClickableAreaManager.
+     * 
+     * @param buttonManager the ButtonManager to use
+     */
     public ClickableAreaManager(ButtonManager buttonManager) {
         super();
         this.buttonManager = buttonManager;
         this.areaButtons = new HashMap<>();
     }
 
+    /**
+     * Creates clickable areas on the pane.
+     * 
+     * @param group the group to which to add the clickable areas
+     * @param command the command to execute when the area is clicked
+     * @param data the data associated with the clickable area
+     * @param area the area to make clickable
+     */
     public void createClickableAreas(
-        Pane pane, 
+        Group group, 
         String command,
         Object data,
-        Area area,
-        int layer
+        Area area
     ) {
         // Create a new clickable area button
         Button button = new Button(command);
@@ -47,7 +59,7 @@ public class ClickableAreaManager {
         });
 
         // Add button to the pane
-        pane.getChildren().add(button);
+        group.getChildren().add(button);
 
     
         // Add the button to the map
@@ -59,9 +71,9 @@ public class ClickableAreaManager {
      * 
      * @param pane the pane from which buttons will be removed
      */
-    public void removeClickableAreas(Pane pane) {
+    public void removeClickableAreas(Group group) {
         for (Button button : areaButtons.values()) {
-            pane.getChildren().remove(button);
+            group.getChildren().remove(button);
         }
         areaButtons.clear();
     }
