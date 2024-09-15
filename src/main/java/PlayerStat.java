@@ -40,12 +40,30 @@ public class PlayerStat {
     }
 
     /**
+     * Returns the number of dollars the player has.
+     *
+     * @return the number of dollars the player has
+     */
+    public int getDollars() {
+        return this.dollars;
+    }
+    
+    /**
      * Sets the number of credits the player has.
      *
      * @param credits the number of credits the player has
      */
     public void setCredits(Integer credits) {
         this.credits = credits;
+    }
+
+    /**
+     * Returns the number of credits the player has.
+     *
+     * @return the number of credits the player has
+     */
+    public int getCredits() {
+        return this.credits;
     }
 
     /**
@@ -57,4 +75,12 @@ public class PlayerStat {
         this.tokens = tokens;
     }
 
+    /**
+     * Returns the number of rehearsal tokens the player has.
+     *
+     * @return the number of rehearsal tokens the player has
+     */
+    public int getTokens() {
+        return this.tokens;
+    }
 }
