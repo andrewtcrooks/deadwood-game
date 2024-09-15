@@ -2,34 +2,110 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "gradleRunDebug",
+            "label": "gradleClean",
             "type": "shell",
-            "command": "sh",
+            "command": "./gradlew",
             "args": [
-                "-c",
-                "./gradlew clean build run -Pdebug"
+                "clean",
+                "--daemon",
+                "--parallel",
+                "--quiet"
             ],
             "problemMatcher": [],
-            "isBackground": true,
             "group": {
                 "kind": "build",
                 "isDefault": true
             }
         },
         {
-            "label": "gradleRunDebugCLI",
+            "label": "gradleBuild",
             "type": "shell",
-            "command": "sh",
+            "command": "./gradlew",
             "args": [
-                "-c",
-                "./gradlew clean build run -Pdebug --args='--cli'"
+                "build",
+                "--daemon",
+                "--parallel",
+                "--quiet"
             ],
             "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": "gradleClean"
+        },
+        {
+            "label": "gradleRunDebug",
+            "type": "shell",
+            "command": "./gradlew",
+            "args": [
+                "run",
+                "-Pdebug",
+                "--daemon",
+                "--parallel",
+                "--quiet"
+            ],
+            "problemMatcher": [
+                {
+                    "owner": "custom",
+                    "pattern": [
+                        {
+                            "regexp": ".",
+                            "file": 1,
+                            "location": 2,
+                            "message": 3
+                        }
+                    ],
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": ".",
+                        "endsPattern": ".*Listening for transport dt_socket at address: 5005.*"
+                    }
+                }
+            ],
             "isBackground": true,
             "group": {
                 "kind": "build",
                 "isDefault": true
-            }
+            },
+            "dependsOn": "gradleBuild"
+        },
+        {
+            "label": "gradleRunDebugCLI",
+            "type": "shell",
+            "command": "./gradlew",
+            "args": [
+                "run",
+                "-Pdebug",
+                "--daemon",
+                "--parallel",
+                "--quiet",
+                "--args='--cli'"
+            ],
+            "problemMatcher": [
+                {
+                    "owner": "custom",
+                    "pattern": [
+                        {
+                            "regexp": ".",
+                            "file": 1,
+                            "location": 2,
+                            "message": 3
+                        }
+                    ],
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": ".",
+                        "endsPattern": ".*Listening for transport dt_socket at address: 5005.*"
+                    }
+                }
+            ],
+            "isBackground": true,
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": "gradleBuild"
         },
         {
             "label": "killGradleProcess",
@@ -37,7 +113,7 @@
             "command": "sh",
             "args": [
                 "-c",
-                "kill $(lsof -ti :5005)"
+                "(lsof -ti :5005 | xargs kill -9) || echo 'No process found on port 5005'"
             ],
             "problemMatcher": []
         }
