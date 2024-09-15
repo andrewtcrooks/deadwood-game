@@ -90,7 +90,7 @@ task runWithDebug(type: JavaExec) {
 // Task to generate a .classpath file
 task generateClasspath {
     doLast {
-        // Collect all classpaths (source sets + dependencies)
+        // Collect all classpath (source sets + dependencies)
         def classpathEntries = sourceSets.main.output.classesDirs.files +
                 configurations.compileClasspath.files
 
