@@ -4,7 +4,7 @@
 @SuppressWarnings("unused") 
 public class PlayerStat {
     private final Integer playerID;
-	private Integer dollars;
+    private Integer dollars;
     private Integer credits;
     private Integer tokens;
 
