@@ -245,7 +245,7 @@ public class PlayerStatsManager {
      *
      * @param rowIndex The index of the row to be highlighted (0-based index).
      */
-    private void highlightRow(int index) {
+    public void highlightRow(int index) {
         playerStatsTable.setRowFactory(tv -> {
             TableRow<PlayerStat> row = new TableRow<>();
             row.itemProperty().addListener((observable, oldValue, newValue) -> {
