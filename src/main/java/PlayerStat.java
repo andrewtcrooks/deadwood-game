@@ -1,7 +1,7 @@
 /**
  * Represents a player's statistics (dollars, credits, and tokens) in the game.
  */
-
+@SuppressWarnings("unused") 
 public class PlayerStat {
     private final Integer playerID;
 	private Integer dollars;
