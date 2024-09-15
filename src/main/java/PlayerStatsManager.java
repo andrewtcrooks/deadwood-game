@@ -1,213 +1,262 @@
-import javax.swing.DefaultListSelectionModel;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JTable;
-import javax.swing.SwingConstants;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableColumn;
-import java.util.*;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollBar;
+import javafx.util.Callback;
+import javafx.scene.control.TableCell;
 
-//stuff 
+import java.util.List;
+import java.util.Map;
 
-/**
- * Manages the player stats for the game.
- */
-public class PlayerStatsManager extends AbstractTableModel {
-    private JTable playerStatsTable;
-    private PlayerStatsRenderer cellRenderer;
-    // Column names for the player stats table
-    private final String[] columnNames = {
-        "Player  ", "ID", "Dollars", "Credits", "Tokens"
-    };
-    // Map of player stats with JLabel as key and List of stats as value, 
-    // sorted by player ID
-    private Map<JLabel, List<Integer>> playerStats = new TreeMap<>(
-        Comparator.comparingInt(label -> 
-            Integer.parseInt(label.getText().replaceAll("\\D+", ""))
-        )
-    );
+public class PlayerStatsManager {
 
-    
-    /**
-     * Constructor for the player stats manager.
-     */
+    private final TableView<PlayerStat> playerStatsTable;
+
     public PlayerStatsManager() {
-        // Create the player stats table
-        this.playerStatsTable = new JTable(this);
-        // Create a custom renderer for player stats table
-        this.cellRenderer = new PlayerStatsRenderer();
-        // Disable row selection
-        playerStatsTable.setSelectionModel(new DefaultListSelectionModel() {
+        this.playerStatsTable = new TableView<>();
+    }
+
+    /**
+     * Creates a table structure for displaying player stats without data.
+     *
+     * @param group                 The group where the table will be added.
+     * @param playerLabels          List of player labels (one for each player).
+     * @param rowHeight             The height of each row.
+     * @param diceColumnWidth       The width of the player label (icon) column.
+     * @param headerOffset          The offset used to position the table (Y position calculation).
+     * @param leftBorder            The X position (left border).
+     * @param yPosition             The Y position (top of the table).
+     * @param tableWidth            The total width of the table.
+     */
+    public void createPlayerStatsTable(
+        Group group, 
+        Map<String, Label> playerLabels, 
+        int rowHeight, 
+        int diceColumnWidth, 
+        int headerOffset, 
+        int leftBorder, 
+        int yPosition, 
+        int tableWidth
+    ) {
+        // Calculate the number of players from the size of the list
+        int numPlayers = playerLabels.size();
+
+        // Set the calculated table height based on number of players and row height
+        int tableHeight = rowHeight * numPlayers + headerOffset;
+
+        // Set the X and Y position of the table
+        playerStatsTable.setPrefSize(tableWidth, tableHeight);
+        playerStatsTable.setLayoutX(leftBorder);
+        playerStatsTable.setLayoutY(yPosition);
+
+        // Create and set up columns
+        setupTableColumns(diceColumnWidth, tableWidth, playerLabels);
+
+        // Set row height
+        playerStatsTable.setFixedCellSize(rowHeight);
+
+        // Disable scroll bars
+        disableScrollBars(playerStatsTable);
+
+        // Add the empty table to the pane
+        group.getChildren().add(playerStatsTable);
+    }
+
+    /**
+     * Sets up the columns for the player stats table.
+     *
+     * @param diceColumnWidth The width of the dice (icon) column.
+     * @param tableWidth      The total width of the table to adjust other column widths.
+     * @param playerLabels    List of player labels to be set in the player column.
+     */
+    @SuppressWarnings("unchecked")
+    private void setupTableColumns(int diceColumnWidth, int tableWidth, Map<String, Label> playerLabels) {
+        // Create the "Player" label column (icon column with custom width)
+        TableColumn<PlayerStat, Label> labelColumn = new TableColumn<>("Player");
+        labelColumn.setCellFactory(new Callback<TableColumn<PlayerStat, Label>, TableCell<PlayerStat, Label>>() {
             @Override
-            public void setSelectionInterval(int index0, int index1) {
-                // Do nothing to prevent creating a clickable table
+            public TableCell<PlayerStat, Label> call(TableColumn<PlayerStat, Label> param) {
+                TableCell<PlayerStat, Label> cell = new TableCell<PlayerStat, Label>() {
+                    @Override
+                    protected void updateItem(Label item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty || getIndex() >= playerLabels.size()) {
+                            setGraphic(null);
+                        } else {
+                            String playerName = (String) playerLabels.keySet().toArray()[getIndex()];
+                            Label originalLabel = playerLabels.get(playerName);
+                            // Create a new label and copy the icon (graphic) from the original label
+                            Label newLabel = new Label();
+                            if (originalLabel.getGraphic() instanceof ImageView) {
+                                ImageView originalImageView = (ImageView) originalLabel.getGraphic();
+                                ImageView newImageView = new ImageView(originalImageView.getImage());
+                                newLabel.setGraphic(newImageView);
+                            } else {
+                                newLabel.setGraphic(originalLabel.getGraphic());
+                            }
+                            setGraphic(newLabel);
+                        }
+                    }
+                };
+                cell.setAlignment(Pos.CENTER); // Center the content
+                return cell;
+            }
+        });
+        labelColumn.setPrefWidth(diceColumnWidth); // Use the provided dice column width
+
+        // Adjust the remaining table width for the stat columns
+        int remainingWidth = tableWidth - diceColumnWidth;
+
+        // Create the "Dollars" column and center the content
+        TableColumn<PlayerStat, Integer> dollarsColumn = new TableColumn<>("Dollars");
+        dollarsColumn.setCellValueFactory(new PropertyValueFactory<>("dollars"));
+        dollarsColumn.setCellFactory(column -> new TableCell<PlayerStat, Integer>() {
+            @Override
+            protected void updateItem(Integer item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(item.toString());
+                }
+                setAlignment(Pos.CENTER); // Center the content
+            }
+        });
+        dollarsColumn.setPrefWidth(remainingWidth * 0.33); // 33% of remaining width
+
+        // Create the "Credits" column and center the content
+        TableColumn<PlayerStat, Integer> creditsColumn = new TableColumn<>("Credits");
+        creditsColumn.setCellValueFactory(new PropertyValueFactory<>("credits"));
+        creditsColumn.setCellFactory(column -> new TableCell<PlayerStat, Integer>() {
+            @Override
+            protected void updateItem(Integer item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(item.toString());
+                }
+                setAlignment(Pos.CENTER); // Center the content
+            }
+        });
+        creditsColumn.setPrefWidth(remainingWidth * 0.33); // 33% of remaining width
+
+        // Create the "Tokens" column and center the content
+        TableColumn<PlayerStat, Integer> tokensColumn = new TableColumn<>("Tokens");
+        tokensColumn.setCellValueFactory(new PropertyValueFactory<>("tokens"));
+        tokensColumn.setCellFactory(column -> new TableCell<PlayerStat, Integer>() {
+            @Override
+            protected void updateItem(Integer item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(item.toString());
+                }
+                setAlignment(Pos.CENTER); // Center the content
+            }
+        });
+        tokensColumn.setPrefWidth(remainingWidth * 0.33); // 33% of remaining width
+
+        // Add all columns to the table
+        playerStatsTable.getColumns().addAll(labelColumn, dollarsColumn, creditsColumn, tokensColumn);
+
+        // Add empty PlayerStat objects to the table to match the number of player labels
+        for (int i = 0; i < playerLabels.size(); i++) {
+            if (i == 0) {
+                playerStatsTable.getItems().add(new PlayerStat(i+1,0,0,0, true));
+            } else {
+                playerStatsTable.getItems().add(new PlayerStat(i+1,0,0,0, false));
+            }
+        }
+    }
+
+    /**
+     * Disables the scroll bars of the given TableView.
+     *
+     * @param tableView The TableView whose scroll bars should be disabled.
+     */
+    private void disableScrollBars(TableView<?> tableView) {
+        tableView.skinProperty().addListener((obs, oldSkin, newSkin) -> {
+            if (newSkin != null) {
+                // Disable horizontal scroll bar
+                ScrollBar hBar = (ScrollBar) tableView.lookup(".scroll-bar:horizontal");
+                if (hBar != null) {
+                    hBar.setManaged(false);
+                    hBar.setVisible(false);
+                }
+
+                // Disable vertical scroll bar
+                ScrollBar vBar = (ScrollBar) tableView.lookup(".scroll-bar:vertical");
+                if (vBar != null) {
+                    vBar.setManaged(false);
+                    vBar.setVisible(false);
+                }
             }
         });
     }
-
+    
     /**
-     * Creates the player stats table.
-     * 
-     * @param bPane the layered pane
-     * @param numPlayers the number of players
-     * @param BOARD_IMAGE_WIDTH the width of the board image
-     * @param ROW_HEIGHT the height of each row
-     * @param DICE_COLUMN_WIDTH the width of the dice column
-     * @param HEADER_OFFSET the offset of the header
-     * @param HEADER_HEIGHT the height of the header
-     * @param X the x-coordinate of the player stats table
-     * @param Y the y-coordinate of the player stats table
-     * @param WIDTH the width of the player stats table
-     * @param layer the layer of the player stats table
+     * Updates the stats for a single player in the table.
+     *
+     * @param playerID The ID of the player to update.
+     * @param dollars New value for dollars.
+     * @param credits New value for credits.
+     * @param tokens New value for tokens.
      */
-    public void createPlayerStatsTable(
-        JLayeredPane bPane, 
-        int numPlayers, 
-        int BOARD_IMAGE_WIDTH, 
-        int ROW_HEIGHT, 
-        int DICE_COLUMN_WIDTH, 
-        int HEADER_OFFSET, 
-        int HEADER_HEIGHT, 
-        int X, 
-        int Y, 
-        int WIDTH,
-        int layer
-    ) {
-        // Set the row height based on the dice image height
-        playerStatsTable.setRowHeight(ROW_HEIGHT);
-        // Set custom renderer for the all columns and make the first column 
-        // only as wide as the dice labels
-        for (int i = 0; i < columnNames.length; i++) {
-            // Get the column
-            TableColumn column = playerStatsTable.getColumnModel().getColumn(i);
-            if (i == 0) {
-                // Set the width of the first column
-                column.setPreferredWidth(DICE_COLUMN_WIDTH);
-                column.setMinWidth(DICE_COLUMN_WIDTH);
-                column.setMaxWidth(DICE_COLUMN_WIDTH);
+    public void updatePlayerStat(int playerID, int dollars, int credits, int tokens) {
+        // Iterate over the table's items (PlayerStat instances)
+        for (PlayerStat playerStat : playerStatsTable.getItems()) {
+            // Find the player by their ID
+            if (playerStat.getPlayerID().equals(playerID)) {
+                // Update the player's stats
+                playerStat.setDollars(dollars);
+                playerStat.setCredits(credits);
+                playerStat.setTokens(tokens);
+
+                // Refresh the table to reflect the updated row
+                playerStatsTable.refresh();
+                break;
             }
-            // Set the custom renderer for the column
-            column.setCellRenderer(this.cellRenderer);
         }
-        // Set the column headers
-        JTableHeader header = playerStatsTable.getTableHeader();
-        header.setReorderingAllowed(false);
-        // Set the default header renderer and center alignment
-        DefaultTableCellRenderer headerRenderer = 
-            (DefaultTableCellRenderer) header.getDefaultRenderer();
-        headerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-        // Set the custom header value and renderer for each column
-        for (int i = 0; 
-             i < playerStatsTable.getColumnModel().getColumnCount(); 
-             i++
-        ) {
-            playerStatsTable.getColumnModel()
-                            .getColumn(i)
-                            .setHeaderValue(columnNames[i]);
-        }
-        // Set the bounds of the header
-        header.setBounds(X, Y, WIDTH, HEADER_HEIGHT);
-        // Set the bounds of the player stats table
-        playerStatsTable.setBounds(
-            X, 
-            Y + HEADER_OFFSET, 
-            WIDTH, 
-            ROW_HEIGHT*numPlayers
-        );
-        // Add the player stats table to the layered pane
-        bPane.add(playerStatsTable, new Integer(2));
-        // Add the table header to the layered pane
-        bPane.add(header, new Integer(2));
     }
 
     /**
-     * Sets the current player ID for highlighting.
-     * 
-     * @param currentPlayerID the current player ID
+     * Adds player stats data to the table.
+     *
+     * @param playerStats The list of player statistics to be added to the table.
      */
-    public void setCurrentPlayerID(int currentPlayerID) {
-        // Set the current player ID for the cell renderer
-        this.cellRenderer.setCurrentPlayerID(currentPlayerID);
-        // Repaint the table to apply the highlight
-        this.playerStatsTable.repaint();
+    public void addPlayerData(List<PlayerStat> playerStats) {
+        playerStatsTable.getItems().addAll(playerStats);
+        playerStatsTable.refresh();
+    }
+
+    public TableView<PlayerStat> getPlayerStatsTable() {
+        return playerStatsTable;
     }
 
     /**
-     * Updates the given player's stats row with the new stats.
-     * 
-     * @param playerDiceLabels the map of player dice labels
-     * @param playerID the player ID
-     * @param dollars the player's dollars
-     * @param credits the player's credits
-     * @param rehearsalTokens the player's rehearsal tokens
+     * Highlights the row corresponding to the given row index.
+     *
+     * @param rowIndex The index of the row to be highlighted (0-based index).
      */
-    public void updateStats(
-        Map<String, JLabel> playerDiceLabels, 
-        Integer playerID, 
-        Integer dollars, 
-        Integer credits, 
-        Integer rehearsalTokens
-    ) {
-        // Retrieve the JLabel associated with the playerID
-        JLabel playerLabel = playerDiceLabels.get(playerID.toString());
-        // Update the playerStats map with the new stats
-        playerStats.put(playerLabel, Arrays.asList(
-            playerID, 
-            dollars, 
-            credits, 
-            rehearsalTokens
-            )
-        );
-        // Determine the row index of the updated player
-        int rowIndex = 
-            new ArrayList<>(playerStats.keySet()).indexOf(playerLabel);
-        // Notify listeners that the row at rowIndex has been updated
-        fireTableRowsUpdated(rowIndex, rowIndex);
-    }
-
-    /**
-     * Returns the value at the specified row and column.
-     * 
-     * @param rowIndex the row index
-     * @param columnIndex the column index
-     * @return the value at the specified row and column
-     */
-    @Override
-    public Object getValueAt(int rowIndex, int columnIndex) {
-        // Retrieve the JLabels for the players
-        List<JLabel> keys = new ArrayList<>(playerStats.keySet());
-        // Retrieve the JLabel for the player at the rowIndex
-        JLabel key = keys.get(rowIndex);
-        // Retrieve the stats for the player associated with the key
-        List<Integer> stats = playerStats.get(key);
-        if (columnIndex == 0) {
-            // Return JLabel for the first column
-            return key; 
-        }
-        // Adjust index for other columns
-        return stats.get(columnIndex - 1); 
-    }
-
-    /**
-     * Returns the number of rows in the table.
-     * 
-     * @return the number of rows
-     */
-    @Override
-    public int getRowCount() {
-        return playerStats.size();
-    }
-
-    /**
-     * Returns the number of columns in the table.
-     * 
-     * @return the number of columns
-     */
-    @Override
-    public int getColumnCount() {
-        return columnNames.length;
+    private void highlightRow(int index) {
+        playerStatsTable.setRowFactory(tv -> {
+            TableRow<PlayerStat> row = new TableRow<>();
+            row.itemProperty().addListener((observable, oldValue, newValue) -> {
+                if (row.getIndex() == index) {
+                    row.setStyle("-fx-background-color: #808080;"); // gray
+                } else {
+                    row.setStyle(""); // reset to default style
+                }
+            });
+            return row;
+        });
     }
 
 }
