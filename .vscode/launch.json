@@ -8,7 +8,7 @@
             "hostName": "localhost",
             "port": 5005,
             "preLaunchTask": "gradleRunDebug",
-            "postDebugTask": "killGradleProcess"
+            "postDebugTask": "killGradleProcess",
         },
         {
             "type": "java",
