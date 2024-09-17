@@ -39,7 +39,6 @@ dependencies {
     implementation 'org.openjfx:javafx-graphics:17'
     implementation 'org.openjfx:javafx-base:17'
     implementation 'org.openjfx:javafx-swing:17'
-    implementation 'org.openjfx:javafx-web:17'
     implementation 'org.openjfx:javafx-fxml:17.0.12'
 
     // Gson library
@@ -80,7 +79,7 @@ tasks.named('run', JavaExec) {
 // Task to run the application with debugging enabled
 tasks.register('runWithDebug', JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
-    mainClass = 'Deadwood'  // Replace with your actual main class
+    mainClass = 'Deadwood'
     jvmArgs = [ // Enable debugging on port 5005
                 '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005'
     ]
