@@ -38,7 +38,6 @@ dependencies {
     implementation 'org.openjfx:javafx-controls:17.0.12'
     implementation 'org.openjfx:javafx-graphics:17'
     implementation 'org.openjfx:javafx-base:17'
-    implementation 'org.openjfx:javafx-media:17'
     implementation 'org.openjfx:javafx-swing:17'
     implementation 'org.openjfx:javafx-web:17'
     implementation 'org.openjfx:javafx-fxml:17.0.12'
@@ -59,10 +58,10 @@ application {
 }
 
 // Task to set up debugging for the application
-tasks.withType(JavaExec) {
+tasks.withType(JavaExec).configureEach {
     if (project.hasProperty('debug')) {
         jvmArgs = [
-            "-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005"
+                "-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005"
         ]
     }
 }
@@ -79,16 +78,16 @@ tasks.named('run', JavaExec) {
 }
 
 // Task to run the application with debugging enabled
-task runWithDebug(type: JavaExec) {
+tasks.register('runWithDebug', JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'Deadwood'  // Replace with your actual main class
     jvmArgs = [ // Enable debugging on port 5005
-        '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005'  
+                '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005'
     ]
 }
 
 // Task to generate a .classpath file
-task generateClasspath {
+tasks.register('generateClasspath') {
     doLast {
         // Collect all classpath (source sets + dependencies)
         def classpathEntries = sourceSets.main.output.classesDirs.files +
@@ -96,10 +95,10 @@ task generateClasspath {
 
         // Add parentheses around each classpath entry and join them into a single string
         def classpathString = classpathEntries.collect{"\"${it.absolutePath}\""}
-                                              .join(File.pathSeparator)
+                .join(File.pathSeparator)
 
         // Define the output file (.classpath)
-        def classpathFile = file("$buildDir/.classpath")
+        def classpathFile = layout.buildDirectory.file(".classpath").get().asFile
 
         // Write the classpath string to the file
         classpathFile.text = classpathString
