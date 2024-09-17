@@ -81,7 +81,7 @@ tasks.named('run', JavaExec) {
 // Task to run the application with debugging enabled
 task runWithDebug(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
-    main = 'Deadwood'  // Replace with your actual main class
+    mainClass = 'Deadwood'  // Replace with your actual main class
     jvmArgs = [ // Enable debugging on port 5005
         '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005'  
     ]
