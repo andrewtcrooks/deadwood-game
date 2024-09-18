@@ -243,7 +243,7 @@ public class PlayerStatsManager {
     /**
      * Highlights the row corresponding to the given row index.
      *
-     * @param rowIndex The index of the row to be highlighted (0-based index).
+     * @param index The index of the row to be highlighted (0-based index).
      */
     public void highlightRow(int index) {
         playerStatsTable.setRowFactory(tv -> {
