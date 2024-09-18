@@ -8,9 +8,6 @@ import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.Properties;
 import java.util.Queue;
-import java.util.concurrent.CompletableFuture;
-
-
 
 /*
  * Deadwood by Andrew Crooks
@@ -23,7 +20,6 @@ import java.util.concurrent.CompletableFuture;
 public class Deadwood extends Application{
 
     private static final Properties config = new Properties();
-    private static boolean isCLIMode = false;
 
     // Task queue for sequential execution
     private final Queue<Runnable> taskQueue = new LinkedList<>();
@@ -45,7 +41,6 @@ public class Deadwood extends Application{
         if (args.length > 0) {
             switch (args[0]) {
                 case "--cli":
-                    isCLIMode = true;
                     startCLI();
                     break;
 
@@ -92,13 +87,14 @@ public class Deadwood extends Application{
      * Display the help menu.
      */
     private static void displayHelpMenu() {
+        System.out.println("\n");
         System.out.println("Usage: java Deadwood [OPTION]");
         System.out.println("Options:");
         System.out.println("  --cli      Run the game in Command Line " + 
                            "Interface (CLI) mode.");
-        System.out.println("  --help     Display this help menu.");
-        System.out.println("\nIf no option is provided, the game will run in" + 
-                           " GUI mode by default.");
+        System.out.println("  --help     Display this help menu.\n");
+        System.out.println("If no option is provided, the game will run in" + 
+                           " GUI mode by default.\n");
     }
 
 
@@ -115,7 +111,7 @@ public class Deadwood extends Application{
             GameController controller = initializeCLIController(model, view);
             playGame(controller);
         } catch (Exception e) {
-            System.err.println("An error occurred during CLI initialization: " + 
+            System.err.println("An error occurred during CLI initialization: " +
                                e.getMessage());
             e.printStackTrace();
         }
@@ -135,7 +131,7 @@ public class Deadwood extends Application{
     /**
      * Initializes the game model for both CLI and GUI views.
      * 
-     * @param view
+     * @param view the view to register as an observer
      * @return the initialized model
      */
     private static GameModel initializeModel(GameView view) {
@@ -145,10 +141,8 @@ public class Deadwood extends Application{
     }
 
     /**
-     * Initializes the CLI controller
-     * 
-     * @param model 
-     * @param view 
+     * Initializes the CLI controller.
+     *
      * @return the initialized controller
      */
     private static GameController initializeCLIController(
@@ -167,7 +161,7 @@ public class Deadwood extends Application{
 
     /**
      * Plays the game in CLI mode.
-     * @param controller
+     * @param controller the game controller
      */
     private static void playGame(GameController controller) {
         controller.playDays();
@@ -181,7 +175,7 @@ public class Deadwood extends Application{
     /**
      * Starts Deadwood as a JavaFX application in GUI mode.
      * 
-     * @param primaryStage
+     * @param primaryStage the primary stage for the application
      */
     @Override
     public void start(Stage primaryStage) {
@@ -204,9 +198,9 @@ public class Deadwood extends Application{
             // Step 3: Initialize the controller
             addTask(this::runInitController); 
             // Step 4: Show application window
-            addTask(this::runRefreshView); 
-            // Step 5: Refresh the board
             addTask(this::runShowBoard); 
+            // Step 5: Refresh the board
+            addTask(this::runRefreshView); 
             // Step 6: Add the board elements
             addTask(() -> runCreateBoardElements(controller)); 
             // Step 7: Refresh the board
@@ -228,21 +222,17 @@ public class Deadwood extends Application{
         }
     }
 
-
-
     /**
      * Initializes the GameView in GUI mode.
      * 
-     * @param primaryStage
-     * @return the initialized view
+     * @param primaryStage the primary stage for the application
      */
     private void initializeView(Stage primaryStage) {
-        GameGUIView view = null;
         try {
-            view = GameGUIView.getInstance();
+            GameGUIView view = GameGUIView.getInstance();
             view.setStage(primaryStage);
         } catch (Exception e) {
-            System.err.println("Error initializing GameGUIView: " + 
+            System.err.println("Error initializing GameGUIView: " +
                                e.getMessage());
             e.printStackTrace();
         }
@@ -252,11 +242,10 @@ public class Deadwood extends Application{
      * Run the getNumPlayers method on the JavaFX application thread.
      */
     private void runGetNumPlayers() {
-        CompletableFuture<Integer> numPlayersFuture = 
-            GameGUIView.getInstance().getNumPlayersFuture();
-        numPlayersFuture.thenAccept(players -> {
-            numPlayers = players; // Set the shared variable
-            processNextTask(); // Continue processing the queue
+        // Get the number of players
+        GameGUIView.getInstance().getNumPlayersFuture().thenAccept(players -> {
+            this.numPlayers = players;
+            processNextTask();
         });
     }
 
@@ -268,7 +257,7 @@ public class Deadwood extends Application{
         GameModel.getInstance().registerObserver(GameGUIView.getInstance());
         // Initialize the model
         GameModel.getInstance().initModel(
-            numPlayers, 
+            this.numPlayers,
             config.getProperty("boardXMLFilePath"),
             config.getProperty("cardsXMLFilePath")
         );
@@ -292,7 +281,6 @@ public class Deadwood extends Application{
 
     /**
      * Run the showBoard method on the JavaFX application thread.
-     * @param guiView
      */
     private void runShowBoard() {
         GameGUIView.getInstance().showBoard();
@@ -301,7 +289,6 @@ public class Deadwood extends Application{
 
     /**
      * Run the refreshView method on the JavaFX application thread.
-     * @param guiView
      */
     private void runRefreshView() {
         GameGUIView.getInstance().refreshView();
@@ -311,7 +298,7 @@ public class Deadwood extends Application{
     /**
      * Run the createBoardElements method on the JavaFX application thread.
      * 
-     * @param controller
+     * @param controller the game controller
      */
     private void runCreateBoardElements(GameController controller) {
         controller.createBoardElements();
@@ -322,30 +309,25 @@ public class Deadwood extends Application{
     /**
      * Run the playDays method on the JavaFX application thread.
      * 
-     * @param controller
+     * @param controller the game controller
      */
     public void runPlayDays(GameController controller) {
-        CompletableFuture<Void> playDaysFuture = 
-            CompletableFuture.runAsync(() -> {
-                controller.getPlayDaysFuture();
-            });
-        playDaysFuture.join(); // block current thread until playDays completes
+        controller.playDays();
         processNextTask(); // Continue to the next task
     }
 
     /**
      * Run the scoreGame method on the JavaFX application thread.
      * 
-     * @param controller
+     * @param controller the game controller
      */
     private void runScoreGame(GameController controller) {
         controller.scoreGame();
-        System.out.println("scoreGame method should be running now.");
     }
     
     /**
      * Add a new task to the JavaFX application thread queue
-     * @param task
+     * @param task the task to add
      */
     private void addTask(Runnable task) {
         taskQueue.offer(task);
