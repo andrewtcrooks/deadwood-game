@@ -5,6 +5,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollBar;
 import javafx.util.Callback;
@@ -245,18 +246,18 @@ public class PlayerStatsManager {
      *
      * @param index The index of the row to be highlighted (0-based index).
      */
+    @SuppressWarnings("unchecked")
     public void highlightRow(int index) {
-        playerStatsTable.setRowFactory(tv -> {
-            TableRow<PlayerStat> row = new TableRow<>();
-            row.itemProperty().addListener((observable, oldValue, newValue) -> {
-                if (row.getIndex() == index) {
-                    row.setStyle("-fx-background-color: #808080;"); // gray
+        for (Node node : playerStatsTable.lookupAll(".table-row-cell")) {
+            if (node instanceof TableRow) {
+                TableRow<PlayerStat> row = (TableRow<PlayerStat>) node;
+                if (row.getIndex() == (index - 1)) {
+                    row.setStyle("-fx-background-color: #AAAAAA;"); // gray
                 } else {
                     row.setStyle(""); // reset to default style
                 }
-            });
-            return row;
-        });
+            }
+        }
     }
 
 }
