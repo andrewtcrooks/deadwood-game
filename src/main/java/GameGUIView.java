@@ -79,7 +79,10 @@ public class GameGUIView implements GameView {
 
     private static final int DICE_HEIGHT = 40;
     private static final int DICE_WIDTH = 40;
-
+    private static final int DICE_LOCATION_ROLE_OFFSET_X = 10;
+    private static final int DICE_LOCATION_ROLE_OFFSET_Y = 10;
+    private static final int DICE_SCENECARD_ROLE_OFFSET_X = 10;
+    private static final int DICE_SCENECARD_ROLE_OFFSET_Y = 10;
     private static final int SHOT_HEIGHT = 42;
     private static final int SHOT_WIDTH = 42;
 
@@ -265,6 +268,9 @@ public class GameGUIView implements GameView {
                 break;
             case "UPDATE_ALL_PLAYER_STATS":
                 updateAllPlayerStats(eventData);
+                break;
+            case "HIGHLIGHT_PLAYER_ROW":
+                playerStatsManager.highlightRow((int) eventData);
                 break;
             case "ADD_BUTTON":
                 addButton(eventData);
@@ -519,7 +525,7 @@ public class GameGUIView implements GameView {
 
         // } else 
         
-        if ( command == "END"){
+        if ( command.equals("END") ){
             // Get the button area from the playerDiceLabel
             Label diceLabel = this.playerDiceLabels.get(info);
             Area endArea = new Area(
@@ -536,7 +542,7 @@ public class GameGUIView implements GameView {
                 endArea,
                 tooltipText
             ); 
-        } else if (command == "WORK"){ // Coomand was WORK
+        } else if ( command.equals("WORK") ){ // Coomand was WORK
 
             boolean onCard = (boolean) data.get("onCard");
             Area locationArea = (Area) data.get("locationArea");
@@ -603,10 +609,12 @@ public class GameGUIView implements GameView {
     private void handlePlayerMove(Object eventData) {
 
         // Get the x and y coords of the new location and the player id
+        String command = (String) ((Map<String, Object>) eventData).get("command");
         int x = (int) ((Map<String, Object>) eventData).get("locationX");
         int y = (int) ((Map<String, Object>) eventData).get("locationY");
         int playerID = 
             (int) ((Map<String, Object>) eventData).get("playerID");
+        
         // Get the player label
         String key = String.valueOf(playerID);
         Label playerLabel = 
@@ -614,15 +622,29 @@ public class GameGUIView implements GameView {
 
         // Update the dice label location for the player
         if (playerLabel != null) {
-            int adjustedY = y + CARD_HEIGHT;
-            if (playerID >= 5 && playerID <= 8) {
-                adjustedY -= CARD_HEIGHT;
+            if (command.equals("MOVE")) {
+
+                int adjustedY = y + CARD_HEIGHT;
+                if (playerID >= 5 && playerID <= 8) {
+                    adjustedY -= CARD_HEIGHT;
+                }
+                movePlayerDieToCoords(
+                    playerLabel,
+                    x + BOARD_OFFSET + 40 * ((playerID - 1) % 4),
+                    adjustedY
+                );
+            } else if (command.equals("WORK")) {
+                movePlayerDieToCoords(
+                    playerLabel,
+                    x + BOARD_OFFSET,
+                    y
+                );
+            } else if(command.equals("Trailer")){
+
+            } else if (command.equals("Casting Office")){
+
             }
-            movePlayerDieToCoords(
-                playerLabel,
-                x + BOARD_OFFSET + 40 * ((playerID - 1) % 4),
-                adjustedY
-            );
+
         }
 
     }
@@ -665,8 +687,6 @@ public class GameGUIView implements GameView {
      * @param filename The filename of the card
      */
     private void moveCardToLocation(int x, int y, String filename) {
-        System.out.println("Adding card " + filename + " to location: " + x + ", " + y);
-
         // Load the card image
         Image cardImage = new Image(getClass().getClassLoader().getResourceAsStream(filename));
         // Create the card view
