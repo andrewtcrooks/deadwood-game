@@ -4,23 +4,24 @@ import java.util.*;
  * Represents a shuffled deck of SceneCard objects.
  */
 public class Deck {
+    // create a list for undrawn cards
     private List<SceneCard> undrawnCards;
     // create an empty list for drawn cards
     private List<SceneCard> drawnCards = new ArrayList<>();
-    // create an empty list for discarded cards
-    private List<SceneCard> discardedCards = new ArrayList<>();
 
 
     /**
      * Initializes a new shuffled Deck with SceneCard objects created from the data in the XML file at the given path.
      *
-     * @param xmlFilePath The path to the XML file containing the card data.
+     * @param cards The list of SceneCard objects to populate the deck with.
      */
     public Deck(List<SceneCard> cards) {
-        // populate the list of undrawn cards
-        this.undrawnCards = cards;
+        // populate the deck of undrawn cards
+        this.undrawnCards = new ArrayList<>(cards);
         // shuffle the deck of undrawn cards
         this.shuffle();
+        // populate the list of drawn cards
+        this.drawnCards = new ArrayList<>();
     }
 
     /**
@@ -59,19 +60,17 @@ public class Deck {
     
     /**
      * Discards the given SceneCard.
-     * @param card the SceneCard to discard
+     * @param sceneCardID the ID of the SceneCard to discard
      */
     public void discardCard(int sceneCardID) {
         SceneCard card = getDrawnCard(sceneCardID);
         // remove the card from the drawn deck
         this.drawnCards.remove(card);
-        // add the card to the discarded deck
-        this.discardedCards.add(card);
     }
 
     /**
      * Returns the specific drawn SceneCard with the given ID
-     * @param sceneCardID
+     * @param sceneCardID the ID of the SceneCard to return
      * @return the SceneCard with the given ID
      */
     public SceneCard getDrawnCard(int sceneCardID) {
@@ -91,6 +90,5 @@ public class Deck {
     public void discardLastDrawnCard() {
         SceneCard lastCard = this.drawnCards.get(0);
         this.drawnCards.remove(lastCard);
-        this.discardedCards.add(lastCard);
     }
 }
