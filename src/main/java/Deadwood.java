@@ -2,7 +2,6 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedList;
@@ -208,7 +207,7 @@ public class Deadwood extends Application{
             // Step 8: Play days
             addTask(() -> runPlayDays(controller)); 
             // Step 9: Score game
-            addTask(() -> runScoreGame(controller)); 
+            // addTask(() -> runScoreGame(controller)); 
 
             // Start processing the tasks in the queue
             processNextTask();
@@ -276,7 +275,8 @@ public class Deadwood extends Application{
             config.getProperty("boardXMLFilePath"), 
             config.getProperty("cardsXMLFilePath")
         );
-        processNextTask(); // Continue to the next task
+        // Continue to the next task
+        processNextTask();
     }
 
     /**
@@ -312,18 +312,19 @@ public class Deadwood extends Application{
      * @param controller the game controller
      */
     public void runPlayDays(GameController controller) {
-        controller.playDays();
-        processNextTask(); // Continue to the next task
+        controller.playDaysGUI().thenRun(() -> {
+            Platform.runLater(controller::scoreGame);  // GUI-specific end
+        });
     }
 
-    /**
-     * Run the scoreGame method on the JavaFX application thread.
-     * 
-     * @param controller the game controller
-     */
-    private void runScoreGame(GameController controller) {
-        controller.scoreGame();
-    }
+    // /**
+    //  * Run the scoreGame method on the JavaFX application thread.
+    //  * 
+    //  * @param controller the game controller
+    //  */
+    // private void runScoreGame(GameController controller) {
+    //     controller.scoreGame();
+    // }
     
     /**
      * Add a new task to the JavaFX application thread queue
