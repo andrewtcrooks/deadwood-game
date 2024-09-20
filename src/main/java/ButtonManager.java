@@ -1,18 +1,17 @@
+import javafx.scene.Group;
 import javafx.scene.control.Button;
-import javafx.scene.layout.Pane;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.Tooltip;
 import java.util.Map;
-
-
-// import java.util.Arrays;
+import java.util.function.BiConsumer;
 import java.util.HashMap;
 
 /**
  * Manages the buttons for the game.
  */
 public class ButtonManager {
-    private GameActionListener gameActionListener;
-    private Map<Button, Runnable> buttonActions = new HashMap<>();
+    // private final Map<Button, Runnable> buttonActions = new HashMap<>();
+    private final Map<Area, Button> areaButtons = new HashMap<>();
+    private BiConsumer<String, Object> onButtonClick;
 
 
     /**
@@ -20,80 +19,110 @@ public class ButtonManager {
      * 
      * @param gameActionListener the game action listener
      */
-    public ButtonManager(GameActionListener gameActionListener) {
-        super();
-        this.gameActionListener = gameActionListener;
+    public ButtonManager() {
     }
 
     /**
      * Creates a button.
      * 
-     * @param text the text of the button
-     * @param xPos the x-coordinate of the button
-     * @param yPos the y-coordinate of the button
-     * @param WIDTH the width of the button
-     * @param HEIGHT the height of the button
-     * @param pane the pane to which the button will be added
+     * @param group the group
+     * @param command the command
+     * @param data the data
+     * @param area the area
+     * @param tooltipText the tooltip text
+     *
      * @return the button
      */
-    public Button createButton(
-        String text, 
-        int xPos, 
-        int yPos, 
-        int WIDTH, 
-        int HEIGHT,
-        Pane pane
+    @SuppressWarnings("unchecked")
+    public void createButton(
+        Group group, 
+        String command,
+        Object data,
+        Area area,
+        String tooltipText
     ) {
-        // Set button properties
-        Button button = new Button(text);
-        button.setStyle("-fx-background-color: white;");
-        button.setLayoutX(xPos);
-        button.setLayoutY(yPos);
-        button.setMinWidth(WIDTH);
-        button.setMinHeight(HEIGHT);
-        
-        // Add event handler to the button
-        button.addEventHandler(
-            MouseEvent.MOUSE_CLICKED, 
-            new BoardMouseListener(this)
-        );
-        
-        // Add the button to the provided pane
-        pane.getChildren().add(button);
-        return button;
-    }
 
-    /**
-     * Gets the action for the button.
-     * 
-     * @param button the button
-     * @return the action for the button
-     */
-    public Runnable getAction(Button button) {
-        String command = (String) button.getUserData(); // Using setUserData/getUserData in JavaFX
-        if ("MOVE".equals(command)) {
-            return () -> this.gameActionListener.onMove((String) button.getUserData());
-        } else if ("WORK".equals(command)) {
-            return () -> this.gameActionListener.onWork();
-        } else if ("END".equals(command)) {
-            return () -> this.gameActionListener.onEnd();
-        } else {
-            return () -> this.gameActionListener.onSelectNeighbor((String) button.getUserData());
+        // GameGUIView.getInstance().showMessage("Button added at: X = " + area.getX() + ", Y = " + area.getY());
+        
+        // Create a new clickable area button with command as label
+        Button button = new Button(command);
+        
+        // Set the associated data type
+        if (command.equals("MOVE")){
+            button.setUserData((String) data);
         }
-    }
+        else if (command.equals("WORK")){
+            GameGUIView.getInstance().showMessage("Button added at: X = " + area.getX() + ", Y = " + area.getY() + " with width = " + area.getW() + " and height = " + area.getH());
+            button.setUserData((String) data);
+        }
+        else if (command.equals("UPGRADE")){
+            button.setUserData((Map<String, Object>) data);
+        }
+        
+        // Set the tooltip text
+        button.setTooltip(new Tooltip(tooltipText)); 
 
-    // TODO: fix this it seems off
-    /**
-     * Associates a command and data with a button.
-     * 
-     * @param button the button to associate
-     * @param command the command string
-     * @param data the data associated with the command
-     */
-    public void setButtonAction(Button button, String command, Object data) {
-        button.setUserData(data); // Store data in the button
-        // Add a mapping to the action for the button
-        buttonActions.put(button, getAction(button));
+        // Set the size and position of the button
+        button.setLayoutX(area.getX());
+        button.setLayoutY(area.getY());
+        button.setPrefWidth(area.getW());
+        button.setPrefHeight(area.getH());
+
+        // Set button appearance to be mostly transparent with a visible border
+        button.setStyle(
+            "-fx-background-color: rgba(255, 192, 203, 0.5); " +  // Pink with transparency
+            "-fx-border-color: pink; " +                         // Pink border
+            "-fx-border-width: 3px;" +
+            "-fx-text-fill: transparent;" // Make the text invisible
+        );
+
+        // Add action to button
+        button.setOnMouseClicked(event -> {
+            // if (command.equals("MOVE")) {
+            //     gameActionListener.onMove((String) data);
+            // } else if (command.equals("WORK")) {
+            //     gameActionListener.onWork((String) data);
+            // } else if (command.equals("ACT")) {
+            //     gameActionListener.onAct();
+            // } else if (command.equals("REHEARSE")) {
+            //     gameActionListener.onRehearse();
+            // } else if (command.equals("UPGRADE")) {
+            //     gameActionListener.onUpgrade((Map<String, Object>) data);
+            // } else if (command.equals("END")) {
+            //     gameActionListener.onEnd();
+            // }
+            // Notify any additional listeners through the callback
+            if (onButtonClick != null) {
+                onButtonClick.accept(command, data);
+            }
+        });
+
+        // Add button to the group
+        group.getChildren().add(button);
+    
+        // Add the button to the map
+        areaButtons.put(area, button);
     }
     
+    /**
+     * Set a callback for when a button is clicked.
+     * 
+     * @param onButtonClick a BiConsumer that handles command and data when clicked
+     */
+    public void setOnButtonClick(BiConsumer<String, Object> onButtonClick) {
+        this.onButtonClick = onButtonClick;
+    }
+
+    /**
+     * Removes all clickable areas from the pane.
+     * 
+     * @param pane the pane from which buttons will be removed
+     */
+    public void removeClickableAreas(Group group) {
+        for (Button button : areaButtons.values()) {
+            group.getChildren().remove(button);
+        }
+        areaButtons.clear();
+    }
+
 }
