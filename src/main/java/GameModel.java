@@ -174,7 +174,7 @@ public class GameModel implements Subject {
         Location office = new Location(
             "Casting Office", 
             office_neighbors, 
-            new Area(0,0,0,0), 
+            new Area(21, 478, 115, 115), 
             Arrays.asList(), 
             Arrays.asList()
         );
