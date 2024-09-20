@@ -16,8 +16,14 @@
             "name": "Debug CLI",
             "hostName": "localhost",
             "port": 5005,
-            "preLaunchTask": "gradleRunDebugCLI",
-            "postDebugTask": "killGradleProcess"
-        }
+            "preLaunchTask": "gradleRunDebugCLI"
+        },
+        {
+            "type": "java",
+            "request": "attach",
+            "name": "Debug CLI Help",
+            "hostName": "localhost",
+            "port": 5005,
+            "preLaunchTask": "gradleRunDebugCLIhelp"        }
     ]
 }
