@@ -105,13 +105,4 @@ public class GameCLIView implements GameView {
         // There is nothing to update in CLI View so this does nothing
     }
 
-    /**
-     * Sets the game action listener.
-     * 
-     * @param listener The game action listener
-     */
-    public void setGameActionListener(GameActionListener listener) {
-        // There is no game action listener in CLI View so this does nothing
-    }
-
 }
