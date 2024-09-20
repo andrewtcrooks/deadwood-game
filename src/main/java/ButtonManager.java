@@ -41,10 +41,7 @@ public class ButtonManager {
         Object data,
         Area area,
         String tooltipText
-    ) {
-
-        // GameGUIView.getInstance().showMessage("Button added at: X = " + area.getX() + ", Y = " + area.getY());
-        
+    ) {        
         // Create a new clickable area button with command as label
         Button button = new Button(command);
         
@@ -53,7 +50,6 @@ public class ButtonManager {
             button.setUserData((String) data);
         }
         else if (command.equals("WORK")){
-            GameGUIView.getInstance().showMessage("Button added at: X = " + area.getX() + ", Y = " + area.getY() + " with width = " + area.getW() + " and height = " + area.getH());
             button.setUserData((String) data);
         }
         else if (command.equals("UPGRADE")){
@@ -90,9 +86,6 @@ public class ButtonManager {
     
         // Add the button to the list of buttons
         buttons.add(button);
-
-        GameGUIView.getInstance().showMessage("Button added: Command = " + command + ", Total buttons = " + buttons.size());
-
     }
     
     /**
