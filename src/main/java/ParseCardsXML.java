@@ -92,18 +92,6 @@ public class ParseCardsXML extends AbstractParseXML {
     }
 
     /**
-     * Parses the scene ID from the given Element object.
-     * 
-     * @param cardElement
-     * @return the parsed scene ID as an integer
-     */
-    private int parseSceneID(Element cardElement) {
-        Element sceneElement = (Element) cardElement.getElementsByTagName("scene").item(0);
-        int id = Integer.parseInt(sceneElement.getAttribute("number"));
-        return id;
-    }
-
-    /**
      * Parses the scene description from the given Element object.
      * 
      * @param cardElement
