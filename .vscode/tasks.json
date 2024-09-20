@@ -42,8 +42,7 @@
                 "run",
                 "-Pdebug",
                 "--daemon",
-                "--parallel",
-                "--quiet"
+                "--parallel"
             ],
             "problemMatcher": [
                 {
@@ -79,8 +78,45 @@
                 "-Pdebug",
                 "--daemon",
                 "--parallel",
-                "--quiet",
-                "--args='--cli'"
+                "--args=--cli"
+            ],
+            "problemMatcher": [
+                {
+                    "owner": "custom",
+                    "pattern": [
+                        {
+                            "regexp": ".",
+                            "file": 1,
+                            "location": 2,
+                            "message": 3
+                        }
+                    ],
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": ".",
+                        "endsPattern": ".*Listening for transport dt_socket at address: 5005.*"
+                    }
+                }
+            ],
+            "isBackground": true,
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": "gradleBuild"
+        },
+        {
+            "label": "gradleRunDebugCLIhelp",
+            "type": "shell",
+            "command": "./gradlew",
+            "args": [
+                "run",
+                "-Pdebug",
+                "--daemon",
+                "--parallel",
+                "--warning-mode",
+                "all",
+                "--args=--help"
             ],
             "problemMatcher": [
                 {
