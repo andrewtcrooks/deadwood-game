@@ -58,17 +58,17 @@ public class ParseCardsXML extends AbstractParseXML {
         // Parse name
         String title = parseName(cardElement);
         // Parse image
-        String image = parseImage(cardElement);
+        String imageFilename = parseImage(cardElement);
         // Parse budget
         int budget = parseBudget(cardElement);
-        // Parse scene ID
-        int id = parseSceneID(cardElement);
+        // Parse filename ID since the scene ID is not unique
+        int id = Integer.parseInt(imageFilename.substring(0, 2));
         // Parse scene description
         String desc = parseSceneDescription(cardElement);
         // Parse roles
         List<Role> roles = parseRoles(cardElement, true);
         // Create a new SceneCard object with the parsed attributes
-        return new SceneCard(title, image, budget, id, desc, roles);
+        return new SceneCard(title, imageFilename, budget, id, desc, roles);
     }
 
     /**
