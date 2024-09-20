@@ -6,5 +6,5 @@ public interface GameView extends Observer{
     public int getNumPlayers();
     public void showMessage(String message);
     public void update(String eventType, Object eventData);
-    public void setGameActionListener(GameActionListener listener);
+    // public void setGameActionListener(GameActionListener listener);
 }
