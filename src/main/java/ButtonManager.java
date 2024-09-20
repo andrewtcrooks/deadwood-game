@@ -3,14 +3,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Manages the buttons for the game.
  */
 public class ButtonManager {
     // private final Map<Button, Runnable> buttonActions = new HashMap<>();
-    private final Map<Area, Button> areaButtons = new HashMap<>();
+    private final List<Button> buttons = new ArrayList<>();
     private BiConsumer<String, Object> onButtonClick;
 
 
@@ -78,19 +80,6 @@ public class ButtonManager {
 
         // Add action to button
         button.setOnMouseClicked(event -> {
-            // if (command.equals("MOVE")) {
-            //     gameActionListener.onMove((String) data);
-            // } else if (command.equals("WORK")) {
-            //     gameActionListener.onWork((String) data);
-            // } else if (command.equals("ACT")) {
-            //     gameActionListener.onAct();
-            // } else if (command.equals("REHEARSE")) {
-            //     gameActionListener.onRehearse();
-            // } else if (command.equals("UPGRADE")) {
-            //     gameActionListener.onUpgrade((Map<String, Object>) data);
-            // } else if (command.equals("END")) {
-            //     gameActionListener.onEnd();
-            // }
             // Notify any additional listeners through the callback
             if (onButtonClick != null) {
                 onButtonClick.accept(command, data);
@@ -100,8 +89,11 @@ public class ButtonManager {
         // Add button to the group
         group.getChildren().add(button);
     
-        // Add the button to the map
-        areaButtons.put(area, button);
+        // Add the button to the list of buttons
+        buttons.add(button);
+
+        GameGUIView.getInstance().showMessage("Button added: Command = " + command + ", Total buttons = " + buttons.size());
+
     }
     
     /**
@@ -119,10 +111,10 @@ public class ButtonManager {
      * @param pane the pane from which buttons will be removed
      */
     public void removeClickableAreas(Group group) {
-        for (Button button : areaButtons.values()) {
+        for (Button button : buttons) {
             group.getChildren().remove(button);
         }
-        areaButtons.clear();
+        buttons.clear();
     }
 
 }
