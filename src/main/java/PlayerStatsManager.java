@@ -9,7 +9,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollBar;
 import javafx.util.Callback;
 import javafx.scene.control.TableCell;
 
@@ -199,31 +198,6 @@ public class PlayerStatsManager {
         playerStatsTable.setMinHeight(totalHeight);
         playerStatsTable.setMaxHeight(totalHeight);
     }
-
-    // /**
-    //  * Disables the scroll bars of the given TableView.
-    //  *
-    //  * @param tableView The TableView whose scroll bars should be disabled.
-    //  */
-    // private void disableScrollBars(TableView<?> tableView) {
-    //     tableView.skinProperty().addListener((obs, oldSkin, newSkin) -> {
-    //         if (newSkin != null) {
-    //             // Disable horizontal scroll bar
-    //             ScrollBar hBar = (ScrollBar) tableView.lookup(".scroll-bar:horizontal");
-    //             if (hBar != null) {
-    //                 hBar.setManaged(false);
-    //                 hBar.setVisible(false);
-    //             }
-
-    //             // Disable vertical scroll bar
-    //             ScrollBar vBar = (ScrollBar) tableView.lookup(".scroll-bar:vertical");
-    //             if (vBar != null) {
-    //                 vBar.setManaged(false);
-    //                 vBar.setVisible(false);
-    //             }
-    //         }
-    //     });
-    // }
     
     /**
      * Updates the stats for a single player in the table.
