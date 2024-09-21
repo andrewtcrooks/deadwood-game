@@ -98,7 +98,7 @@ public class PlayerActionAct implements PlayerAction {
         if (sceneCard.getRoles().stream().anyMatch(r -> r.getName().equals(board.getPlayerRole(player.getID())))) {
             player.addCredits(2);
         } else if (board.getPlayerRole(player.getID()) != null) { //check if player has a role (that must be off card)
-            player.addMoney(1);
+            player.addDollars(1);
             player.addCredits(1);
         }
     }
@@ -118,7 +118,7 @@ public class PlayerActionAct implements PlayerAction {
         SceneCard sceneCard = deck.getDrawnCard(sceneCardID);
         // Check if the player is off-card
         if (!sceneCard.getRoles().stream().anyMatch(r -> r.getName().equals(board.getPlayerRole(player.getID())))) {
-            player.addMoney(1);
+            player.addDollars(1);
         }
     }
 

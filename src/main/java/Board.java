@@ -311,7 +311,7 @@ public class Board {
         // Pay out the on card players an amount equal to the dice roll, distributed in a round-robin fashion
         Player playerToPay = activePlayer;
         for (int i = 0; i < numDice; i++) {
-            playerToPay.addMoney(diceRolls.get(i));
+            playerToPay.addDollars(diceRolls.get(i));
             playerToPay = playersOnCard.get((playersOnCard.indexOf(playerToPay) + 1) % numPlayersOnCard);
         }
         // Pay out the off card players an amount equal to the rank of their role
@@ -321,7 +321,7 @@ public class Board {
                 .filter(r -> r.getName().equals(getPlayerRole(player.getID())))
                 .findFirst()
                 .orElse(null);
-            player.addMoney(role.getRank());
+            player.addDollars(role.getRank());
         }
     }
 

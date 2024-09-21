@@ -247,6 +247,7 @@ public class GameGUIView implements GameView {
      * @param eventType The type of event
      * @param eventData The event data
      */
+    @SuppressWarnings("unchecked")
     @Override
     public void update(String eventType, Object eventData) {
         switch (eventType) {
@@ -255,31 +256,31 @@ public class GameGUIView implements GameView {
                 break;
             case "INIT_DICE_LABELS":
                 showMessage("Welcome to Deadwood!");
-                initDiceLabels(eventData);
+                initDiceLabels((Map<Integer, Map<String, Integer>>) eventData);
                 break;
             case "ADD_CARD":
-                addCard(eventData);
+                addCard((Map<String, Integer>) eventData);
                 break;
             case "ADD_CARD_BACKS":
-                addCardBack(eventData);
+                addCardBack((Map<String, Integer>) eventData);
                 break;
             case "CREATE_PLAYER_STATS_TABLE":
-                createPlayerStats();
+                createPlayerStats((List<Player>) eventData);
                 break;
-            case "UPDATE_ALL_PLAYER_STATS":
-                updateAllPlayerStats(eventData);
+            case "UPDATE_PLAYER_STAT":
+                updatePlayerStat(eventData);
                 break;
             case "HIGHLIGHT_PLAYER_ROW":
                 playerStatsManager.highlightRow((int) eventData);
                 break;
             case "ADD_BUTTON":
-                addButton(eventData);
+                addButton((Map<String,Object>) eventData);
                 break;
             case "REMOVE_BUTTONS":
                 buttonManager.removeClickableAreas(this.rootGroup);
                 break;
             case "PLAYER_MOVE":
-                handlePlayerMove(eventData);
+                handlePlayerMove((Map<String, Object>) eventData);
                 break;
             case "LOAD_GAME":
                 handleLoadGame(eventData);
@@ -353,11 +354,7 @@ public class GameGUIView implements GameView {
      * 
      * @param eventData number of players (int)
      */
-    @SuppressWarnings("unchecked")
-    private void initDiceLabels(Object eventData) {
-        // Cast eventData to Map<Integer, Map<String, Integer>>
-        Map<Integer, Map<String, Integer>> playerData = 
-            (Map<Integer, Map<String, Integer>>) eventData;
+    private void initDiceLabels(Map<Integer, Map<String, Integer>> playerData) {
         // numPlayers is the size of the playerData map
         int numPlayers = playerData.size();
         // Determine initial dice rank based on number of players
@@ -428,8 +425,7 @@ public class GameGUIView implements GameView {
      * @param eventData The event data
      */
     @SuppressWarnings("unchecked")
-    public void addCard(Object eventData) {
-        Map<String, Integer> addCard = (Map<String, Integer>) eventData;
+    public void addCard(Map<String, Integer> addCard) {
         int cardID = addCard.get("sceneCardID");
         String cardName = String.format("cards/%02d.png", cardID);
         int x = addCard.get("locationX");
@@ -445,9 +441,7 @@ public class GameGUIView implements GameView {
      * @param eventData The event data
      */
     @SuppressWarnings("unchecked")
-    private void addCardBack(Object eventData) {
-        // Add card backs to GUI board
-        Map<String, Integer> addCardBack = (Map<String, Integer>) eventData;
+    private void addCardBack(Map<String, Integer> addCardBack) {
         int x = addCardBack.get("locationX");
         int y = addCardBack.get("locationY");
         // Add offset to x to compensate for left sidebar
@@ -459,7 +453,7 @@ public class GameGUIView implements GameView {
      * Create player stats table.
      * 
      */
-    private void createPlayerStats() {
+    private void createPlayerStats(List<Player> players) {
         playerStatsManager.createPlayerStatsTable(
             rootGroup, 
             playerDiceLabels,
@@ -470,31 +464,31 @@ public class GameGUIView implements GameView {
             PLAYER_STATS_Y,
             PLAYER_STATS_WIDTH
         );
+
+        // Add the player data to the table
+        playerStatsManager.addPlayerData(players);
     }
 
     /**
-     * Update player stats.
+     * Update a single player's stats.
      * 
-     * @param eventData The event data
+     * @param playerID The ID of the player to update.
+     * @param dollars New value for dollars.
+     * @param credits New value for credits.
+     * @param rehearsalTokens New value for rehearsal tokens.
      */
-    @SuppressWarnings("unchecked")
-    public void updateAllPlayerStats(Object eventData) {
-        Map<Integer, List<Integer>> playerData = 
-            (Map<Integer, List<Integer>>) eventData;
-        // update player stats
-        for (Map.Entry<Integer, List<Integer>> entry : playerData.entrySet()) {
-            Integer playerID = entry.getKey();
-            List<Integer> playerStats = entry.getValue();
-            Integer dollars = playerStats.get(0);
-            Integer credits = playerStats.get(1);
-            Integer rehearsalTokens = playerStats.get(2);
-            playerStatsManager.updatePlayerStat(
-                playerID, 
-                dollars, 
-                credits, 
-                rehearsalTokens
-            );
-        }
+    public void updatePlayerStat(Object eventData) {
+        Map<String, Object> playerData = (Map<String, Object>) eventData;
+        int playerID = (Integer) playerData.get("playerID");
+        int dollars = (Integer) playerData.get("dollars");
+        int credits = (Integer) playerData.get("credits");
+        int rehearsalTokens = (Integer) playerData.get("tokens");
+        playerStatsManager.updatePlayerStat(
+            playerID, 
+            dollars, 
+            credits, 
+            rehearsalTokens
+        );
     }
 
     /**
@@ -503,11 +497,10 @@ public class GameGUIView implements GameView {
      * @param eventData The event data
      */
     @SuppressWarnings("unchecked")    
-    public void addButton(Object eventData) {
-        Map<String,Object> data = (Map<String,Object>) eventData;
-        String command = data.get("command").toString();
-        String info = data.get("data").toString();
-        Area area = (Area) data.get("area");
+    public void addButton(Map<String,Object> buttonData) {
+        String command = buttonData.get("command").toString();
+        String info = buttonData.get("data").toString();
+        Area area = (Area) buttonData.get("area");
         String tooltipText = 
             command.substring(0, 1).toUpperCase() +
             command.substring(1).toLowerCase();
@@ -544,8 +537,8 @@ public class GameGUIView implements GameView {
             ); 
         } else if ( command.equals("WORK") ){ // Coomand was WORK
 
-            boolean onCard = (boolean) data.get("onCard");
-            Area locationArea = (Area) data.get("locationArea");
+            boolean onCard = (boolean) buttonData.get("onCard");
+            Area locationArea = (Area) buttonData.get("locationArea");
 
             if (onCard){ // Role is OnCard and needs location 
                 // If onCard the role area needs to have the location x and y 
@@ -606,14 +599,13 @@ public class GameGUIView implements GameView {
      * @param eventData The event data
      */
     @SuppressWarnings("unchecked")
-    private void handlePlayerMove(Object eventData) {
+    private void handlePlayerMove(Map<String, Object> moveData) {
 
         // Get the x and y coords of the new location and the player id
-        String command = (String) ((Map<String, Object>) eventData).get("command");
-        int x = (int) ((Map<String, Object>) eventData).get("locationX");
-        int y = (int) ((Map<String, Object>) eventData).get("locationY");
-        int playerID = 
-            (int) ((Map<String, Object>) eventData).get("playerID");
+        String command = (String) moveData.get("command");
+        int x = (int) moveData.get("locationX");
+        int y = (int) moveData.get("locationY");
+        int playerID = (int) moveData.get("playerID");
         
         // Get the player label
         String key = String.valueOf(playerID);

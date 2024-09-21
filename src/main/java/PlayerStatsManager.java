@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class PlayerStatsManager {
 
-    private final TableView<PlayerStat> playerStatsTable;
+    private final TableView<Player> playerStatsTable;
 
     public PlayerStatsManager() {
         this.playerStatsTable = new TableView<>();
@@ -78,11 +78,11 @@ public class PlayerStatsManager {
     @SuppressWarnings("unchecked")
     private void setupTableColumns(int diceColumnWidth, int tableWidth, Map<String, Label> playerLabels) {
         // Create the "Player" label column (icon column with custom width)
-        TableColumn<PlayerStat, Label> labelColumn = new TableColumn<>("Player");
-        labelColumn.setCellFactory(new Callback<TableColumn<PlayerStat, Label>, TableCell<PlayerStat, Label>>() {
+        TableColumn<Player, Label> labelColumn = new TableColumn<>("Player");
+        labelColumn.setCellFactory(new Callback<TableColumn<Player, Label>, TableCell<Player, Label>>() {
             @Override
-            public TableCell<PlayerStat, Label> call(TableColumn<PlayerStat, Label> param) {
-                TableCell<PlayerStat, Label> cell = new TableCell<PlayerStat, Label>() {
+            public TableCell<Player, Label> call(TableColumn<Player, Label> param) {
+                TableCell<Player, Label> cell = new TableCell<Player, Label>() {
                     @Override
                     protected void updateItem(Label item, boolean empty) {
                         super.updateItem(item, empty);
@@ -114,9 +114,9 @@ public class PlayerStatsManager {
         int remainingWidth = tableWidth - diceColumnWidth;
 
         // Create the "Dollars" column and center the content
-        TableColumn<PlayerStat, Integer> dollarsColumn = new TableColumn<>("Dollars");
+        TableColumn<Player, Integer> dollarsColumn = new TableColumn<>("Dollars");
         dollarsColumn.setCellValueFactory(new PropertyValueFactory<>("dollars"));
-        dollarsColumn.setCellFactory(column -> new TableCell<PlayerStat, Integer>() {
+        dollarsColumn.setCellFactory(column -> new TableCell<Player, Integer>() {
             @Override
             protected void updateItem(Integer item, boolean empty) {
                 super.updateItem(item, empty);
@@ -131,9 +131,9 @@ public class PlayerStatsManager {
         dollarsColumn.setPrefWidth(remainingWidth * 0.33); // 33% of remaining width
 
         // Create the "Credits" column and center the content
-        TableColumn<PlayerStat, Integer> creditsColumn = new TableColumn<>("Credits");
+        TableColumn<Player, Integer> creditsColumn = new TableColumn<>("Credits");
         creditsColumn.setCellValueFactory(new PropertyValueFactory<>("credits"));
-        creditsColumn.setCellFactory(column -> new TableCell<PlayerStat, Integer>() {
+        creditsColumn.setCellFactory(column -> new TableCell<Player, Integer>() {
             @Override
             protected void updateItem(Integer item, boolean empty) {
                 super.updateItem(item, empty);
@@ -148,9 +148,9 @@ public class PlayerStatsManager {
         creditsColumn.setPrefWidth(remainingWidth * 0.33); // 33% of remaining width
 
         // Create the "Tokens" column and center the content
-        TableColumn<PlayerStat, Integer> tokensColumn = new TableColumn<>("Tokens");
+        TableColumn<Player, Integer> tokensColumn = new TableColumn<>("Tokens");
         tokensColumn.setCellValueFactory(new PropertyValueFactory<>("tokens"));
-        tokensColumn.setCellFactory(column -> new TableCell<PlayerStat, Integer>() {
+        tokensColumn.setCellFactory(column -> new TableCell<Player, Integer>() {
             @Override
             protected void updateItem(Integer item, boolean empty) {
                 super.updateItem(item, empty);
@@ -166,15 +166,6 @@ public class PlayerStatsManager {
 
         // Add all columns to the table
         playerStatsTable.getColumns().addAll(labelColumn, dollarsColumn, creditsColumn, tokensColumn);
-
-        // Add empty PlayerStat objects to the table to match the number of player labels
-        for (int i = 0; i < playerLabels.size(); i++) {
-            if (i == 0) {
-                playerStatsTable.getItems().add(new PlayerStat(i+1,0,0,0, true));
-            } else {
-                playerStatsTable.getItems().add(new PlayerStat(i+1,0,0,0, false));
-            }
-        }
     }
 
     /**
@@ -212,13 +203,13 @@ public class PlayerStatsManager {
      */
     public void updatePlayerStat(int playerID, int dollars, int credits, int tokens) {
         // Iterate over the table's items (PlayerStat instances)
-        for (PlayerStat playerStat : playerStatsTable.getItems()) {
+        for (Player player : playerStatsTable.getItems()) {
             // Find the player by their ID
-            if (playerStat.getPlayerID().equals(playerID)) {
+            if (player.getID() == playerID) {
                 // Update the player's stats
-                playerStat.setDollars(dollars);
-                playerStat.setCredits(credits);
-                playerStat.setTokens(tokens);
+                player.setDollars(dollars);
+                player.setCredits(credits);
+                player.setRehearsalTokens(tokens);
 
                 // Refresh the table to reflect the updated row
                 playerStatsTable.refresh();
@@ -228,16 +219,16 @@ public class PlayerStatsManager {
     }
 
     /**
-     * Adds player stats data to the table.
+     * Adds player data to the table.
      *
-     * @param playerStats The list of player statistics to be added to the table.
+     * @param players The list of players to be added to the table.
      */
-    public void addPlayerData(List<PlayerStat> playerStats) {
-        playerStatsTable.getItems().addAll(playerStats);
+    public void addPlayerData(List<Player> players) {
+        playerStatsTable.getItems().addAll(players);
         playerStatsTable.refresh();
     }
 
-    public TableView<PlayerStat> getPlayerStatsTable() {
+    public TableView<Player> getPlayerStatsTable() {
         return playerStatsTable;
     }
 
@@ -250,9 +241,9 @@ public class PlayerStatsManager {
     public void highlightRow(int index) {
         for (Node node : playerStatsTable.lookupAll(".table-row-cell")) {
             if (node instanceof TableRow) {
-                TableRow<PlayerStat> row = (TableRow<PlayerStat>) node;
-                if (row.getIndex() == (index - 1)) {
-                    row.setStyle("-fx-background-color: #AAAAAA;"); // gray
+                TableRow<Player> row = (TableRow<Player>) node;
+                if (row.getIndex() == index) {
+                    row.setStyle("-fx-background-color: #AAAAAA;"); // medium gray
                 } else {
                     row.setStyle(""); // reset to default style
                 }

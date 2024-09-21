@@ -3,7 +3,7 @@
  * It holds information about the player's state, including:
  * - ID
  * - rank
- * - money
+ * - dollars
  * - credits
  * - rehearsal tokens
  * - whether they are active
@@ -15,7 +15,7 @@
 public class Player {
     private int id;
     private int rank;
-    private int money;
+    private int dollars;
     private int credits;
     private int rehearsalTokens;
     private boolean active;
@@ -33,7 +33,7 @@ public class Player {
     public Player(int id, int rank, int credits) {
         this.id = id;
         this.rank = rank;
-        this.money = 0;
+        this.dollars = 0;
         this.credits = credits;
         this.rehearsalTokens = 0;
         this.active = false;
@@ -61,12 +61,12 @@ public class Player {
     }
 
     /**
-     * Returns the amount of money the player has.
+     * Returns the amount of dollars the player has.
      *
-     * @return the amount of money the player has
+     * @return the amount of dollars the player has
      */
-    public int getMoney() {
-        return this.money;
+    public int getDollars() {
+        return this.dollars;
     }
 
     /**
@@ -130,30 +130,30 @@ public class Player {
     }
 
     /**
-     * Adds to the amount of money the player has.
+     * Adds to the amount of dollars the player has.
      *
-     * @param money the amount of money to add for the player
+     * @param dollars the amount of dollars to add for the player
      */
-    public void addMoney(int money) {
-        this.money += money;
+    public void addDollars(int dollars) {
+        this.dollars += dollars;
     }
 
     /**
-     * Decreases the amount of money the player has.
+     * Decreases the amount of dollars the player has.
      *
-     * @param money the amount of money to subtract from the player
+     * @param dollars the amount of dollars to subtract from the player
      */
-    public void decreaseMoney(int money) {
-        this.money -= money;
+    public void decreaseDollars(int dollar) {
+        this.dollars -= dollar;
     }
 
     /**
-     * Sets the amount of money the player has.
+     * Sets the amount of dollar the player has.
      *
-     * @param money the amount of money for the player
+     * @param dollars the amount of dollar for the player
      */
-    public void setMoney(int money) {
-        this.money = money;
+    public void setDollars(int dollars) {
+        this.dollars = dollars;
     }
     
     /**
@@ -245,7 +245,7 @@ public class Player {
      * @return the score of the player
      */
     public int getScore() {
-        return 5*this.rank + this.credits + this.money;
+        return 5*this.rank + this.credits + this.dollars;
     }
 
 }

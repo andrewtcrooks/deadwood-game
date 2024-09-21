@@ -264,7 +264,7 @@ public class GameController{
         initializePlayerDice();
         this.model.notifyObservers(
             "CREATE_PLAYER_STATS_TABLE", 
-            model.getPlayers().size()
+            model.getPlayers()
         );
         updateAllPlayerStats();
                 
@@ -519,16 +519,28 @@ public class GameController{
                         
                     } else if (command.equals("ACT")) {
                         // TODO: add shot counter image to last wrapped Take
+
+                        // Handle act action in model
+                        actionMap.get("act").execute(player, model, view);
+
+                        // TODO: Update location shot counter images
+
+                        // Update player stats in the view
+                        updatePlayerStat(player.getID());
+
+                        // end turn
                         endTurn[0] = true;
                     } else if (command.equals("REHEARSE")) {
                         // Handle rehearse action in model
-
-                        // Handle rehearse action on the board
-                        
+                        actionMap.get("rehearse").execute(player, model, view);
+                        // Update player stats in the view
+                        updatePlayerStat(player.getID());
+                        // end turn
                         endTurn[0] = true;
 
                     } else if (command.equals("UPGRADE")) {
                         // Handle upgrade action in model
+                        
                         // player.upgrade(data); 
                         player.setHasUpgraded(true);
 
@@ -536,6 +548,9 @@ public class GameController{
 
                     } else if (command.equals("END")) {
                         // Handle end turn action
+                        actionMap.get("end").execute(player, model, view);
+
+                        // end turn
                         endTurn[0] = true;
                     }
 
@@ -902,17 +917,28 @@ public class GameController{
      * Updates the player stats in the view.
      */
     public void updateAllPlayerStats() {
-        // Collect player stats
-        Map<Integer, List<Integer>> playerStats = new HashMap<>();
+        // Iterate over all players and update their stats
         for (Player player : model.getPlayers()) {
-            List<Integer> stats = new ArrayList<>();
-            stats.add(player.getMoney());
-            stats.add(player.getCredits());
-            stats.add(player.getRehearsalTokens());
-            playerStats.put(player.getID(), stats);
+            updatePlayerStat(player.getID());
         }
+    }
+
+    /**
+     * Updates the player stats in the view.
+     * 
+     * @param playerID The ID of the player to update.
+     */
+    public void updatePlayerStat(int playerID) {
+        // Collect players stats
+        Map<String, Integer> playerStats = new HashMap<>();
+        Player player = model.getPlayer(playerID);
+        // Add player stats to the playerStats HashMap
+        playerStats.put("playerID", player.getID());
+        playerStats.put("dollars", player.getDollars());
+        playerStats.put("credits", player.getCredits());
+        playerStats.put("tokens", player.getRehearsalTokens());
         // Send the player stats in the view
-        this.model.notifyObservers("UPDATE_ALL_PLAYER_STATS", playerStats);
+        this.model.notifyObservers("UPDATE_PLAYER_STAT", playerStats);
     }
 
     /**

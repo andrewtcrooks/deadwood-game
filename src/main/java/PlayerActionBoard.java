@@ -112,7 +112,7 @@ public class PlayerActionBoard implements PlayerAction {
         String playerInfo = String.format("Player %d (rank %d, $%4d, %4dcr, %drt) - %-14s", 
                                           player.getID(), 
                                           player.getRank(), 
-                                          player.getMoney(), 
+                                          player.getDollars(), 
                                           player.getCredits(), 
                                           player.getRehearsalTokens(), 
                                           locationName);

@@ -97,7 +97,7 @@ public class PlayerActionUpgrade implements PlayerAction {
         int nextRank = player.getRank() + 1;
         int dollarCostForNextRank = dollarCosts.getOrDefault(nextRank, Integer.MAX_VALUE);
         int creditCostForNextRank = creditCosts.getOrDefault(nextRank, Integer.MAX_VALUE);
-        if (player.getMoney() < dollarCostForNextRank && player.getCredits() < creditCostForNextRank) {
+        if (player.getDollars() < dollarCostForNextRank && player.getCredits() < creditCostForNextRank) {
             view.showMessage("You do not have enough money or credits to upgrade to a higher rank.");
             return false;
         }
@@ -188,7 +188,7 @@ public class PlayerActionUpgrade implements PlayerAction {
      * @return The payment method
      */
     private String determinePaymentMethod(Player player, int chosenRank, GameView view) {
-        boolean canAffordWithDollars = player.getMoney() >= dollarCosts.getOrDefault(chosenRank, 0);
+        boolean canAffordWithDollars = player.getDollars() >= dollarCosts.getOrDefault(chosenRank, 0);
         boolean canAffordWithCredits = player.getCredits() >= creditCosts.getOrDefault(chosenRank, 0);
         if (canAffordWithDollars && canAffordWithCredits) {
             view.showMessage("You can afford to upgrade to this rank with either money or credits.");
@@ -231,7 +231,7 @@ public class PlayerActionUpgrade implements PlayerAction {
      */
     private void processPayment(Player player, int chosenRank, String paymentMethod) {
         if ("money".equals(paymentMethod)) {
-            player.decreaseMoney(dollarCosts.get(chosenRank));
+            player.decreaseDollars(dollarCosts.get(chosenRank));
         } else if ("credits".equals(paymentMethod)) {
             player.decreaseCredits(creditCosts.get(chosenRank));
         }
