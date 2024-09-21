@@ -3,7 +3,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.ArrayList;
