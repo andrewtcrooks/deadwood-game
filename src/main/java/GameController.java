@@ -101,6 +101,21 @@ public class GameController{
         // reset the board for the next day by resetting shot counters 
         // and dealing enw scene cards
         this.model.getBoard().resetBoard(deck, locations);
+
+        if (view instanceof GameGUIView) {
+            //TODO: fix this part that clear up the gui each day
+
+            // // Return all players to Trailer
+            // eventData.put("command", "MOVE");
+            //             eventData.put("command", locationName);
+            //             eventData.put("playerID", player.getID());
+            //             eventData.put("locationArea", area);
+            // this.model.notifyObservers("PLAYER_MOVE
+            // // redeal the cards and card backs
+            // initializeLocationCards();
+            // Remove all shots from the board
+            this.model.notifyObservers("REMOVE_ALL_SHOTS", null);
+        }
     }
 
     /**
@@ -201,14 +216,6 @@ public class GameController{
         player.setHasWorked(false);
         player.setHasUpgraded(false);
 
-        // TODO: add the below bit for highlgihting row to GUI method
-        // // GUI ONLY: Highlight the player's row in the player stats table
-        // if (view instanceof GameGUIView) {
-        //     ((GameGUIView) view).getPlayerStatsManager().highlightRow(player.getID());
-        //     processPlayerTurnGUI(player);
-        // } else {
-        //     processPlayerTurn(player);
-        // }
         processPlayerTurn(player);
     }
 
@@ -356,14 +363,7 @@ public class GameController{
                 // After player's turn ends, continue to the next step
                 player.setActive(false); // Mark player as inactive after turn
 
-                // Check if more than 1 scene remains to continue the day
-                if (this.model.getBoard().getNumScenesRemaining() > 1) {
-                    return CompletableFuture.completedFuture(null);
-                } else {
-                    // If fewer than 1 scene remains, end the day
-                    endDay();
-                    return CompletableFuture.completedFuture(null);
-                }
+                return CompletableFuture.completedFuture(null);
             });
         }
 
@@ -422,27 +422,13 @@ public class GameController{
                         Location location = this.model.getLocations()
                                                     .get(locationName);
                         Area area = location.getArea();
-                        int x = area.getX();
-                        int y = area.getY();
                         // Create a HashMap to hold the event data
                         Map<String, Object> eventData = new HashMap<>();
                         // Add data to eventData
-                        if ( locationName.equals("Trailer") ) {
-                            eventData.put("command", "Trailer");
-                            eventData.put("playerID", player.getID());
-                            eventData.put("locationX", x);
-                            eventData.put("locationY", y);
-                        } else if (locationName.equals("Casting Office")){
-                            eventData.put("command", "Casting Office");
-                            eventData.put("playerID", player.getID());
-                            eventData.put("locationX", x);
-                            eventData.put("locationY", y);
-                        } else {
-                            eventData.put("command", "MOVE");
-                            eventData.put("playerID", player.getID());
-                            eventData.put("locationX", x);
-                            eventData.put("locationY", y);
-                        }
+                        eventData.put("command", "MOVE");
+                        eventData.put("locationName", locationName);
+                        eventData.put("playerID", player.getID());
+                        eventData.put("locationArea", area);
 
                         // Add the player to the location
                         this.model.notifyObservers("PLAYER_MOVE", eventData);
@@ -505,8 +491,8 @@ public class GameController{
                         // Add data to eventData
                         eventData.put("command", "WORK");
                         eventData.put("playerID", currentPlayer.getID());
-                        eventData.put("locationX", x);
-                        eventData.put("locationY", y);
+                        eventData.put("locationName", location.getName());
+                        eventData.put("locationArea", new Area(x, y, 0, 0));
                         // Add the player to the location
                         this.model.notifyObservers("PLAYER_MOVE", eventData);
                         
@@ -537,8 +523,6 @@ public class GameController{
                         // actionMap.get("upgrade").execute(player, model, view);
                         // player.upgrade(data); 
                         player.setHasUpgraded(true);
-
-                        // Handle upgrade action on the board
 
                     } else if (command.equals("END")) {
                         // Handle end turn action
@@ -639,18 +623,9 @@ public class GameController{
             // make sure neighborName has first letter capitalized
             String formattedNeighborName = neighborName.substring(0, 1).toUpperCase() + 
                                   neighborName.substring(1);
-            Area area;
-
-            // Define custom areas for "trailer" and "office"
-            if (neighborName.equalsIgnoreCase("trailer")) {
-                area = new Area(991, 248, 194, 201); // Custom area for trailer
-            } else if (neighborName.equalsIgnoreCase("office")) {
-                area = new Area(200, 200, 50, 50); // Custom area for office
-            } else {
-                Location neighborLocation = this.model.getLocation(formattedNeighborName);
-                area = neighborLocation.getArea();
-            }
-
+            Location neighborLocation = this.model.getLocation(formattedNeighborName);
+            Area area = neighborLocation.getArea();
+            // Create a HashMap to hold the event data
             Map<String, Object> eventData = new HashMap<>();
             // Add data to eventData
             eventData.put("command", "MOVE");
@@ -732,9 +707,10 @@ public class GameController{
         // Get the first unwrapped take
         Take nextTake = null;
         for (Take take : takes) {
-            if (!take.isWrapped()) {
+            if (!take.isWrapped() && 
+                (nextTake == null || take.getNumber() < nextTake.getNumber())
+            ) {
                 nextTake = take;
-                break;
             }
         }
         // Get Take area
@@ -845,19 +821,19 @@ public class GameController{
             Map<String, Integer> playerInfo = new HashMap<>();
             playerInfo.put("playerRank", player.getRank());
 
-            if (
-                locationString.equals("Trailer") || 
-                locationString.equals("Casting Office")
-            ) {
-                // Calculate row and column for Trailer and Casting Office
-                int row = (playerID - 1) / 4;
-                int col = (playerID - 1) % 4;
-                x += col * TRAILER_CASTING_X_OFFSET;
-                y += row * TRAILER_CASTING_Y_OFFSET;
-            } else {
-                // Apply general Y offset for other locations
-                y += playerID * GENERAL_Y_OFFSET;
-            }
+            // if (
+            //     locationString.equals("Trailer") || 
+            //     locationString.equals("Casting Office")
+            // ) {
+            //     // Calculate row and column for Trailer and Casting Office
+            //     int row = (playerID - 1) / 4;
+            //     int col = (playerID - 1) % 4;
+            //     x += col * TRAILER_CASTING_X_OFFSET;
+            //     y += row * TRAILER_CASTING_Y_OFFSET;
+            // } else {
+            //     // Apply general Y offset for other locations
+            //     y += playerID * GENERAL_Y_OFFSET;
+            // }
             // Add player location to playerInfo
             playerInfo.put("locationX", x);
             playerInfo.put("locationY", y);
@@ -866,6 +842,23 @@ public class GameController{
 
         // Initialize the player dice in the view
         this.model.notifyObservers("INIT_DICE_LABELS", initDiceLabels);
+
+
+
+        // move all playres to trailer using obsever method for "PLAYER_MOVE"
+        // get Trailer location
+        Location trailer = this.model.getLocation("Trailer");
+        Area area = trailer.getArea();
+
+        for (Player player : this.model.getPlayers()) {
+            // create moveData
+            Map<String, Object> moveData = new HashMap<>();
+            moveData.put("command", "MOVE");
+            moveData.put("playerID", player.getID());
+            moveData.put("locationName", "Trailer");
+            moveData.put("locationArea", area);
+            this.model.notifyObservers("PLAYER_MOVE", moveData);
+        }
     }
 
     /**
@@ -924,13 +917,30 @@ public class GameController{
         eventData.put("command", "MOVE");
         eventData.put("playerID", player.getID());
         // movePlayer.put("playerRank", player.getRank());
-        eventData.put("locationX", location.getArea().getX());
-        eventData.put("locationY", location.getArea().getY());
+        eventData.put("locationName", locationName);
+        eventData.put("locationArea", location.getArea());
         
         // Pass the string and the movePlayer HashMap to notifyObservers
         this.model.notifyObservers("PLAYER_MOVE", eventData);
     }
 
+    /**
+     * Notifies observers to add a shot image at the specified location.
+     *
+     * @param locationName The name of the location where the shot image should be added.
+     */
+    private void addShotToLocation(String locationName) {
+        model.notifyObservers("ADD_SHOT", locationName);
+    }
+
+    /**
+     * Notifies observers to remove all shot images from the specified location.
+     * 
+     * @param locationName The name of the location from which to remove shot images.
+     */
+    private void removeAllShotsn() {
+        model.notifyObservers("REMOVE_ALL_SHOTS", null);
+    }
 
 // ============================================================
 // Buttons Listener Methods
