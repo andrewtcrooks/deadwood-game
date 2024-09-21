@@ -277,7 +277,7 @@ public class GameGUIView implements GameView {
                 addButton((Map<String,Object>) eventData);
                 break;
             case "REMOVE_BUTTONS":
-                buttonManager.removeClickableAreas(this.rootGroup);
+                buttonManager.removeButtons(this.rootGroup);
                 break;
             case "PLAYER_MOVE":
                 handlePlayerMove((Map<String, Object>) eventData);
@@ -385,10 +385,6 @@ public class GameGUIView implements GameView {
             // Position the text label next to or above/below the dice image
             diceTextLabel.setLayoutX(x);  // Adjust as needed for positioning
             diceTextLabel.setLayoutY(y - 20);  // Slightly above the dice image
-
-            // // Add hover effect on the dice image to show/hide the text
-            // diceImageLabel.setOnMouseEntered(e -> diceTextLabel.setVisible(true));
-            // diceImageLabel.setOnMouseExited(e -> diceTextLabel.setVisible(false));
     
             // Add the dice image and the text label to the board
             rootGroup.getChildren().addAll(diceImageLabel, diceTextLabel);
@@ -603,10 +599,12 @@ public class GameGUIView implements GameView {
 
         // Get the x and y coords of the new location and the player id
         String command = (String) moveData.get("command");
-        int x = (int) moveData.get("locationX");
-        int y = (int) moveData.get("locationY");
+        Area area  = (Area) moveData.get("locationArea");
         int playerID = (int) moveData.get("playerID");
         
+        int x = area.getX();
+        int y = area.getY();
+
         // Get the player label
         String key = String.valueOf(playerID);
         Label playerLabel = 
@@ -689,6 +687,16 @@ public class GameGUIView implements GameView {
         // Add the card view to the board pane
         rootGroup.getChildren().add(cardView);
     }
+
+    // /**
+    //  * Mark a take as wrapped.
+    //  * 
+    //  * @param take The take to be marked as wrapped
+    //  */
+    // public void markTakeAsWrapped(String locationName, GameModel model) {
+    //     Location location = model.getLocation(locationName);
+
+    // }
 
     /**
      * Get the player's input in GUI mode.
