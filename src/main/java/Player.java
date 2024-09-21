@@ -1,3 +1,10 @@
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.property.SimpleStringProperty;
+
 /**
  * This class represents a player in the game.
  * It holds information about the player's state, including:
@@ -13,15 +20,15 @@
  * It also provides methods to modify the player's state.
  */
 public class Player {
-    private int id;
-    private int rank;
-    private int dollars;
-    private int credits;
-    private int rehearsalTokens;
-    private boolean active;
-    private boolean hasMoved;
-    private boolean hasWorked;
-    private boolean hasUpgraded;
+    private final IntegerProperty id;
+    private final IntegerProperty rank;
+    private final IntegerProperty dollars;
+    private final IntegerProperty credits;
+    private final IntegerProperty rehearsalTokens;
+    private final BooleanProperty active;
+    private final BooleanProperty hasMoved;
+    private final BooleanProperty hasWorked;
+    private final BooleanProperty hasUpgraded;
 
     /**
      * Constructs a new Player with the specified rank and credits.
@@ -31,16 +38,22 @@ public class Player {
      * @param credits the initial number of credits for the player
      */
     public Player(int id, int rank, int credits) {
-        this.id = id;
-        this.rank = rank;
-        this.dollars = 0;
-        this.credits = credits;
-        this.rehearsalTokens = 0;
-        this.active = false;
-        this.hasMoved = false;
-        this.hasWorked = false;
-        this.hasUpgraded = false;
+        this.id = new SimpleIntegerProperty(id);
+        this.rank = new SimpleIntegerProperty(rank);
+        this.dollars = new SimpleIntegerProperty(0);
+        this.credits = new SimpleIntegerProperty(credits);
+        this.rehearsalTokens = new SimpleIntegerProperty(0);
+        this.active = new SimpleBooleanProperty(false);
+        this.hasMoved = new SimpleBooleanProperty(false);
+        this.hasWorked = new SimpleBooleanProperty(false);
+        this.hasUpgraded = new SimpleBooleanProperty(false);
     }
+
+
+// ============================================================
+// ID
+// ============================================================
+
 
     /**
      * Returns the ID of the player.
@@ -48,8 +61,23 @@ public class Player {
      * @return the ID of the player
      */
     public int getID() {
+        return this.id.get();
+    }
+
+    /**
+     * Returns the property for the ID of the player.
+     *
+     * @return the property for the ID of the player
+     */
+    public IntegerProperty idProperty() {
         return this.id;
     }
+    
+
+// ============================================================
+// Rank
+// ============================================================
+
 
     /**
      * Returns the rank of the player.
@@ -57,8 +85,32 @@ public class Player {
      * @return the rank of the player
      */
     public int getRank() {
+        return this.rank.get();
+    }
+    
+    /**
+     * Sets the rank of the player.
+     *
+     * @param rank the new rank of the player
+     */
+    public void setRank(int rank) {
+        this.rank.set(rank);
+    }
+
+    /**
+     * Returns the property for the rank of the player.
+     *
+     * @return the property for the rank of the player
+     */
+    public IntegerProperty rankProperty() {
         return this.rank;
     }
+
+
+// ============================================================
+// Dollars
+// ============================================================
+
 
     /**
      * Returns the amount of dollars the player has.
@@ -66,85 +118,7 @@ public class Player {
      * @return the amount of dollars the player has
      */
     public int getDollars() {
-        return this.dollars;
-    }
-
-    /**
-     * Returns the number of credits the player has.
-     *
-     * @return the number of credits the player has
-     */
-    public int getCredits() {
-        return this.credits;
-    }
-
-    /**
-     * Returns the number of rehearsal tokens the player has.
-     *
-     * @return the number of rehearsal tokens the player has
-     */
-    public int getRehearsalTokens() {
-        return this.rehearsalTokens;
-    }
-
-    /**
-     * Returns whether the player is active.
-     *
-     * @return true if the player is active, false otherwise
-     */
-    public boolean isActive() {
-        return this.active;
-    }
-
-    /**
-     * Returns whether the player has moved.
-     * @return true if the player has moved, false otherwise
-     */
-    public boolean getHasMoved() {
-        return this.hasMoved;
-    }
-
-    /**
-     * Returns whether the player has worked.
-     * @return true if the player has worked, false otherwise
-     */
-    public boolean getHasWorked() {
-        return this.hasWorked;
-    }
-
-    /**
-     * Returns whether the player has upgraded.
-     * @return true if the player has upgraded, false otherwise
-     */
-    public boolean getHasUpgraded() {
-        return this.hasUpgraded;
-    }
-
-    /**
-     * Sets the rank of the player.
-     *
-     * @param rank the new rank for the player
-     */
-    public void setRank(int rank) {
-        this.rank = rank;
-    }
-
-    /**
-     * Adds to the amount of dollars the player has.
-     *
-     * @param dollars the amount of dollars to add for the player
-     */
-    public void addDollars(int dollars) {
-        this.dollars += dollars;
-    }
-
-    /**
-     * Decreases the amount of dollars the player has.
-     *
-     * @param dollars the amount of dollars to subtract from the player
-     */
-    public void decreaseDollars(int dollar) {
-        this.dollars -= dollar;
+        return this.dollars.get();
     }
 
     /**
@@ -153,25 +127,49 @@ public class Player {
      * @param dollars the amount of dollar for the player
      */
     public void setDollars(int dollars) {
-        this.dollars = dollars;
-    }
-    
-    /**
-     * Adds to the number of credits the player has.
-     *
-     * @param credits the number of credits to add for the player
-     */
-    public void addCredits(int credits) {
-        this.credits += credits;
+        this.dollars.set(dollars);
     }
 
     /**
-     * Decreases the number of credits the player has.
+     * Adds to the amount of dollars the player has.
      *
-     * @param credits the number of credits to subtract from the player
+     * @param amount the amount of dollars to add for the player
      */
-    public void decreaseCredits(int credits) {
-        this.credits -= credits;
+    public void addDollars(int amount) {
+        this.dollars.set(this.dollars.get() + amount);
+    }
+
+    /**
+     * Decreases the amount of dollars the player has.
+     *
+     * @param amount the amount of dollars to subtract from the player
+     */
+    public void decreaseDollars(int amount) {
+        this.dollars.set(this.dollars.get() - amount);
+    }
+
+    /**
+     * Returns the property for the player's dollars.
+     *
+     * @return the property for the player's dollars
+     */
+    public IntegerProperty dollarsProperty() {
+        return this.dollars;
+    }
+
+
+// ============================================================
+// Credits
+// ============================================================
+
+
+    /**
+     * Returns the number of credits the player has.
+     *
+     * @return the number of credits the player has
+     */
+    public int getCredits() {
+        return this.credits.get();
     }
 
     /**
@@ -180,30 +178,96 @@ public class Player {
      * @param credits the number of credits for the player
      */
     public void setCredits(int credits) {
-        this.credits = credits;
+        this.credits.set(credits);
+    }
+
+    /**
+     * Adds to the number of credits the player has.
+     *
+     * @param amount the number of credits to add for the player
+     */
+    public void addCredits(int amount) {
+        this.credits.set(this.credits.get() + amount);
+    }
+
+    /**
+     * Decreases the number of credits the player has.
+     *
+     * @param amount the number of credits to subtract from the player
+     */
+    public void decreaseCredits(int amount) {
+        this.credits.set(this.credits.get() - amount);
+    }
+
+    /**
+     * Returns the property for the number of credits the player has.
+     *
+     * @return the property for the number of credits the player has
+     */
+    public IntegerProperty creditsProperty() {
+        return this.credits;
     }
     
+
+// ============================================================
+// Rehearsal Tokens
+// ============================================================
+
+
     /**
+     * Returns the number of rehearsal tokens the player has.
+     *
+     * @return the number of rehearsal tokens the player has
+     */
+    public int getRehearsalTokens() {
+        return rehearsalTokens.get();
+    }
+
+    /**
+     * Sets the number of rehearsal tokens the player has.
+     *
+     * @param tokens the number of rehearsal tokens the player has
+     */
+    public void setRehearsalTokens(int tokens) {
+        this.rehearsalTokens.set(tokens);
+    }
+
+        /**
      * Increments the number of rehearsal tokens the player has.
      */
     public void incrementRehearsalTokens() {
-        ++this.rehearsalTokens;
+        this.rehearsalTokens.set(this.rehearsalTokens.get() + 1);
     }
 
     /**
      * Resets the number of rehearsal tokens the player has.
      */
     public void resetRehearsalTokens() {
-        this.rehearsalTokens = 0;
+        this.rehearsalTokens.set(0);
     }
 
     /**
-     * Sets the number of rehearsal tokens the player has.
-     *
-     * @param rehearsalTokens the number of rehearsal tokens the player has
+     * Returns the property for the number of rehearsal tokens the player has.
+     * 
+     * @return the property for the number of rehearsal tokens the player has
      */
-    public void setRehearsalTokens(int rehearsalTokens) {
-        this.rehearsalTokens = rehearsalTokens;
+    public IntegerProperty rehearsalTokensProperty() {
+        return rehearsalTokens;
+    }
+
+
+// ============================================================
+// Active
+// ============================================================
+
+
+    /**
+     * Returns whether the player is active.
+     *
+     * @return true if the player is active, false otherwise
+     */
+    public boolean isActive() {
+        return active.get();
     }
 
     /**
@@ -212,7 +276,30 @@ public class Player {
      * @param active true if the player is active, false otherwise
      */
     public void setActive(boolean active) {
-        this.active = active;
+        this.active.set(active);
+    }
+
+    /**
+     * Returns the property for whether the player is active.
+     * 
+     * @return the property for whether the player is active
+     */
+    public BooleanProperty activeProperty() {
+        return active;
+    }
+
+
+// ============================================================
+// Has Moved, Has Worked, Has Upgraded
+// ============================================================
+
+
+    /**
+     * Returns whether the player has moved.
+     * @return true if the player has moved, false otherwise
+     */
+    public boolean getHasMoved() {
+        return hasMoved.get();
     }
 
     /**
@@ -220,7 +307,24 @@ public class Player {
      * @param hasMoved true if the player has moved, false otherwise
      */
     public void setHasMoved(boolean hasMoved) {
-        this.hasMoved = hasMoved;
+        this.hasMoved.set(hasMoved);
+    }
+
+    /**
+     * Returns the property for whether the player has moved.
+     * 
+     * @return the property for whether the player has moved
+     */
+    public BooleanProperty hasMovedProperty() {
+        return hasMoved;
+    }
+
+    /**
+     * Returns whether the player has worked.
+     * @return true if the player has worked, false otherwise
+     */
+    public boolean getHasWorked() {
+        return hasWorked.get();
     }
 
     /**
@@ -228,7 +332,24 @@ public class Player {
      * @param hasWorked true if the player has worked, false otherwise
      */
     public void setHasWorked(boolean hasWorked) {
-        this.hasWorked = hasWorked;
+        this.hasWorked.set(hasWorked);
+    }
+
+    /**
+     * Returns the property for whether the player has worked.
+     * 
+     * @return the property for whether the player has worked
+     */
+    public BooleanProperty hasWorkedProperty() {
+        return hasWorked;
+    }
+    
+    /**
+     * Returns whether the player has upgraded.
+     * @return true if the player has upgraded, false otherwise
+     */
+    public boolean getHasUpgraded() {
+        return hasUpgraded.get();
     }
 
     /**
@@ -236,8 +357,23 @@ public class Player {
      * @param hasUpgraded true if the player has upgraded, false otherwise
      */
     public void setHasUpgraded(boolean hasUpgraded) {
-        this.hasUpgraded = hasUpgraded;
+        this.hasUpgraded.set(hasUpgraded);
     }
+
+    /**
+     * Returns the property for whether the player has upgraded.
+     * 
+     * @return the property for whether the player has upgraded
+     */
+    public BooleanProperty hasUpgradedProperty() {
+        return hasUpgraded;
+    }
+    
+
+// ============================================================
+// Get Score
+// ============================================================
+
 
     /**
      * Returns the score of the player.
@@ -245,7 +381,7 @@ public class Player {
      * @return the score of the player
      */
     public int getScore() {
-        return 5*this.rank + this.credits + this.dollars;
+        return 5 * getRank() + getCredits() + getDollars();
     }
 
 }

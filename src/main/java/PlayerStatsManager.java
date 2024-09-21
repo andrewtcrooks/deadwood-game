@@ -3,6 +3,8 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -17,9 +19,11 @@ import java.util.Map;
 public class PlayerStatsManager {
 
     private final TableView<Player> playerStatsTable;
+    private final ObservableList<Player> observablePlayerList;
 
     public PlayerStatsManager() {
         this.playerStatsTable = new TableView<>();
+        this.observablePlayerList = FXCollections.observableArrayList();
     }
 
     /**
@@ -55,14 +59,23 @@ public class PlayerStatsManager {
         playerStatsTable.setLayoutX(leftBorder);
         playerStatsTable.setLayoutY(yPosition);
 
+        // Set column resize policy to constrain columns within the TableView
+        playerStatsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
         // Create and set up columns
         setupTableColumns(diceColumnWidth, tableWidth, playerLabels);
 
         // Set row height
         playerStatsTable.setFixedCellSize(rowHeight);
 
-        // Disable scroll bars
-        disableScrollBars(playerStatsTable);
+        // Calculate and set the preferred height to fit all rows
+        setTableViewHeight(numPlayers, rowHeight);
+
+        // Bind the observable list to the TableView
+        playerStatsTable.setItems(observablePlayerList);
+
+        // // Disable scroll bars
+        // disableScrollBars(playerStatsTable);
 
         // Add the empty table to the pane
         group.getChildren().add(playerStatsTable);
@@ -86,11 +99,11 @@ public class PlayerStatsManager {
                     @Override
                     protected void updateItem(Label item, boolean empty) {
                         super.updateItem(item, empty);
-                        if (empty || getIndex() >= playerLabels.size()) {
+                        if (empty || getIndex() >= observablePlayerList.size()) {
                             setGraphic(null);
                         } else {
-                            String playerName = (String) playerLabels.keySet().toArray()[getIndex()];
-                            Label originalLabel = playerLabels.get(playerName);
+                            Player player = observablePlayerList.get(getIndex());
+                            Label originalLabel = playerLabels.get(String.valueOf(player.getID()));
                             // Create a new label and copy the icon (graphic) from the original label
                             Label newLabel = new Label();
                             if (originalLabel.getGraphic() instanceof ImageView) {
@@ -104,21 +117,22 @@ public class PlayerStatsManager {
                         }
                     }
                 };
-                cell.setAlignment(Pos.CENTER); // Center the content
                 return cell;
             }
         });
-        labelColumn.setPrefWidth(diceColumnWidth); // Use the provided dice column width
-
-        // Adjust the remaining table width for the stat columns
-        int remainingWidth = tableWidth - diceColumnWidth;
+        
+        // Set fixed width for the first column
+        labelColumn.setPrefWidth(48);
+        labelColumn.setMinWidth(48);
+        labelColumn.setMaxWidth(48);
+        labelColumn.setResizable(false);
 
         // Create the "Dollars" column and center the content
-        TableColumn<Player, Integer> dollarsColumn = new TableColumn<>("Dollars");
+        TableColumn<Player, Number> dollarsColumn = new TableColumn<>("Dollars");
         dollarsColumn.setCellValueFactory(new PropertyValueFactory<>("dollars"));
-        dollarsColumn.setCellFactory(column -> new TableCell<Player, Integer>() {
+        dollarsColumn.setCellFactory(column -> new TableCell<Player, Number>() {
             @Override
-            protected void updateItem(Integer item, boolean empty) {
+            protected void updateItem(Number item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty) {
                     setText(null);
@@ -128,14 +142,13 @@ public class PlayerStatsManager {
                 setAlignment(Pos.CENTER); // Center the content
             }
         });
-        dollarsColumn.setPrefWidth(remainingWidth * 0.33); // 33% of remaining width
 
         // Create the "Credits" column and center the content
-        TableColumn<Player, Integer> creditsColumn = new TableColumn<>("Credits");
+        TableColumn<Player, Number> creditsColumn = new TableColumn<>("Credits");
         creditsColumn.setCellValueFactory(new PropertyValueFactory<>("credits"));
-        creditsColumn.setCellFactory(column -> new TableCell<Player, Integer>() {
+        creditsColumn.setCellFactory(column -> new TableCell<Player, Number>() {
             @Override
-            protected void updateItem(Integer item, boolean empty) {
+            protected void updateItem(Number item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty) {
                     setText(null);
@@ -145,14 +158,13 @@ public class PlayerStatsManager {
                 setAlignment(Pos.CENTER); // Center the content
             }
         });
-        creditsColumn.setPrefWidth(remainingWidth * 0.33); // 33% of remaining width
 
         // Create the "Tokens" column and center the content
-        TableColumn<Player, Integer> tokensColumn = new TableColumn<>("Tokens");
-        tokensColumn.setCellValueFactory(new PropertyValueFactory<>("tokens"));
-        tokensColumn.setCellFactory(column -> new TableCell<Player, Integer>() {
+        TableColumn<Player, Number> tokensColumn = new TableColumn<>("Tokens");
+        tokensColumn.setCellValueFactory(new PropertyValueFactory<>("rehearsalTokens")); // Updated property name
+        tokensColumn.setCellFactory(column -> new TableCell<Player, Number>() {
             @Override
-            protected void updateItem(Integer item, boolean empty) {
+            protected void updateItem(Number item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty) {
                     setText(null);
@@ -162,36 +174,56 @@ public class PlayerStatsManager {
                 setAlignment(Pos.CENTER); // Center the content
             }
         });
-        tokensColumn.setPrefWidth(remainingWidth * 0.33); // 33% of remaining width
 
         // Add all columns to the table
         playerStatsTable.getColumns().addAll(labelColumn, dollarsColumn, creditsColumn, tokensColumn);
     }
 
     /**
-     * Disables the scroll bars of the given TableView.
+     * Calculates and sets the TableView's preferred height based on the number of rows.
      *
-     * @param tableView The TableView whose scroll bars should be disabled.
+     * @param numPlayers The number of player rows.
+     * @param rowHeight  The height of each row.
      */
-    private void disableScrollBars(TableView<?> tableView) {
-        tableView.skinProperty().addListener((obs, oldSkin, newSkin) -> {
-            if (newSkin != null) {
-                // Disable horizontal scroll bar
-                ScrollBar hBar = (ScrollBar) tableView.lookup(".scroll-bar:horizontal");
-                if (hBar != null) {
-                    hBar.setManaged(false);
-                    hBar.setVisible(false);
-                }
+    private void setTableViewHeight(int numPlayers, int rowHeight) {
+        // Estimate header height (default is approximately 25 pixels)
+        int headerHeight = 25;
 
-                // Disable vertical scroll bar
-                ScrollBar vBar = (ScrollBar) tableView.lookup(".scroll-bar:vertical");
-                if (vBar != null) {
-                    vBar.setManaged(false);
-                    vBar.setVisible(false);
-                }
-            }
-        });
+        // Calculate total height: header + (rows * rowHeight)
+        int totalHeight = headerHeight + (numPlayers * rowHeight) + 3;
+
+        // Set the preferred height
+        playerStatsTable.setPrefHeight(totalHeight);
+        
+        // Optionally, set min and max heights to prevent resizing
+        playerStatsTable.setMinHeight(totalHeight);
+        playerStatsTable.setMaxHeight(totalHeight);
     }
+
+    // /**
+    //  * Disables the scroll bars of the given TableView.
+    //  *
+    //  * @param tableView The TableView whose scroll bars should be disabled.
+    //  */
+    // private void disableScrollBars(TableView<?> tableView) {
+    //     tableView.skinProperty().addListener((obs, oldSkin, newSkin) -> {
+    //         if (newSkin != null) {
+    //             // Disable horizontal scroll bar
+    //             ScrollBar hBar = (ScrollBar) tableView.lookup(".scroll-bar:horizontal");
+    //             if (hBar != null) {
+    //                 hBar.setManaged(false);
+    //                 hBar.setVisible(false);
+    //             }
+
+    //             // Disable vertical scroll bar
+    //             ScrollBar vBar = (ScrollBar) tableView.lookup(".scroll-bar:vertical");
+    //             if (vBar != null) {
+    //                 vBar.setManaged(false);
+    //                 vBar.setVisible(false);
+    //             }
+    //         }
+    //     });
+    // }
     
     /**
      * Updates the stats for a single player in the table.
@@ -211,8 +243,6 @@ public class PlayerStatsManager {
                 player.setCredits(credits);
                 player.setRehearsalTokens(tokens);
 
-                // Refresh the table to reflect the updated row
-                playerStatsTable.refresh();
                 break;
             }
         }
@@ -224,8 +254,7 @@ public class PlayerStatsManager {
      * @param players The list of players to be added to the table.
      */
     public void addPlayerData(List<Player> players) {
-        playerStatsTable.getItems().addAll(players);
-        playerStatsTable.refresh();
+        observablePlayerList.addAll(players);
     }
 
     public TableView<Player> getPlayerStatsTable() {
@@ -242,7 +271,7 @@ public class PlayerStatsManager {
         for (Node node : playerStatsTable.lookupAll(".table-row-cell")) {
             if (node instanceof TableRow) {
                 TableRow<Player> row = (TableRow<Player>) node;
-                if (row.getIndex() == index) {
+                if (row.getIndex() == index - 1) {
                     row.setStyle("-fx-background-color: #AAAAAA;"); // medium gray
                 } else {
                     row.setStyle(""); // reset to default style
