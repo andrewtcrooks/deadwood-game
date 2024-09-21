@@ -265,9 +265,7 @@ public class GameController{
         this.model.notifyObservers(
             "CREATE_PLAYER_STATS_TABLE", 
             model.getPlayers()
-        );
-        updateAllPlayerStats();
-                
+        );                
     }
 
     /**
@@ -525,22 +523,18 @@ public class GameController{
 
                         // TODO: Update location shot counter images
 
-                        // Update player stats in the view
-                        updatePlayerStat(player.getID());
-
                         // end turn
                         endTurn[0] = true;
                     } else if (command.equals("REHEARSE")) {
                         // Handle rehearse action in model
                         actionMap.get("rehearse").execute(player, model, view);
-                        // Update player stats in the view
-                        updatePlayerStat(player.getID());
+
                         // end turn
                         endTurn[0] = true;
 
                     } else if (command.equals("UPGRADE")) {
                         // Handle upgrade action in model
-                        
+                        // actionMap.get("upgrade").execute(player, model, view);
                         // player.upgrade(data); 
                         player.setHasUpgraded(true);
 
@@ -549,7 +543,6 @@ public class GameController{
                     } else if (command.equals("END")) {
                         // Handle end turn action
                         actionMap.get("end").execute(player, model, view);
-
                         // end turn
                         endTurn[0] = true;
                     }
@@ -914,34 +907,6 @@ public class GameController{
     }
 
     /**
-     * Updates the player stats in the view.
-     */
-    public void updateAllPlayerStats() {
-        // Iterate over all players and update their stats
-        for (Player player : model.getPlayers()) {
-            updatePlayerStat(player.getID());
-        }
-    }
-
-    /**
-     * Updates the player stats in the view.
-     * 
-     * @param playerID The ID of the player to update.
-     */
-    public void updatePlayerStat(int playerID) {
-        // Collect players stats
-        Map<String, Integer> playerStats = new HashMap<>();
-        Player player = model.getPlayer(playerID);
-        // Add player stats to the playerStats HashMap
-        playerStats.put("playerID", player.getID());
-        playerStats.put("dollars", player.getDollars());
-        playerStats.put("credits", player.getCredits());
-        playerStats.put("tokens", player.getRehearsalTokens());
-        // Send the player stats in the view
-        this.model.notifyObservers("UPDATE_PLAYER_STAT", playerStats);
-    }
-
-    /**
      * Moves the player to the selected location.
      * 
      * @param playerID The ID of the player to move.
@@ -972,89 +937,13 @@ public class GameController{
 // ============================================================
 
 
-    // /**
-    //  * Handles the Move action.
-    // */
-    // public void onMove(String locationName) {
-    //     // Update the menu to show locations the player can select
-    //     int currentPlayerID = this.model.getCurrentPlayer();
-    //     Player currentPlayer = this.model.getPlayer(currentPlayerID);
-
-    //     // move player to location
-    //     movePlayerToLocation(currentPlayerID, locationName);
-
-    //     // set player as hasMoved
-    //     currentPlayer.setHasMoved(true);
-
-    // }
-
-    // /**
-    //  * Handles the Work action.
-    //  */
-    // public void onWork(String roleName){
-    //     // Get the board and the current player's location
-    //     Board board = this.model.getBoard();
-    //     int currentPlayerID = this.model.getCurrentPlayer();
-    //     Location location = this.model.getLocation(
-    //         board.getPlayerLocationName(currentPlayer)
-    //     );
-
-    //     // Get all the location and scene card roles
-    //     List<Role> locationRoles = location.getRoles();
-    //     List<Role> sceneCardRoles = board.getLocationSceneCardRoles(
-    //         location.getName(), this.model.getDeck()
-    //     );
-
-    //     // Determine if the roleName is onCard
-    //     boolean onCard = false;
-    //     for (Role role : sceneCardRoles) {
-    //         if (role.getName().equals(roleName)) {
-    //             onCard = true;
-    //             break;
-    //         }
-    //     }
-
-    //     int x = 0;
-    //     int y = 0;
-
-    
-
-    //     // Create a HashMap to hold the event data
-    //     Map<String, Object> eventData = new HashMap<>();
-    //     // Add data to eventData
-    //     eventData.put("command", "WORK");
-    //     eventData.put("playerID", currentPlayerID);
-    //     eventData.put("locationX", x);
-    //     eventData.put("locationY", y);
-    //     // Add the player to the location
-    //     this.model.notifyObservers("PLAYER_MOVE", eventData);
-        
-    //     board.setPlayerRole(currentPlayerID, roleName);
-
-    //     // set player as hasWorked
-    //     currentPlayer.setHasWorked(true);
-
-
-    // }
-
-
     // public void onAct(){
     //     // TODO: finish method
     // }
 
-    // public void onRehearse(){
-    //     // TODO: finish method
-    // }
 
     // public void onUpgrade(Map<String, Object> data){
     //     // TODO: finish method
-    // }
-
-    // /**
-    //  * Handles the End action.
-    //  */
-    // public void onEnd(){
-    //     // Just don't do anything!
     // }
 
 }
