@@ -46,7 +46,7 @@ public class PlayerActionRehearse implements PlayerAction {
     public boolean execute(Player player, GameModel model, GameView view) {
         // Add a rehearsal token and display message
         player.incrementRehearsalTokens();
-        view.showMessage("success! You got a rehearsal token!");
+        view.showMessage("Success! You got a rehearsal token!");
         return true;
     }
 
