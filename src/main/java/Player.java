@@ -148,6 +148,15 @@ public class Player {
     }
 
     /**
+     * Sets the amount of money the player has.
+     *
+     * @param money the amount of money for the player
+     */
+    public void setMoney(int money) {
+        this.money = money;
+    }
+    
+    /**
      * Adds to the number of credits the player has.
      *
      * @param credits the number of credits to add for the player
@@ -166,6 +175,15 @@ public class Player {
     }
 
     /**
+     * Sets the number of credits the player has.
+     *
+     * @param credits the number of credits for the player
+     */
+    public void setCredits(int credits) {
+        this.credits = credits;
+    }
+    
+    /**
      * Increments the number of rehearsal tokens the player has.
      */
     public void incrementRehearsalTokens() {
@@ -177,6 +195,15 @@ public class Player {
      */
     public void resetRehearsalTokens() {
         this.rehearsalTokens = 0;
+    }
+
+    /**
+     * Sets the number of rehearsal tokens the player has.
+     *
+     * @param rehearsalTokens the number of rehearsal tokens the player has
+     */
+    public void setRehearsalTokens(int rehearsalTokens) {
+        this.rehearsalTokens = rehearsalTokens;
     }
 
     /**
