@@ -87,9 +87,9 @@ public class GameGUIView implements GameView {
     private static final int SHOT_WIDTH = 42;
 
     private static final int TRAILER_X_OFFSET = 11;
-    private static final int TRAILER_Y_OFFSET = 95;
-    private static final int CASTING_X_OFFSET = 47;
-    private static final int CASTING_Y_OFFSET = 47;
+    private static final int TRAILER_Y_OFFSET = 104;
+    private static final int CASTING_OFFICE_X_OFFSET = 14;
+    private static final int CASTING_OFFICE_Y_OFFSET = -10;
     private static final int DICE_X_SPACING = 46;
     private static final int DICE_Y_SPACING = 46;
 
@@ -608,18 +608,29 @@ public class GameGUIView implements GameView {
                 if(locationName.equals("Trailer")){
                     int adjustedY = y + TRAILER_Y_OFFSET;
                     if (playerID >= 5 && playerID <= 8) {
-                        adjustedY += DICE_X_SPACING;
+                        adjustedY += DICE_Y_SPACING;
                     }
                     movePlayerDieToCoords(
                         playerLabel,
-                        x + BOARD_OFFSET + TRAILER_X_OFFSET + DICE_X_SPACING * ((playerID - 1) % 4),
+                        x + 
+                            BOARD_OFFSET + 
+                            TRAILER_X_OFFSET + 
+                            DICE_X_SPACING * ((playerID - 1) % 4),
                         adjustedY
                     );
                 } else if (locationName.equals("Casting Office")){
-                    int row = (playerID - 1) / 4;
-                    int col = (playerID - 1) % 4;
-                    x += col * DICE_X_SPACING;
-                    y += row * DICE_Y_SPACING;
+                    int adjustedY = y + DICE_Y_SPACING + CASTING_OFFICE_Y_OFFSET;
+                    if (playerID >= 5 && playerID <= 8) {
+                        adjustedY -= DICE_Y_SPACING;
+                    }
+                    movePlayerDieToCoords(
+                        playerLabel,
+                        x + 
+                            BOARD_OFFSET + 
+                            CASTING_OFFICE_X_OFFSET + 
+                            DICE_X_SPACING * ((playerID - 1) % 4),
+                        adjustedY
+                    );
                 } else {
                     int adjustedY = y + CARD_HEIGHT;
                     if (playerID >= 5 && playerID <= 8) {
