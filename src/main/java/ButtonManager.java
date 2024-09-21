@@ -1,6 +1,9 @@
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.ArrayList;
@@ -10,17 +13,30 @@ import java.util.List;
  * Manages the buttons for the game.
  */
 public class ButtonManager {
-    // private final Map<Button, Runnable> buttonActions = new HashMap<>();
+    // List to keep track of all buttons
     private final List<Button> buttons = new ArrayList<>();
+    
+    // List to store all shot ImageViews
+    private final List<ImageView> shotImageViews = new ArrayList<>();
+    
+    // Callback for button clicks
     private BiConsumer<String, Object> onButtonClick;
-
+    
+    // Image for the shot counter
+    private final Image shotImage;
 
     /**
-     * Creates a new button manager.
-     * 
-     * @param gameActionListener the game action listener
+     * Creates a new button manager and loads the shot image.
      */
     public ButtonManager() {
+        // Load the shot.png image from the resources folder
+        Image tempImage = null;
+        try {
+            tempImage = new Image(getClass().getResourceAsStream("shot.png"));
+        } catch (Exception e) {
+            System.out.println("Error loading shot.png: " + e.getMessage());
+        }
+        shotImage = tempImage;
     }
 
     /**
@@ -46,10 +62,7 @@ public class ButtonManager {
         Button button = new Button(command);
         
         // Set the associated data type
-        if (command.equals("MOVE")){
-            button.setUserData((String) data);
-        }
-        else if (command.equals("WORK")){
+        if (command.equalsIgnoreCase("MOVE") || command.equalsIgnoreCase("WORK")) {
             button.setUserData((String) data);
         }
         else if (command.equals("UPGRADE")){
@@ -75,6 +88,11 @@ public class ButtonManager {
 
         // Add action to button
         button.setOnMouseClicked(event -> {
+            // If the command is "ACT", place a shot image at the button's location
+            if (command.equalsIgnoreCase("ACT")) {
+                placeShotImage(group, button);
+            }
+            
             // Notify any additional listeners through the callback
             if (onButtonClick != null) {
                 onButtonClick.accept(command, data);
@@ -102,11 +120,56 @@ public class ButtonManager {
      * 
      * @param pane the pane from which buttons will be removed
      */
-    public void removeClickableAreas(Group group) {
+    public void removeButtons(Group group) {
         for (Button button : buttons) {
             group.getChildren().remove(button);
         }
         buttons.clear();
     }
 
+        /**
+     * Places a shot image at the location of the given button.
+     * 
+     * @param group  The group where the image will be added.
+     * @param button The button whose location determines where the image is placed.
+     */
+    private void placeShotImage(Group group, Button button) {
+        if (shotImage == null) {
+            System.out.println("Shot image not loaded.");
+            return;
+        }
+        
+        // Create an ImageView for the shot
+        ImageView shotImageView = new ImageView(shotImage);
+        shotImageView.setFitWidth(30);   // Adjust size as needed
+        shotImageView.setFitHeight(30);
+        shotImageView.setPreserveRatio(true);
+        shotImageView.setSmooth(true);
+        shotImageView.setCache(true);
+
+        // Calculate the position: place the shot image near the button
+        double shotX = button.getLayoutX() + (button.getPrefWidth() / 2) - (shotImageView.getFitWidth() / 2);
+        double shotY = button.getLayoutY() + (button.getPrefHeight() / 2) - (shotImageView.getFitHeight() / 2);
+
+        // Set the position of the shot image
+        shotImageView.setLayoutX(shotX);
+        shotImageView.setLayoutY(shotY);
+
+        // Add the shot image to the group
+        group.getChildren().add(shotImageView);
+
+        // Store the ImageView in the list
+        shotImageViews.add(shotImageView);
+    }
+    
+    /**
+     * Clears all shot counters from the board.
+     */
+    public void clearShotCounters(Group group) {
+        for (ImageView shotImageView : shotImageViews) {
+            group.getChildren().remove(shotImageView);
+        }
+        shotImageViews.clear();
+        System.out.println("All shot counters have been cleared.");
+    }
 }
