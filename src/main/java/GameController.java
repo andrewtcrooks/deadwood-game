@@ -938,22 +938,8 @@ public class GameController{
      * 
      * @param locationName The name of the location from which to remove shot images.
      */
-    private void removeAllShotsn() {
+    private void removeAllShots() {
         model.notifyObservers("REMOVE_ALL_SHOTS", null);
     }
-
-// ============================================================
-// Buttons Listener Methods
-// ============================================================
-
-
-    // public void onAct(){
-    //     // TODO: finish method
-    // }
-
-
-    // public void onUpgrade(Map<String, Object> data){
-    //     // TODO: finish method
-    // }
 
 }
