@@ -81,7 +81,13 @@ public class ParseBoardXML extends AbstractParseXML {
         NodeList neighborsList = setElement.getElementsByTagName("neighbor");
         for (int i = 0; i < neighborsList.getLength(); i++) {
             Element neighborElement = (Element) neighborsList.item(i);
-            neighbors.add(neighborElement.getAttribute("name"));
+            String neighborName = neighborElement.getAttribute("name");
+            if ("office".equalsIgnoreCase(neighborName)) {
+                neighborName = "Casting Office";
+            } else if ("trailer".equalsIgnoreCase(neighborName)) {
+                neighborName = "Trailer";
+            }
+            neighbors.add(neighborName);
         }
         return neighbors;
     }
