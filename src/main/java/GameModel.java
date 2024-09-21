@@ -162,7 +162,7 @@ public class GameModel implements Subject {
         Location trailer = new Location(
             "Trailer", 
             trailer_neighbors, 
-            new Area(1000,326,115,115), 
+            new Area(991,248,194,201), 
             Arrays.asList(), 
             Arrays.asList()
         );
@@ -174,7 +174,7 @@ public class GameModel implements Subject {
         Location office = new Location(
             "Casting Office", 
             office_neighbors, 
-            new Area(21, 478, 115, 115), 
+            new Area(9, 459, 208, 209), 
             Arrays.asList(), 
             Arrays.asList()
         );
