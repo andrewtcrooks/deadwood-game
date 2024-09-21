@@ -86,6 +86,13 @@ public class GameGUIView implements GameView {
     private static final int SHOT_HEIGHT = 42;
     private static final int SHOT_WIDTH = 42;
 
+    private static final int TRAILER_X_OFFSET = 11;
+    private static final int TRAILER_Y_OFFSET = 95;
+    private static final int CASTING_X_OFFSET = 47;
+    private static final int CASTING_Y_OFFSET = 47;
+    private static final int DICE_X_SPACING = 46;
+    private static final int DICE_Y_SPACING = 46;
+
 
 // Constructor
 
@@ -338,18 +345,6 @@ public class GameGUIView implements GameView {
     }
 
     /**
-     * Show an error message.
-     * 
-     * @param message The error message to display
-     */
-    private void showErrorMessage(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    /**
      * Create player dice labels.
      * 
      * @param eventData number of players (int)
@@ -420,7 +415,6 @@ public class GameGUIView implements GameView {
      * 
      * @param eventData The event data
      */
-    @SuppressWarnings("unchecked")
     public void addCard(Map<String, Integer> addCard) {
         int cardID = addCard.get("sceneCardID");
         String cardName = String.format("cards/%02d.png", cardID);
@@ -436,7 +430,6 @@ public class GameGUIView implements GameView {
      * 
      * @param eventData The event data
      */
-    @SuppressWarnings("unchecked")
     private void addCardBack(Map<String, Integer> addCardBack) {
         int x = addCardBack.get("locationX");
         int y = addCardBack.get("locationY");
@@ -492,7 +485,6 @@ public class GameGUIView implements GameView {
      * 
      * @param eventData The event data
      */
-    @SuppressWarnings("unchecked")    
     public void addButton(Map<String,Object> buttonData) {
         String command = buttonData.get("command").toString();
         String info = buttonData.get("data").toString();
@@ -594,13 +586,13 @@ public class GameGUIView implements GameView {
      * 
      * @param eventData The event data
      */
-    @SuppressWarnings("unchecked")
     private void handlePlayerMove(Map<String, Object> moveData) {
 
         // Get the x and y coords of the new location and the player id
         String command = (String) moveData.get("command");
+        String locationName = (String) moveData.get("locationName");
         Area area  = (Area) moveData.get("locationArea");
-        int playerID = (int) moveData.get("playerID");
+        int playerID = (Integer) moveData.get("playerID");
         
         int x = area.getX();
         int y = area.getY();
@@ -613,27 +605,39 @@ public class GameGUIView implements GameView {
         // Update the dice label location for the player
         if (playerLabel != null) {
             if (command.equals("MOVE")) {
-
-                int adjustedY = y + CARD_HEIGHT;
-                if (playerID >= 5 && playerID <= 8) {
-                    adjustedY -= CARD_HEIGHT;
+                if(locationName.equals("Trailer")){
+                    int adjustedY = y + TRAILER_Y_OFFSET;
+                    if (playerID >= 5 && playerID <= 8) {
+                        adjustedY += DICE_X_SPACING;
+                    }
+                    movePlayerDieToCoords(
+                        playerLabel,
+                        x + BOARD_OFFSET + TRAILER_X_OFFSET + DICE_X_SPACING * ((playerID - 1) % 4),
+                        adjustedY
+                    );
+                } else if (locationName.equals("Casting Office")){
+                    int row = (playerID - 1) / 4;
+                    int col = (playerID - 1) % 4;
+                    x += col * DICE_X_SPACING;
+                    y += row * DICE_Y_SPACING;
+                } else {
+                    int adjustedY = y + CARD_HEIGHT;
+                    if (playerID >= 5 && playerID <= 8) {
+                        adjustedY -= CARD_HEIGHT;
+                    }
+                    movePlayerDieToCoords(
+                        playerLabel,
+                        x + BOARD_OFFSET + 40 * ((playerID - 1) % 4),
+                        adjustedY
+                    );
                 }
-                movePlayerDieToCoords(
-                    playerLabel,
-                    x + BOARD_OFFSET + 40 * ((playerID - 1) % 4),
-                    adjustedY
-                );
             } else if (command.equals("WORK")) {
                 movePlayerDieToCoords(
                     playerLabel,
                     x + BOARD_OFFSET,
                     y
                 );
-            } else if(command.equals("Trailer")){
-
-            } else if (command.equals("Casting Office")){
-
-            }
+            } 
 
         }
 
