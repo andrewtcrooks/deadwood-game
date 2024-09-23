@@ -101,7 +101,13 @@ public class Board {
     /**
      * Wraps the scene in the Location.
      */
-    public void wrapScene(Player activePlayer, List<Player> players, Deck deck, Location location) {
+    public void wrapScene(
+        Player activePlayer, 
+        List<Player> players, 
+        Deck deck, 
+        Location location, 
+        List<Integer> diceRolls
+    ) {
         // Get players at location
         List<Player> playersAtLocation = getLocationPlayers(players, location);
         // Get the scene card at the location
@@ -125,7 +131,7 @@ public class Board {
             .collect(Collectors.toList());
         // Pay out bonus if any player was on a card
         if (playersOnCard.size() > 0) {
-            payOutBonus(activePlayer, playersOnCard, playersOffCard, deck, location);
+            payOutBonus(activePlayer, playersOnCard, playersOffCard, deck, location, diceRolls);
         }
         // Remove all players from their roles and reset rehearsal tokens
         playersAtLocation.forEach(player -> setPlayerRole(player.getID(), null));
@@ -296,14 +302,14 @@ public class Board {
     /**
      * Pays out the bonus to all players at the Location.
      */
-    private void payOutBonus(Player activePlayer, List<Player> playersOnCard, List<Player> playersOffCard, Deck deck, Location location) {
-        // Get the scene card at the location
-        int sceneCardID = getLocationSceneCardID(location.getName());
-        SceneCard sceneCard = deck.getDrawnCard(sceneCardID);
-        // Get the movie budget
-        int movieBudget = sceneCard.getBudget();
-        // Roll a number of dice equal to the budget
-        List<Integer> diceRolls = rollDice(movieBudget);
+    private void payOutBonus(
+        Player activePlayer, 
+        List<Player> playersOnCard, 
+        List<Player> playersOffCard, 
+        Deck deck, 
+        Location location, 
+        List<Integer> diceRolls
+    ) {
         // Sort dice rolls in descending order
         Collections.sort(diceRolls, Collections.reverseOrder());
         // Distribute dice rolls as money in a round-robin fashion, starting from the active player
@@ -326,19 +332,6 @@ public class Board {
         }
     }
 
-    /**
-     * Rolls a number of dice and returns the results.
-     *
-     * @param numDice the number of dice to roll
-     * @return the results of the dice rolls
-     */
-    private List<Integer> rollDice(int numDice) {
-        List<Integer> rolls = new ArrayList<>();
-        for (int i = 0; i < numDice; i++) {
-            Dice dice = new Dice(); // Use the Dice class to roll the dice
-            rolls.add(dice.getValue()); // Get the value of the roll
-        }
-        return rolls;
-    }
+
 
 }

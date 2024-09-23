@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -154,6 +155,7 @@ public class PlayerActionAct implements PlayerAction {
      * @param view the game view
      */
     private void wrapLocationScene(Player player, Location location, Deck deck, Board board, GameModel model, GameView view) {
+        List<Integer> diceRolls;
         String locationName = location.getName();
         // Get all players
         List<Player> players = model.getPlayers();
@@ -167,37 +169,50 @@ public class PlayerActionAct implements PlayerAction {
         // Display bonus payout message if there are any players on-card
         if (anyPlayerOnCard) {
             view.showMessage("Bonus payout!");
+            // Get the scene card at the location
+            int sceneCardID = board.getLocationSceneCardID(location.getName());
+            SceneCard sceneCard = deck.getDrawnCard(sceneCardID);
+            // Get the movie budget
+            int movieBudget = sceneCard.getBudget();
+            // Roll a number of dice equal to the budget
+            diceRolls = rollDice(movieBudget);
+            // Print out the dice rolls nicely formatted
+            view.showMessage("Dice rolls: " + diceRolls.stream()
+                    .map(Object::toString)
+                    .collect(Collectors.joining(", ")));
+        } else {
+            diceRolls = new ArrayList<>();
         }
         // get active player
         Player activePlayer = model.getActivePlayer();
-        board.wrapScene(activePlayer, playersAtLocation, deck, location);
+        board.wrapScene(activePlayer, playersAtLocation, deck, location, diceRolls);
         view.showMessage("The scene is wrapped.");
 
         if (view instanceof GameGUIView) {
 
-            // Re-add cardback to location
-            int x = location.getArea().getX();
-            int y = location.getArea().getY();
-            // Create a HashMap to hold the event data
-            Map<String, Object> cardbackData = new HashMap<>();
-            // Add data to eventData
-            cardbackData.put("locationX", x);
-            cardbackData.put("locationY", y);
-            // Add cardback to the location as well
-            model.notifyObservers("ADD_CARD_BACK", cardbackData);
-            
-            // Get list of players at the location
-            List<Player> playersAtCurrentLocation =
-                board.getLocationPlayers(model.getPlayers(),location);
+            // TODO:  make card back at location visible again
 
+
+            // // Re-add cardback to location
+            Area area = location.getArea();
+            // int x = location.getArea().getX();
+            // int y = location.getArea().getY();
+            // // Create a HashMap to hold the event data
+            // Map<String, Object> cardbackData = new HashMap<>();
+            // // Add data to eventData
+            // cardbackData.put("locationX", x);
+            // cardbackData.put("locationY", y);
+            // // Add cardback to the location as well
+            // model.notifyObservers("ADD_CARD_BACK", cardbackData);
+            
             // Iterate through each player and move them back to the location
-            for (Player playerEntry : playersAtCurrentLocation) {
+            for (Player playerEntry : playersAtLocation) {
                 // Create a HashMap to hold the event data
                 Map<String, Object> moveData = new HashMap<>();
                 // Add data to eventData
                 moveData.put("locationName", locationName);
                 moveData.put("playerID", playerEntry.getID());
-                moveData.put("locationArea", location.getArea());
+                moveData.put("locationArea", area);
                 // Move player to location
                 model.notifyObservers("PLAYER_MOVE", moveData);
             }
@@ -222,6 +237,21 @@ public class PlayerActionAct implements PlayerAction {
                                                     t2.getNumber()))
                 .get();
         shotManager.placeShotImage(guiView.getGroup(), wrappedTake.getArea());
+    }
+
+    /**
+     * Rolls a number of dice and returns the results.
+     *
+     * @param numDice the number of dice to roll
+     * @return the results of the dice rolls
+     */
+    private List<Integer> rollDice(int numDice) {
+        List<Integer> rolls = new ArrayList<>();
+        for (int i = 0; i < numDice; i++) {
+            Dice dice = new Dice(); // Use the Dice class to roll the dice
+            rolls.add(dice.getValue()); // Get the value of the roll
+        }
+        return rolls;
     }
 
 }
