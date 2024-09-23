@@ -173,6 +173,36 @@ public class PlayerActionAct implements PlayerAction {
         board.wrapScene(activePlayer, playersAtLocation, deck, location);
         view.showMessage("The scene is wrapped.");
 
+        if (view instanceof GameGUIView) {
+
+            // Re-add cardback to location
+            int x = location.getArea().getX();
+            int y = location.getArea().getY();
+            // Create a HashMap to hold the event data
+            Map<String, Object> cardbackData = new HashMap<>();
+            // Add data to eventData
+            cardbackData.put("locationX", x);
+            cardbackData.put("locationY", y);
+            // Add cardback to the location as well
+            model.notifyObservers("ADD_CARD_BACK", cardbackData);
+            
+            // Get list of players at the location
+            List<Player> playersAtCurrentLocation =
+                board.getLocationPlayers(model.getPlayers(),location);
+
+            // Iterate through each player and move them back to the location
+            for (Player playerEntry : playersAtCurrentLocation) {
+                // Create a HashMap to hold the event data
+                Map<String, Object> moveData = new HashMap<>();
+                // Add data to eventData
+                moveData.put("locationName", locationName);
+                moveData.put("playerID", playerEntry.getID());
+                moveData.put("locationArea", location.getArea());
+                // Move player to location
+                model.notifyObservers("PLAYER_MOVE", moveData);
+            }
+
+        }
     }
 
     /**
