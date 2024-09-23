@@ -86,6 +86,9 @@ public class GameController{
      * Ends the day by resetting the board for the next day.
      */
     private void endDay() {
+        // TODO: remove debug line below
+        this.model.notifyObservers("SHOW_MESSAGE", "End of day triggered.");
+
         // reset player locations to Trailer
         this.model.resetPlayerLocations();
         // reset player roles
@@ -105,14 +108,33 @@ public class GameController{
         if (view instanceof GameGUIView) {
             //TODO: fix this part that clear up the gui each day
 
-            // // Return all players to Trailer
-            // eventData.put("command", "MOVE");
-            //             eventData.put("command", locationName);
-            //             eventData.put("playerID", player.getID());
-            //             eventData.put("locationArea", area);
-            // this.model.notifyObservers("PLAYER_MOVE
-            // // redeal the cards and card backs
-            // initializeLocationCards();
+            // Get the area for the Trailer location from the model
+            Area trailerArea = this.model.getLocation("Trailer").getArea();
+
+            // Get all players from the model
+            List<Player> players= this.model.getPlayers();
+
+            // Return all players to Trailer
+            for (Player player : players) {
+                // get player ID
+                int playerID = player.getID();
+                // Create a HashMap to hold the event data
+                Map<String, Object> eventData = new HashMap<>();
+                // Add data to eventData
+                eventData.put("locationName", "Trailer");
+                eventData.put("locationArea", trailerArea);
+                eventData.put("playerID", playerID);
+
+                // Add the player die to the location
+                this.model.notifyObservers("PLAYER_MOVE", eventData);
+
+            }
+
+            // Redeal the cards and card backs
+            initializeLocationCards();
+
+            // remove all remaining buttons
+            this.model.notifyObservers("REMOVE_ALL_BUTTONS", null);
             // Remove all shots from the board
             this.model.notifyObservers("REMOVE_ALL_SHOTS", null);
         }
@@ -284,7 +306,12 @@ public class GameController{
         int numDays = this.model.getNumDays();
         int day = this.model.getDay();
 
+        // TODO: remove debug line below
+        this.model.notifyObservers("SHOW_MESSAGE", "Current Day: " + day + " / Total Days: " + numDays);
+
         if (day > numDays) {
+            // TODO: remove debug line below
+            this.model.notifyObservers("SHOW_MESSAGE", "All days completed. Ending game.");
             // Complete the game when all days are done
             return CompletableFuture.completedFuture(null);
         }
@@ -295,6 +322,9 @@ public class GameController{
         return playDayGUI().thenCompose(ignored -> {
             // After the day ends, increment the day and move to the next
             this.model.incrementDay();
+
+            // TODO: remove debug line below
+            this.model.notifyObservers("SHOW_MESSAGE", "Day incremented to: " + this.model.getDay());
 
             // Recursively play the next day
             return playDaysGUI();
@@ -352,18 +382,20 @@ public class GameController{
         player.setHasWorked(false);
         player.setHasUpgraded(false);
 
-        // GUI ONLY: Highlight the player's row in the player stats table
         if (view instanceof GameGUIView) {
-            // TODO: make this a this.model.notifyObersvers call
-            // ((GameGUIView) view).getPlayerStatsManager().highlightRow(player.getID());
+            // Highlight the player's row in the player stats table
             this.model.notifyObservers("HIGHLIGHT_PLAYER_ROW", player.getID());
 
             // Process the player's turn in GUI mode, wait for input
             return processPlayerTurnGUI(player).thenCompose(ignored -> {
-                // After player's turn ends, continue to the next step
-                player.setActive(false); // Mark player as inactive after turn
-
-                return CompletableFuture.completedFuture(null);
+                // After player's turn ends, check if only 1 scene remains
+                if (this.model.getBoard().getNumScenesRemaining() == 1) {
+                    endDay();  // End the day if only 1 scene remains
+                    return CompletableFuture.completedFuture(null);
+                } else {
+                    player.setActive(false);  // Mark player as inactive after turn
+                    return CompletableFuture.completedFuture(null);
+                }
             });
         }
 
@@ -405,151 +437,149 @@ public class GameController{
         CompletableFuture<Map<String, Object>> playerInputFuture = ((GameGUIView) this.view).getPlayerInputFuture();
 
         playerInputFuture.thenAccept(commandData -> {
-                String command = (String) commandData.get("command");
-                String data = (String) commandData.get("data");
-                Board board = this.model.getBoard();
-                final boolean[] endTurn = {false};
-                
-                Platform.runLater(() -> {
-                    // Handle the command with an if-else tree
-                    if (command.equals("MOVE")) {
-                        String locationName = data;
-                        // Move player in the model
-                        board.setPlayerLocation(player, locationName);
-                        player.setHasMoved(true);
+            String command = (String) commandData.get("command");
+            String data = (String) commandData.get("data");
+            Board board = this.model.getBoard();
+            final boolean[] endTurn = {false};
+            
+            Platform.runLater(() -> {
+                // Handle the command with an if-else tree
+                if (command.equals("MOVE")) {
+                    String locationName = data;
+                    // Move player in the model
+                    board.setPlayerLocation(player, locationName);
+                    player.setHasMoved(true);
 
-                        // Move player on the board
-                        Location location = this.model.getLocations()
-                                                    .get(locationName);
-                        Area area = location.getArea();
-                        // Create a HashMap to hold the event data
-                        Map<String, Object> eventData = new HashMap<>();
-                        // Add data to eventData
-                        eventData.put("command", "MOVE");
-                        eventData.put("locationName", locationName);
-                        eventData.put("playerID", player.getID());
-                        eventData.put("locationArea", area);
+                    // Move player on the board
+                    Location location = this.model.getLocations()
+                                                .get(locationName);
+                    Area area = location.getArea();
+                    // Create a HashMap to hold the event data
+                    Map<String, Object> eventData = new HashMap<>();
+                    // Add data to eventData
+                    eventData.put("locationName", locationName);
+                    eventData.put("playerID", player.getID());
+                    eventData.put("locationArea", area);
 
-                        // Add the player to the location
-                        this.model.notifyObservers("PLAYER_MOVE", eventData);
+                    // Add the player to the location
+                    this.model.notifyObservers("PLAYER_MOVE", eventData);
 
-                    } else if (command.equals("WORK")) {
-                        String roleName = data;
-                        // Get the current player's location
-                        // int currentPlayerID = this.model.getCurrentPlayer();
-                        Location location = this.model.getLocation(
-                            board.getPlayerLocationName(currentPlayer)
-                        );
+                } else if (command.equals("WORK")) {
+                    String roleName = data;
+                    // Get the current player's location
+                    // int currentPlayerID = this.model.getCurrentPlayer();
+                    Location location = this.model.getLocation(
+                        board.getPlayerLocationName(currentPlayer)
+                    );
 
-                        // Get all the location and scene card roles
-                        List<Role> locationRoles = location.getRoles();
-                        List<Role> sceneCardRoles = board.getLocationSceneCardRoles(
-                            location.getName(), this.model.getDeck()
-                        );
+                    // Get all the location and scene card roles
+                    List<Role> locationRoles = location.getRoles();
+                    List<Role> sceneCardRoles = board.getLocationSceneCardRoles(
+                        location.getName(), this.model.getDeck()
+                    );
 
-                        // Determine if the roleName is onCard
-                        boolean onCard = false;
+                    // Determine if the roleName is onCard
+                    boolean onCard = false;
+                    for (Role role : sceneCardRoles) {
+                        if (role.getName().equals(roleName)) {
+                            onCard = true;
+                            break;
+                        }
+                    }
+
+                    int x = 0;
+                    int y = 0;
+
+                    
+                    // if on card add the player to the x and y coordinates of the location 
+                    // plus the role area
+                    if (onCard) {
+                        // get the x and y coords for the role on the scene card
                         for (Role role : sceneCardRoles) {
                             if (role.getName().equals(roleName)) {
-                                onCard = true;
+                                x = role.getArea().getX() + 
+                                    location.getArea().getX() +
+                                    1;
+                                y = role.getArea().getY() + 
+                                    location.getArea().getY() +
+                                    1;
+                                role.setOccupied(true);
                                 break;
                             }
                         }
-
-                        int x = 0;
-                        int y = 0;
-
-                        
-                        // if on card add the player to the x and y coordinates of the location 
-                        // plus the role area
-                        if (onCard) {
-                            // get the x and y coords for the role on the scene card
-                            for (Role role : sceneCardRoles) {
-                                if (role.getName().equals(roleName)) {
-                                    x = role.getArea().getX() + 
-                                        location.getArea().getX() +
-                                        1;
-                                    y = role.getArea().getY() + 
-                                        location.getArea().getY() +
-                                        1;
-                                    role.setOccupied(true);
-                                    break;
-                                }
-                            }
-                        } else {
-                            for (Role role : locationRoles) {
-                                if (role.getName().equals(roleName)) {
-                                    x = role.getArea().getX() + 3;
-                                    y = role.getArea().getY() + 3;
-                                    role.setOccupied(true);
-                                    break;
-                                }
+                    } else {
+                        for (Role role : locationRoles) {
+                            if (role.getName().equals(roleName)) {
+                                x = role.getArea().getX() + 3;
+                                y = role.getArea().getY() + 3;
+                                role.setOccupied(true);
+                                break;
                             }
                         }
-                        // Create a HashMap to hold the event data
-                        Map<String, Object> eventData = new HashMap<>();
-                        // Add data to eventData
-                        eventData.put("command", "WORK");
-                        eventData.put("playerID", currentPlayer.getID());
-                        eventData.put("locationName", location.getName());
-                        eventData.put("locationArea", new Area(x, y, 0, 0));
-                        // Add the player to the location
-                        this.model.notifyObservers("PLAYER_MOVE", eventData);
-                        
-                        board.setPlayerRole(currentPlayer.getID(), roleName);
-
-                        // set player as hasWorked
-                        currentPlayer.setHasWorked(true);
-                        
-                    } else if (command.equals("ACT")) {
-                        // TODO: add shot counter image to last wrapped Take
-
-                        // Handle act action in model
-                        actionMap.get("act").execute(player, model, view);
-
-                        // TODO: Update location shot counter images
-
-                        // end turn
-                        endTurn[0] = true;
-                    } else if (command.equals("REHEARSE")) {
-                        // Handle rehearse action in model
-                        actionMap.get("rehearse").execute(player, model, view);
-
-                        // end turn
-                        endTurn[0] = true;
-
-                    } else if (command.equals("UPGRADE")) {
-                        // Handle upgrade action in model
-                        // actionMap.get("upgrade").execute(player, model, view);
-                        // player.upgrade(data); 
-                        player.setHasUpgraded(true);
-
-                    } else if (command.equals("END")) {
-                        // Handle end turn action
-                        actionMap.get("end").execute(player, model, view);
-                        // end turn
-                        endTurn[0] = true;
                     }
+                    // Create a HashMap to hold the event data
+                    Map<String, Object> eventData = new HashMap<>();
+                    // Add data to eventData
+                    eventData.put("playerID", currentPlayer.getID());
+                    eventData.put("locationName", location.getName());
+                    eventData.put("locationArea", new Area(x, y, 0, 0));
+                    // Add the player to the location
+                    this.model.notifyObservers("PLAYER_WORK", eventData);
+                    
+                    board.setPlayerRole(currentPlayer.getID(), roleName);
 
-                    // Determine if the turn should end based on the command sequence
-                    if (player.getHasMoved() && (player.getHasWorked() || player.getHasUpgraded())) {
-                        endTurn[0] = true;
-                    }
+                    // set player as hasWorked
+                    currentPlayer.setHasWorked(true);
+                    
+                } else if (command.equals("ACT")) {
+                    // TODO: add shot counter image to last wrapped Take
 
-                    // If the player's turn ends, complete the future and end the turn
-                    if (endTurn[0]) {
-                        player.setActive(false);
-                        // removePlayerActionButtons();
-                        // Complete the future to proceed to the next player
-                        turnCompleted.complete(null);
-                    } else {
-                        // removePlayerActionButtons();
-                        // Continue processing the player's actions
-                    processPlayerActions(player, turnCompleted);
-                    }
-                });
+                    // Handle act action in model
+                    actionMap.get("act").execute(player, model, view);
+
+                    // TODO: Update location shot counter images
+
+                    // end turn
+                    endTurn[0] = true;
+                } else if (command.equals("REHEARSE")) {
+                    // Handle rehearse action in model
+                    actionMap.get("rehearse").execute(player, model, view);
+
+                    // end turn
+                    endTurn[0] = true;
+
+                } else if (command.equals("UPGRADE")) {
+                    // Handle upgrade action in model
+                    // actionMap.get("upgrade").execute(player, model, view);
+                    // player.upgrade(data); 
+                    player.setHasUpgraded(true);
+
+                } else if (command.equals("END")) {
+                    // Handle end turn action
+                    actionMap.get("end").execute(player, model, view);
+                    // end turn
+                    endTurn[0] = true;
+                }
+
+                // Determine if the turn should end based on the command sequence
+                if (player.getHasMoved() && (player.getHasWorked() || player.getHasUpgraded())) {
+                    endTurn[0] = true;
+                }
+
+                // If the player's turn ends, complete the future and end the turn
+                if (endTurn[0]) {
+                    player.setActive(false);
+                    // removePlayerActionButtons();
+                    // Complete the future to proceed to the next player
+                    turnCompleted.complete(null);
+                } else {
+                    // removePlayerActionButtons();
+                    // Continue processing the player's actions
+                processPlayerActions(player, turnCompleted);
+                }
             });
-        }
+        });
+    }
 
     /**
      * Handles the beginning of each player's turn.
@@ -573,7 +603,7 @@ public class GameController{
             }
             if (!player.getHasUpgraded()) { // if player hasn't upgraded this turn
                 // Add upgrade buttons
-                addUpgradeListenerToCastingOffice(player); 
+                // addUpgradeListenerToCastingOffice(player); 
             }
         } else { // if at any other location besides Trailer or Casting Office
             // If player has no Role
@@ -604,7 +634,7 @@ public class GameController{
      * Handles the end of each player's turn.
      */
     public void removePlayerActionButtons() {
-        this.model.notifyObservers("REMOVE_BUTTONS", null);
+        this.model.notifyObservers("REMOVE_ALL_BUTTONS", null);
     }
 
     /**
@@ -621,15 +651,15 @@ public class GameController{
 
         for (String neighborName : neighbors) {
             // make sure neighborName has first letter capitalized
-            String formattedNeighborName = neighborName.substring(0, 1).toUpperCase() + 
-                                  neighborName.substring(1);
-            Location neighborLocation = this.model.getLocation(formattedNeighborName);
+            // String formattedNeighborName = neighborName.substring(0, 1).toUpperCase() + 
+            //                       neighborName.substring(1);
+            Location neighborLocation = this.model.getLocation(neighborName);
             Area area = neighborLocation.getArea();
             // Create a HashMap to hold the event data
             Map<String, Object> eventData = new HashMap<>();
             // Add data to eventData
             eventData.put("command", "MOVE");
-            eventData.put("data", formattedNeighborName);
+            eventData.put("data", neighborName);
             eventData.put("area", area);
             // Add the neighbor location to the view
             this.model.notifyObservers("ADD_BUTTON", eventData);
@@ -853,7 +883,6 @@ public class GameController{
         for (Player player : this.model.getPlayers()) {
             // create moveData
             Map<String, Object> moveData = new HashMap<>();
-            moveData.put("command", "MOVE");
             moveData.put("playerID", player.getID());
             moveData.put("locationName", "Trailer");
             moveData.put("locationArea", area);
@@ -914,32 +943,12 @@ public class GameController{
         
         // Create and populate the movePlayer HashMap
         HashMap<String, Object> eventData = new HashMap<>();
-        eventData.put("command", "MOVE");
         eventData.put("playerID", player.getID());
-        // movePlayer.put("playerRank", player.getRank());
         eventData.put("locationName", locationName);
         eventData.put("locationArea", location.getArea());
         
         // Pass the string and the movePlayer HashMap to notifyObservers
         this.model.notifyObservers("PLAYER_MOVE", eventData);
-    }
-
-    /**
-     * Notifies observers to add a shot image at the specified location.
-     *
-     * @param locationName The name of the location where the shot image should be added.
-     */
-    private void addShotToLocation(String locationName) {
-        model.notifyObservers("ADD_SHOT", locationName);
-    }
-
-    /**
-     * Notifies observers to remove all shot images from the specified location.
-     * 
-     * @param locationName The name of the location from which to remove shot images.
-     */
-    private void removeAllShots() {
-        model.notifyObservers("REMOVE_ALL_SHOTS", null);
     }
 
 }
