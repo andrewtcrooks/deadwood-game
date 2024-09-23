@@ -1,4 +1,6 @@
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /*
@@ -45,6 +47,10 @@ public class PlayerActionAct implements PlayerAction {
         if (roll >= budget) {
             processSuccess(player, roll, deck, board, model, view);
             location.removeShotCounter();
+            // If GUI view, add shot image to last wrapped take
+            if (view instanceof GameGUIView) {
+                addShotImageToLastWrappedTake(location, ((GameGUIView) view));
+            }
         } else {
             processFailure(player,roll, deck, board, model, view);
         }
@@ -166,6 +172,26 @@ public class PlayerActionAct implements PlayerAction {
         Player activePlayer = model.getActivePlayer();
         board.wrapScene(activePlayer, playersAtLocation, deck, location);
         view.showMessage("The scene is wrapped.");
+
+    }
+
+    /**
+     * Adds a shot image to the last wrapped take at the given location in
+     * GUI mode.
+     * 
+     * @param location the location
+     * @param guiView the game GUI view
+     */
+    public void addShotImageToLastWrappedTake(Location location, GameGUIView guiView) {
+        // Get the burron manager
+        ShotManager shotManager = guiView.getShotManager();
+        // Get the are of the wrapped take with the largest number
+        Take wrappedTake = location.getTakes().stream()
+                .filter(t -> t.isWrapped())
+                .max((t1, t2) -> Integer.compare(t1.getNumber(), 
+                                                    t2.getNumber()))
+                .get();
+        shotManager.placeShotImage(guiView.getGroup(), wrappedTake.getArea());
     }
 
 }
