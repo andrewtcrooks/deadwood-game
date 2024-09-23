@@ -36,9 +36,10 @@ public class GameGUIView implements GameView {
     private Stage stage;
 
     // Managers
-    private ButtonManager buttonManager;
     private final ConsoleManager consoleManager;
     private PlayerStatsManager playerStatsManager;
+    private ButtonManager buttonManager;
+    private ShotManager shotManager;
 
     // Constants
     private final int BOARD_IMAGE_WIDTH = 1200;
@@ -58,7 +59,7 @@ public class GameGUIView implements GameView {
     private static final int SIDEBAR_RIGHT_BORDER = 28;
     // private static final int MENU_Y = 10;
     private static final int SIDEBAR_WIDTH = 300;
-    private static final int BOARD_OFFSET = SIDEBAR_LEFT_BORDER + 
+    private static final int BOARD_OFFSET_X = SIDEBAR_LEFT_BORDER + 
                                             SIDEBAR_WIDTH + 
                                             SIDEBAR_RIGHT_BORDER;
 
@@ -111,6 +112,7 @@ public class GameGUIView implements GameView {
         this.consoleManager = new ConsoleManager();
         this.playerStatsManager = new PlayerStatsManager();
         this.buttonManager = new ButtonManager();
+        this.shotManager = new ShotManager(BOARD_OFFSET_X);
         
         // Create the console 
         this.consoleManager.createConsole(
@@ -146,7 +148,7 @@ public class GameGUIView implements GameView {
         this.stage = primaryStage;
         
         // If no scene is set, create and set a new one
-        Scene scene = new Scene(rootGroup, BOARD_IMAGE_WIDTH + BOARD_OFFSET, BOARD_IMAGE_HEIGHT + BOARD_IMAGE_HEIGHT_ADJUST);
+        Scene scene = new Scene(rootGroup, BOARD_IMAGE_WIDTH + BOARD_OFFSET_X, BOARD_IMAGE_HEIGHT + BOARD_IMAGE_HEIGHT_ADJUST);
         
         // Set the background color for the scene
         scene.setFill(javafx.scene.paint.Color.web("#AF734A"));
@@ -177,7 +179,7 @@ public class GameGUIView implements GameView {
         // Set the board view to the board graphic
         boardLabel.setGraphic(boardView);
         // Set the board label properties
-        boardLabel.setLayoutX(BOARD_OFFSET);
+        boardLabel.setLayoutX(BOARD_OFFSET_X);
         boardLabel.setLayoutY(0);
         // Add the board label to the board pane
         rootGroup.getChildren().add(boardLabel);
@@ -268,7 +270,7 @@ public class GameGUIView implements GameView {
             case "ADD_CARD":
                 addCard((Map<String, Integer>) eventData);
                 break;
-            case "ADD_CARD_BACKS":
+            case "ADD_CARD_BACK":
                 addCardBack((Map<String, Integer>) eventData);
                 break;
             case "CREATE_PLAYER_STATS_TABLE":
@@ -283,11 +285,17 @@ public class GameGUIView implements GameView {
             case "ADD_BUTTON":
                 addButton((Map<String,Object>) eventData);
                 break;
-            case "REMOVE_BUTTONS":
-                buttonManager.removeButtons(this.rootGroup);
+            case "REMOVE_ALL_BUTTONS":
+                buttonManager.clearAllButtons(this.rootGroup);
+                break;
+            case "REMOVE_ALL_SHOTS":
+                shotManager.clearShotCounters(this.rootGroup);
                 break;
             case "PLAYER_MOVE":
                 handlePlayerMove((Map<String, Object>) eventData);
+                break;
+            case "PLAYER_WORK":
+                handlePlayerWork((Map<String, Object>) eventData);
                 break;
             case "LOAD_GAME":
                 handleLoadGame(eventData);
@@ -324,6 +332,24 @@ public class GameGUIView implements GameView {
     }
 
     /**
+     * Get the shot manager for the board.
+     * 
+     * @return The shot manager
+     */
+    public ShotManager getShotManager() {
+        return this.shotManager;
+    }
+
+    /**
+     * Get the button manager for the board.
+     * 
+     * @return The button manager
+     */
+    public ButtonManager getButtonManager() {
+        return this.buttonManager;
+    }
+
+    /**
      * Get the player stats manager.
      * 
      * @return The player stats manager
@@ -331,6 +357,16 @@ public class GameGUIView implements GameView {
     public PlayerStatsManager getPlayerStatsManager() {
         return this.playerStatsManager;
     }
+
+    /**
+     * Get the root group for the board.
+     * 
+     * @return The root group
+     */
+    public Group getGroup() {
+        return this.rootGroup;
+    }
+
 
 // Observer Pattern Methods
 
@@ -360,7 +396,7 @@ public class GameGUIView implements GameView {
             playerData.entrySet()) {
             Integer playerID = entry.getKey();
             Map<String, Integer> playerInfo = entry.getValue();
-            int x = playerInfo.get("locationX") + BOARD_OFFSET;
+            int x = playerInfo.get("locationX") + BOARD_OFFSET_X;
             int y = playerInfo.get("locationY");
     
             
@@ -413,15 +449,15 @@ public class GameGUIView implements GameView {
     /**
      * Add a card to the GUI board.
      * 
-     * @param eventData The event data
+     * @param cardInfo The card info
      */
-    public void addCard(Map<String, Integer> addCard) {
-        int cardID = addCard.get("sceneCardID");
+    public void addCard(Map<String, Integer> cardInfo) {
+        int cardID = cardInfo.get("sceneCardID");
         String cardName = String.format("cards/%02d.png", cardID);
-        int x = addCard.get("locationX");
-        int y = addCard.get("locationY");
+        int x = cardInfo.get("locationX");
+        int y = cardInfo.get("locationY");
         // Add offset to x to compensate for left sidebar
-        int new_x = x + BOARD_OFFSET;
+        int new_x = x + BOARD_OFFSET_X;
         moveCardToLocation(new_x, y, cardName);
     }
 
@@ -434,7 +470,7 @@ public class GameGUIView implements GameView {
         int x = addCardBack.get("locationX");
         int y = addCardBack.get("locationY");
         // Add offset to x to compensate for left sidebar
-        int new_x = x + BOARD_OFFSET;
+        int new_x = x + BOARD_OFFSET_X;
         moveCardToLocation(new_x, y, "CardBack-small.jpg");
     }
 
@@ -494,7 +530,7 @@ public class GameGUIView implements GameView {
             command.substring(1).toLowerCase();
 
         Area offsetArea = new Area(
-            area.getX() + BOARD_OFFSET, 
+            area.getX() + BOARD_OFFSET_X, 
             area.getY(), 
             area.getH(), 
             area.getW()
@@ -589,7 +625,6 @@ public class GameGUIView implements GameView {
     private void handlePlayerMove(Map<String, Object> moveData) {
 
         // Get the x and y coords of the new location and the player id
-        String command = (String) moveData.get("command");
         String locationName = (String) moveData.get("locationName");
         Area area  = (Area) moveData.get("locationArea");
         int playerID = (Integer) moveData.get("playerID");
@@ -604,55 +639,81 @@ public class GameGUIView implements GameView {
 
         // Update the dice label location for the player
         if (playerLabel != null) {
-            if (command.equals("MOVE")) {
-                if(locationName.equals("Trailer")){
-                    int adjustedY = y + TRAILER_Y_OFFSET;
-                    if (playerID >= 5 && playerID <= 8) {
-                        adjustedY += DICE_Y_SPACING;
-                    }
-                    movePlayerDieToCoords(
-                        playerLabel,
-                        x + 
-                            BOARD_OFFSET + 
-                            TRAILER_X_OFFSET + 
-                            DICE_X_SPACING * ((playerID - 1) % 4),
-                        adjustedY
-                    );
-                } else if (locationName.equals("Casting Office")){
-                    int adjustedY = y + DICE_Y_SPACING + CASTING_OFFICE_Y_OFFSET;
-                    if (playerID >= 5 && playerID <= 8) {
-                        adjustedY -= DICE_Y_SPACING;
-                    }
-                    movePlayerDieToCoords(
-                        playerLabel,
-                        x + 
-                            BOARD_OFFSET + 
-                            CASTING_OFFICE_X_OFFSET + 
-                            DICE_X_SPACING * ((playerID - 1) % 4),
-                        adjustedY
-                    );
-                } else {
-                    int adjustedY = y + CARD_HEIGHT;
-                    if (playerID >= 5 && playerID <= 8) {
-                        adjustedY -= CARD_HEIGHT;
-                    }
-                    movePlayerDieToCoords(
-                        playerLabel,
-                        x + BOARD_OFFSET + 40 * ((playerID - 1) % 4),
-                        adjustedY
-                    );
+            if(locationName.equals("Trailer")){
+                int adjustedY = y + TRAILER_Y_OFFSET;
+                if (playerID >= 5 && playerID <= 8) {
+                    adjustedY += DICE_Y_SPACING;
                 }
-            } else if (command.equals("WORK")) {
                 movePlayerDieToCoords(
                     playerLabel,
-                    x + BOARD_OFFSET,
-                    y
+                    x + 
+                        BOARD_OFFSET_X + 
+                        TRAILER_X_OFFSET + 
+                        DICE_X_SPACING * ((playerID - 1) % 4),
+                    adjustedY
                 );
-            } 
-
+            } else if (locationName.equals("Casting Office")){
+                int adjustedY = y + DICE_Y_SPACING + CASTING_OFFICE_Y_OFFSET;
+                if (playerID >= 5 && playerID <= 8) {
+                    adjustedY -= DICE_Y_SPACING;
+                }
+                movePlayerDieToCoords(
+                    playerLabel,
+                    x + 
+                        BOARD_OFFSET_X + 
+                        CASTING_OFFICE_X_OFFSET + 
+                        DICE_X_SPACING * ((playerID - 1) % 4),
+                    adjustedY
+                );
+            } else {
+                int adjustedY = y + CARD_HEIGHT;
+                if (playerID >= 5 && playerID <= 8) {
+                    adjustedY -= CARD_HEIGHT;
+                }
+                movePlayerDieToCoords(
+                    playerLabel,
+                    x + BOARD_OFFSET_X + 40 * ((playerID - 1) % 4),
+                    adjustedY
+                );
+            }
         }
 
     }
+
+
+    /**
+     * Handle player work event.
+     * 
+     * @param eventData The event data
+     */
+    private void handlePlayerWork(Map<String, Object> moveData) {
+
+        // Get the x and y coords of the new location and the player id
+        Area area  = (Area) moveData.get("locationArea");
+        int playerID = (Integer) moveData.get("playerID");
+        
+        int x = area.getX();
+        int y = area.getY();
+
+        // Get the player label
+        String key = String.valueOf(playerID);
+        Label playerLabel = 
+            playerDiceLabels.get(key);
+
+        // Update the dice label location for the player
+        if (playerLabel != null) {
+            // Move the player dice to the new location
+            movePlayerDieToCoords(
+                playerLabel,
+                x + BOARD_OFFSET_X,
+                y
+            );
+        }
+
+    }
+
+
+
 
     private void handleLoadGame(Object eventData) {
         // TODO: Handle load game event
@@ -722,28 +783,6 @@ public class GameGUIView implements GameView {
         // Not used in GUI mode
         return null;
     }
-
-    // /**
-    //  * Get the player's input in CLI mode.
-    //  * 
-    //  * @return The player's input
-    //  */
-    // @Override
-    // public String getPlayerInput() {
-    //     if (playerInputFuture == null || playerInputFuture.isDone()) {
-    //         playerInputFuture = CompletableFuture.supplyAsync(() -> {
-    //             buttonManager.waitForClick();
-    //             return buttonManager.getClickedArea();
-    //         });
-    //     }
-
-    //     try {
-    //         return playerInputFuture.get();
-    //     } catch (InterruptedException | ExecutionException e) {
-    //         Thread.currentThread().interrupt();
-    //         throw new RuntimeException(e);
-    //     }
-    // }
 
     public CompletableFuture<Map<String, Object>> getPlayerInputFuture() {
         CompletableFuture<Map<String, Object>> future = new CompletableFuture<>();
