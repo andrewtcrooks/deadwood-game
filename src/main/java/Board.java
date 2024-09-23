@@ -206,6 +206,7 @@ public class Board {
     /**
      * Returns the players at a location.
      * 
+     * @param players The list of all players.
      * @param location The location to check.
      * @return The players at the location.
      */
@@ -215,9 +216,9 @@ public class Board {
         // Iterate over the playerLocation map to find players at the location
         for (Map.Entry<Integer, String> entry : playerLocation.entrySet()) {
             if (entry.getValue().equals(location.getName())) {
-                // Assuming getID returns the player's ID as an Integer
+                // Returns the player's ID as an Integer
                 Integer playerId = entry.getKey();
-                // Assuming getPlayerById(int id) is a method that returns a Player object given a player's ID
+                // Returns a Player object given a player's ID
                 Player player = players.stream()
                     .filter(p -> Integer.valueOf(p.getID()).equals(playerId))
                     .findFirst()
