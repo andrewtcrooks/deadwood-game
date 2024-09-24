@@ -98,7 +98,7 @@ public class PlayerActionUpgrade implements PlayerAction {
         int dollarCostForNextRank = dollarCosts.getOrDefault(nextRank, Integer.MAX_VALUE);
         int creditCostForNextRank = creditCosts.getOrDefault(nextRank, Integer.MAX_VALUE);
         if (player.getDollars() < dollarCostForNextRank && player.getCredits() < creditCostForNextRank) {
-            view.showMessage("You do not have enough money or credits to upgrade to a higher rank.");
+            view.showMessage("You do not have enough dollars or credits to upgrade to a higher rank.");
             return false;
         }
         return true;
@@ -191,11 +191,11 @@ public class PlayerActionUpgrade implements PlayerAction {
         boolean canAffordWithDollars = player.getDollars() >= dollarCosts.getOrDefault(chosenRank, 0);
         boolean canAffordWithCredits = player.getCredits() >= creditCosts.getOrDefault(chosenRank, 0);
         if (canAffordWithDollars && canAffordWithCredits) {
-            view.showMessage("You can afford to upgrade to this rank with either money or credits.");
-            view.showMessage("Would you like to pay with money or credits?");
+            view.showMessage("You can afford to upgrade to this rank with either dollars or credits.");
+            view.showMessage("Would you like to pay with dollars or credits?");
             return view.getPlayerInput();
         } else if (canAffordWithDollars) {
-            return "money";
+            return "dollars";
         } else if (canAffordWithCredits) {
             return "credits";
         }
@@ -214,7 +214,7 @@ public class PlayerActionUpgrade implements PlayerAction {
             view.showMessage("You cannot afford to upgrade to this rank.");
             return false;
         }
-        if (!"money".equals(paymentMethod) && !"credits".equals(paymentMethod)) {
+        if (!"dollars".equals(paymentMethod) && !"credits".equals(paymentMethod)) {
             view.showMessage("Invalid payment method.");
             return false;
         }
@@ -230,7 +230,7 @@ public class PlayerActionUpgrade implements PlayerAction {
      * @return true if the payment was successful, false otherwise
      */
     private void processPayment(Player player, int chosenRank, String paymentMethod) {
-        if ("money".equals(paymentMethod)) {
+        if ("dollars".equals(paymentMethod)) {
             player.decreaseDollars(dollarCosts.get(chosenRank));
         } else if ("credits".equals(paymentMethod)) {
             player.decreaseCredits(creditCosts.get(chosenRank));

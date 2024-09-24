@@ -7,7 +7,7 @@
     {
       "id": 1,
       "rank": 4,
-      "money": 2,
+      "dollars": 2,
       "credits": 12,
       "rehearsalTokens": 5,
       "active": false,
@@ -18,7 +18,7 @@
     {
       "id": 2,
       "rank": 3,
-      "money": 0,
+      "dollars": 0,
       "credits": 5,
       "rehearsalTokens": 5,
       "active": true,
