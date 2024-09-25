@@ -2,7 +2,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -12,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.util.Callback;
 import javafx.scene.control.TableCell;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -19,8 +24,10 @@ public class PlayerStatsManager {
 
     private final TableView<Player> playerStatsTable;
     private final ObservableList<Player> observablePlayerList;
+    private final String[] diceColor;
 
-    public PlayerStatsManager() {
+    public PlayerStatsManager(String[] diceColor) {
+        this.diceColor = diceColor;
         this.playerStatsTable = new TableView<>();
         this.observablePlayerList = FXCollections.observableArrayList();
     }
@@ -62,7 +69,7 @@ public class PlayerStatsManager {
         playerStatsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         // Create and set up columns
-        setupTableColumns(diceColumnWidth, tableWidth, playerLabels);
+        setupTableColumns(diceColumnWidth, tableWidth);
 
         // Set row height
         playerStatsTable.setFixedCellSize(rowHeight);
@@ -88,43 +95,73 @@ public class PlayerStatsManager {
      * @param playerLabels    List of player labels to be set in the player column.
      */
     @SuppressWarnings("unchecked")
-    private void setupTableColumns(int diceColumnWidth, int tableWidth, Map<String, Label> playerLabels) {
+    private void setupTableColumns(int diceColumnWidth, int tableWidth) {
         // Create the "Player" label column (icon column with custom width)
-        TableColumn<Player, Label> labelColumn = new TableColumn<>("Player");
-        labelColumn.setCellFactory(new Callback<TableColumn<Player, Label>, TableCell<Player, Label>>() {
-            @Override
-            public TableCell<Player, Label> call(TableColumn<Player, Label> param) {
-                TableCell<Player, Label> cell = new TableCell<Player, Label>() {
-                    @Override
-                    protected void updateItem(Label item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty || getIndex() >= observablePlayerList.size()) {
-                            setGraphic(null);
-                        } else {
-                            Player player = observablePlayerList.get(getIndex());
-                            Label originalLabel = playerLabels.get(String.valueOf(player.getID()));
-                            // Create a new label and copy the icon (graphic) from the original label
-                            Label newLabel = new Label();
-                            if (originalLabel.getGraphic() instanceof ImageView) {
-                                ImageView originalImageView = (ImageView) originalLabel.getGraphic();
-                                ImageView newImageView = new ImageView(originalImageView.getImage());
-                                newLabel.setGraphic(newImageView);
-                            } else {
-                                newLabel.setGraphic(originalLabel.getGraphic());
-                            }
-                            setGraphic(newLabel);
-                        }
-                    }
-                };
-                return cell;
-            }
-        });
-        
-        // Set fixed width for the first column
+        TableColumn<Player, Player> labelColumn = new TableColumn<>("Player");
         labelColumn.setPrefWidth(48);
         labelColumn.setMinWidth(48);
         labelColumn.setMaxWidth(48);
         labelColumn.setResizable(false);
+
+        // Set up the cell factory to listen to rank changes and update the icon
+        labelColumn.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+        labelColumn.setCellFactory(new Callback<TableColumn<Player, Player>, TableCell<Player, Player>>() {
+            @Override
+            public TableCell<Player, Player> call(TableColumn<Player, Player> param) {
+                return new TableCell<Player, Player>() {
+                    private final ImageView imageView = new ImageView();
+                    private ChangeListener<Number> rankListener;
+
+                    @Override
+                    protected void updateItem(Player player, boolean empty) {
+                        super.updateItem(player, empty);
+                        if (empty || player == null) {
+                            setGraphic(null);
+                            // Remove existing listener if any
+                            if (rankListener != null) {
+                                player.rankProperty()
+                                      .removeListener(rankListener);
+                                rankListener = null;
+                            }
+                        } else {
+                            // Remove previous listener if any
+                            if (rankListener != null) {
+                                player.rankProperty()
+                                      .removeListener(rankListener);
+                            }
+
+                            // Set initial image based on current rank
+                            updateImage(player);
+
+                            // Add listener to update image when rank changes
+                            rankListener = (ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+                                updateImage(player);
+                            };
+                            player.rankProperty().addListener(rankListener);
+
+                            setGraphic(imageView);
+                        }
+                    }
+
+                    /**
+                     * Updates the dice icon based on the player's current rank.
+                     */
+                    private void updateImage(Player player) {
+                        String diceFilename = diceColor[player.getID() - 1] + player.getRank() + ".png";
+                        InputStream diceImageStream = getClass().getClassLoader().getResourceAsStream("dice/" + diceFilename);
+                        if (diceImageStream != null) {
+                            Image diceImage = new Image(diceImageStream);
+                            imageView.setImage(diceImage);
+                        } else {
+                            System.err.println("Error loading dice image: " + diceFilename);
+                            imageView.setImage(null); // Optionally set a default image
+                        }
+                        imageView.setFitWidth(40); // Adjust size as needed
+                        imageView.setFitHeight(40);
+                    }
+                };
+            }
+        });
 
         // Create the "Dollars" column and center the content
         TableColumn<Player, Number> dollarsColumn = new TableColumn<>("Dollars");
@@ -160,7 +197,7 @@ public class PlayerStatsManager {
 
         // Create the "Tokens" column and center the content
         TableColumn<Player, Number> tokensColumn = new TableColumn<>("Tokens");
-        tokensColumn.setCellValueFactory(new PropertyValueFactory<>("rehearsalTokens")); // Updated property name
+        tokensColumn.setCellValueFactory(new PropertyValueFactory<>("rehearsalTokens"));
         tokensColumn.setCellFactory(column -> new TableCell<Player, Number>() {
             @Override
             protected void updateItem(Number item, boolean empty) {
@@ -177,6 +214,7 @@ public class PlayerStatsManager {
         // Add all columns to the table
         playerStatsTable.getColumns().addAll(labelColumn, dollarsColumn, creditsColumn, tokensColumn);
     }
+
 
     /**
      * Calculates and sets the TableView's preferred height based on the number of rows.
