@@ -312,7 +312,7 @@ public class Board {
     ) {
         // Sort dice rolls in descending order
         Collections.sort(diceRolls, Collections.reverseOrder());
-        // Distribute dice rolls as money in a round-robin fashion, starting from the active player
+        // Distribute dice rolls as dollars in a round-robin fashion, starting from the active player
         int numPlayersOnCard = playersOnCard.size();
         int numDice = diceRolls.size();
         // Pay out the on card players an amount equal to the dice roll, distributed in a round-robin fashion
