@@ -73,8 +73,6 @@ public class ShotManager {
             group.getChildren().remove(shotImageView);
         }
         shotImageViews.clear();
-        // TODO: remove print line below
-        System.out.println("All shot counters have been cleared.");
     }
 
 }
