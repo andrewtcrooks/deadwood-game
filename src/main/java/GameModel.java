@@ -18,6 +18,7 @@ public class GameModel implements Subject {
     private List<Player> players;
     private Deck deck;
     private Map<String, Location> locations;
+    private List<Upgrade> upgrades;
     private Board board;
 
 
@@ -78,6 +79,7 @@ public class GameModel implements Subject {
         initPlayers(numPlayers);
         initDeck(cardsXMLFilePath);
         initLocations(boardXMLFilePath);
+        initUpgrades(boardXMLFilePath);
         initBoard(this.players, this.deck, this.locations);
     }
 
@@ -156,30 +158,39 @@ public class GameModel implements Subject {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        List<String> trailer_neighbors = Arrays.asList(
-            "Main Street", "Saloon", "Hotel"
-        );
-        Location trailer = new Location(
-            "Trailer", 
-            trailer_neighbors, 
-            new Area(991,248,194,201), 
-            Arrays.asList(), 
-            Arrays.asList()
-        );
-        List<String> office_neighbors = Arrays.asList(
-            "Train Station",
-            "Ranch",
-            "Secret Hideout"
-        );
-        Location office = new Location(
-            "Casting Office", 
-            office_neighbors, 
-            new Area(9, 459, 208, 209), 
-            Arrays.asList(), 
-            Arrays.asList()
-        );
-        this.locations.put("Trailer", trailer);
-        this.locations.put("Casting Office", office);
+        // List<String> trailer_neighbors = Arrays.asList(
+        //     "Main Street", "Saloon", "Hotel"
+        // );
+        // Location trailer = new Location(
+        //     "Trailer", 
+        //     trailer_neighbors, 
+        //     new Area(991,248,194,201), 
+        //     Arrays.asList(), 
+        //     Arrays.asList()
+        // );
+        // List<String> office_neighbors = Arrays.asList(
+        //     "Train Station",
+        //     "Ranch",
+        //     "Secret Hideout"
+        // );
+        // Location office = new Location(
+        //     "Casting Office", 
+        //     office_neighbors, 
+        //     new Area(9, 459, 208, 209), 
+        //     Arrays.asList(), 
+        //     Arrays.asList()
+        // );
+        // this.locations.put("Trailer", trailer);
+        // this.locations.put("Casting Office", office);
+    }
+
+    public void initUpgrades(String upgradesXMLFilePath) {
+        ParseUpgradesXML parser = new ParseUpgradesXML();
+        try {
+            this.upgrades = parser.getUpgrades(upgradesXMLFilePath);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -408,6 +419,15 @@ public class GameModel implements Subject {
         return locations;
     }
 
+    /**
+     * Returns the upgrades.
+     * 
+     * @return The upgrades.
+     */
+    public List<Upgrade> getUpgrades() {
+        return upgrades;
+    }
+    
     /**
      * Returns the board.
      *
