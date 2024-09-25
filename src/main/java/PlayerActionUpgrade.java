@@ -229,10 +229,10 @@ public class PlayerActionUpgrade implements PlayerAction {
      * @param paymentMethod The payment method
      * @return true if the payment was successful, false otherwise
      */
-    private void processPayment(Player player, int chosenRank, String paymentMethod) {
-        if ("dollars".equals(paymentMethod)) {
+    public void processPayment(Player player, int chosenRank, String paymentMethod) {
+        if ("dollar".equals(paymentMethod) || "dollars".equals(paymentMethod)) {
             player.decreaseDollars(dollarCosts.get(chosenRank));
-        } else if ("credits".equals(paymentMethod)) {
+        } else if ("credit".equals(paymentMethod) || "credits".equals(paymentMethod)) {
             player.decreaseCredits(creditCosts.get(chosenRank));
         }
     }
@@ -245,9 +245,11 @@ public class PlayerActionUpgrade implements PlayerAction {
      * @param view The game view
      * @return true if the player was successfully upgraded, false otherwise
      */
-    private void upgradePlayerRank(Player player, int chosenRank, GameView view) {
+    public void upgradePlayerRank(Player player, int chosenRank, GameView view) {
         player.setRank(chosenRank);
-        view.showMessage("You have successfully upgraded to rank " + chosenRank + ".");
+        if (view instanceof GameCLIView) {
+            view.showMessage("You have successfully upgraded to rank " + chosenRank + ".");
+        }
         player.setHasUpgraded(true);
     }
 }
