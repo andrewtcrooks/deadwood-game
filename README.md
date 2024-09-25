@@ -91,4 +91,4 @@ This will run all tests and generate a report in `build/reports/tests/test/index
 ## Additional Information
 
 - For more detailed information on running and testing the program within VS Code, refer to the [Java Extension Pack documentation](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack).
-- If you encounter any issues with OpenJDK 8.0 or setting up the environment, ensure your `JAVA_HOME` environment variable is set correctly to the path of your OpenJDK 8.0 installation.
+- If you encounter any issues with Eclipse Temurin Java Development Kit 17 or setting up the environment, ensure your `JAVA_HOME` environment variable is set correctly to the path of your Eclipse Temurin Java Development Kit 17 installation.
