@@ -97,7 +97,7 @@ public class PlayerActionAct implements PlayerAction {
      * @param view the game view
      */
     private void processSuccess(Player player, int roll, Deck deck, Board board, GameModel model, GameView view) {
-        view.showMessage("You rolled a " + roll + ". Success!");
+        view.showMessage("Rolled a " + roll + ". Success!");
         String locationName = board.getPlayerLocationName(player);
         Integer sceneCardID = board.getLocationSceneCardID(locationName);
         SceneCard sceneCard = deck.getDrawnCard(sceneCardID);
@@ -119,7 +119,7 @@ public class PlayerActionAct implements PlayerAction {
      * @param view the game view
      */
     private void processFailure(Player player, int roll, Deck deck, Board board, GameModel model, GameView view) {
-        view.showMessage("You rolled a " + roll + ". Failure.");
+        view.showMessage("Rolled a " + roll + ". Failure.");
         String locationName = board.getPlayerLocationName(player);
         Integer sceneCardID = board.getLocationSceneCardID(locationName);
         SceneCard sceneCard = deck.getDrawnCard(sceneCardID);
