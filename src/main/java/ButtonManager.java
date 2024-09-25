@@ -1,7 +1,7 @@
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
-import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +34,6 @@ public class ButtonManager {
      *
      * @return the button
      */
-    @SuppressWarnings("unchecked")
     public void createButton(
         Group group, 
         String command,
@@ -50,7 +49,7 @@ public class ButtonManager {
             button.setUserData((String) data);
         }
         else if (command.equals("UPGRADE")){
-            button.setUserData((Map<String, Object>) data);
+            button.setUserData((Upgrade) data); // 'data' is an Upgrade object
         }
         
         // Set the tooltip text
@@ -61,6 +60,15 @@ public class ButtonManager {
         button.setLayoutY(area.getY());
         button.setPrefWidth(area.getW());
         button.setPrefHeight(area.getH());
+
+        // Enforce exact button dimensions by setting min and max sizes
+        button.setMinWidth(area.getW());
+        button.setMinHeight(area.getH());
+        button.setMaxWidth(area.getW());
+        button.setMaxHeight(area.getH());
+
+        // Remove padding to prevent automatic size adjustments
+        button.setPadding(new Insets(0));
 
         // Set button appearance to be mostly transparent with a visible border
         button.setStyle(
@@ -76,11 +84,6 @@ public class ButtonManager {
             if (onButtonClick != null) {
                 onButtonClick.accept(command, data);
             }
-
-            // // If the command is "ACT", place a shot image at the button's location
-            // if (command.equalsIgnoreCase("ACT")) {
-            //     placeShotImage(group, button);
-            // }
 
         });
 
