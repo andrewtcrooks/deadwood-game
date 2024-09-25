@@ -186,7 +186,9 @@ public class PlayerActionAct implements PlayerAction {
         // get active player
         Player activePlayer = model.getActivePlayer();
         board.wrapScene(activePlayer, playersAtLocation, deck, location, diceRolls);
-        view.showMessage("The scene is wrapped.");
+        if (view instanceof GameCLIView) {
+            view.showMessage("The scene is wrapped.");
+        } 
 
         if (view instanceof GameGUIView) {
 
