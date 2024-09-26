@@ -1,12 +1,12 @@
 import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.scene.Group;
+import javafx.scene.Node;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -90,9 +90,15 @@ public class GameGUIView implements GameView {
     private static final int TRAILER_X_OFFSET = 11;
     private static final int TRAILER_Y_OFFSET = 104;
     private static final int CASTING_OFFICE_X_OFFSET = 14;
-    private static final int CASTING_OFFICE_Y_OFFSET = -10;
+    private static final int CASTING_OFFICE_Y_OFFSET = -15;
     private static final int DICE_X_SPACING = 46;
     private static final int DICE_Y_SPACING = 46;
+
+    private static final int UPGRADE_BUTTON_X_OFFSET = -8; // was -5 and looked centered left.right
+    private static final int UPGRADE_BUTTON_Y_OFFSET = -2;
+    private static final int UPGRADE_BUTTON_Y_SPACING = 0; // was -6
+    private static final int UPGRADE_BUTTON_H = 21; // was -5
+    private static final int UPGRADE_BUTTON_W = 36;
 
 
 // Constructor
@@ -110,7 +116,7 @@ public class GameGUIView implements GameView {
 
         // Create the player stats manager, and console manager
         this.consoleManager = new ConsoleManager();
-        this.playerStatsManager = new PlayerStatsManager();
+        this.playerStatsManager = new PlayerStatsManager(diceColor);
         this.buttonManager = new ButtonManager();
         this.shotManager = new ShotManager(BOARD_OFFSET_X);
         
@@ -122,6 +128,9 @@ public class GameGUIView implements GameView {
             CONSOLE_WIDTH,
             CONSOLE_HEIGHT
         );
+
+        // initialize the player input future
+        playerInputFuture = new CompletableFuture<>();
     }
 
 
@@ -238,14 +247,6 @@ public class GameGUIView implements GameView {
         }
     }
 
-    // /**
-    //  * Set the GameActionListener and finish loading the GUI Menu.
-    //  */
-    // public void setGameActionListener(GameActionListener listener) {
-    //     this.gameActionListener = listener;
-    //     this.buttonManager = new ButtonManager();
-    // }
-
 
 // Observer Pattern
 
@@ -274,7 +275,9 @@ public class GameGUIView implements GameView {
                 addCardBack((Map<String, Integer>) eventData);
                 break;
             case "CREATE_PLAYER_STATS_TABLE":
-                createPlayerStats((List<Player>) eventData);
+                List<Player> players = (List<Player>) eventData;
+                addDiceImageListeners(players);
+                createPlayerStats(players);
                 break;
             case "UPDATE_PLAYER_STAT":
                 updatePlayerStat(eventData);
@@ -290,6 +293,9 @@ public class GameGUIView implements GameView {
                 break;
             case "REMOVE_ALL_SHOTS":
                 shotManager.clearShotCounters(this.rootGroup);
+                break;
+            case "BRING_DICE_TO_FRONT":
+                bringPlayerDiceToFront();
                 break;
             case "PLAYER_MOVE":
                 handlePlayerMove((Map<String, Object>) eventData);
@@ -329,6 +335,17 @@ public class GameGUIView implements GameView {
     public void refreshView() {
         // Refresh board elements
         rootGroup.requestLayout();
+    }
+
+    /**
+     * Brings all the dice labels to the front of the board.
+     * This is necessary because the dice labels may be covered
+     * by other nodes in the board, such as the player cards.
+     */
+    public void bringPlayerDiceToFront() {
+        for (Label label : playerDiceLabels.values()) {
+            label.toFront();
+        }
     }
 
     /**
@@ -386,10 +403,10 @@ public class GameGUIView implements GameView {
      * @param eventData number of players (int)
      */
     private void initDiceLabels(Map<Integer, Map<String, Integer>> playerData) {
-        // numPlayers is the size of the playerData map
-        int numPlayers = playerData.size();
-        // Determine initial dice rank based on number of players
-        int rank = numPlayers < 7 ? 1 : 2; // 1 if numPlayers under 7, else 2
+        // // numPlayers is the size of the playerData map
+        // int numPlayers = playerData.size();
+        // // Determine initial dice rank based on number of players
+        // int rank = numPlayers < 7 ? 1 : 2; // 1 if numPlayers under 7, else 2
     
         // Create player dice labels and store them in playerDiceLabels
         for (Map.Entry<Integer, Map<String, Integer>> entry : 
@@ -398,14 +415,12 @@ public class GameGUIView implements GameView {
             Map<String, Integer> playerInfo = entry.getValue();
             int x = playerInfo.get("locationX") + BOARD_OFFSET_X;
             int y = playerInfo.get("locationY");
+            int playerRank = playerInfo.get("playerRank");
     
-            
-
-
             // Create a new Label for the dice image
             Label diceImageLabel = new Label();
             // Create filename reference for dice image
-            String diceFilename = diceColor[playerID - 1] + rank;
+            String diceFilename = diceColor[playerID - 1] + playerRank;
             // Set the icon for the dice label (dice image)
             setDiceLabelIcon(diceImageLabel, diceFilename);
             
@@ -495,6 +510,26 @@ public class GameGUIView implements GameView {
     }
 
     /**
+     * Adds listeners to update dice labels when rank changes.
+     * 
+     * @param players The list of players to add listeners for.
+     */
+    public void addDiceImageListeners(List<Player> players){
+        // Add listeners to update dice labels when rank changes
+        for (Player player : players) {
+            Label diceLabel = playerDiceLabels.get(String.valueOf(player.getID()));
+            if (diceLabel != null) {
+                player.rankProperty().addListener((obs, oldRank, newRank) -> {
+                    Platform.runLater(() -> {
+                        String newDiceFilename = diceColor[player.getID() - 1] + newRank.intValue();
+                        setDiceLabelIcon(diceLabel, newDiceFilename);
+                    });
+                });
+            }
+        }
+    }
+
+    /**
      * Update a single player's stats.
      * 
      * @param playerID The ID of the player to update.
@@ -535,12 +570,6 @@ public class GameGUIView implements GameView {
             area.getH(), 
             area.getW()
         );
-
-        // if ( command == "UPGRADE"){
-        //     // TODO: finish this part since its special buttons
-        //     int stophere = 1;
-
-        // } else 
         
         if ( command.equals("END") ){
             // Get the button area from the playerDiceLabel
@@ -602,7 +631,34 @@ public class GameGUIView implements GameView {
                 );
             }
 
-        } else{ // Command was MOVE, ACT, or REHEARSE
+        } else if ( command.equals("UPGRADE") ){
+            @SuppressWarnings("unchecked")
+            List<Upgrade> availableUpgrades = 
+                (List<Upgrade>) buttonData.get("availableUpgrades");
+
+            // Create a button for each upgrade
+            for (Upgrade upgrade : availableUpgrades) {
+                int rank = upgrade.getLevel();
+                Area upgradeArea = upgrade.getArea();
+                Area upgradeOffsetArea = new Area(
+                    upgradeArea.getX() + UPGRADE_BUTTON_X_OFFSET 
+                                       + BOARD_OFFSET_X, 
+                    upgradeArea.getY() + UPGRADE_BUTTON_Y_OFFSET +
+                                         (rank-2) * UPGRADE_BUTTON_Y_SPACING, 
+                    UPGRADE_BUTTON_H, 
+                    UPGRADE_BUTTON_W
+                );
+                buttonManager.createButton(
+                    this.rootGroup, 
+                    command, 
+                    upgrade, 
+                    upgradeOffsetArea,
+                    tooltipText
+                );
+            }
+
+
+        } else { // Command was MOVE, ACT, or REHEARSE
 
             buttonManager.createButton(
                 this.rootGroup, 
@@ -611,8 +667,6 @@ public class GameGUIView implements GameView {
                 offsetArea,
                 tooltipText
             ); 
-
-            int stophere = 1;
         }
         
     }
