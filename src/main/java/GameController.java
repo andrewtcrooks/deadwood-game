@@ -14,10 +14,10 @@ import java.util.Comparator;
  * It manages the game flow.
  */
 public class GameController{
-    private static boolean debug = true;
+    private static boolean debug = false;
     private GameModel model;
     private GameView view;
-    private Player currentPlayer;
+    private int nextPlayerIndex = 0;
     private boolean dayEnded = false;
     // private List<Area> areasWithListeners;
     private static final HashMap<String, PlayerAction> actionMap = 
@@ -333,6 +333,10 @@ public class GameController{
         // Notify the beginning of the day
         this.model.notifyObservers("SHOW_MESSAGE", "Day " + day + " of " + numDays + " has begun.");
 
+        if (debug) { //debug
+            this.model.notifyObservers("SHOW_MESSAGE", "At start of Day " + day + ", nextPlayerIndex is: " + nextPlayerIndex);
+        }
+
         // Play the current day
         return playDayGUI().thenCompose(ignored -> {
 
@@ -351,6 +355,9 @@ public class GameController{
      * @return CompletableFuture that completes when the day ends.
      */
     private CompletableFuture<Void> playDayGUI() {
+        if (debug) {
+            this.model.notifyObservers("SHOW_MESSAGE", "Starting playDayGUI. nextPlayerIndex is: " + nextPlayerIndex);
+        }
         dayEnded = false;  // Reset the flag for the new day
         // Start processing player cycles
         return processPlayerCycle().thenCompose(ignored -> {
@@ -359,6 +366,7 @@ public class GameController{
                 // Day has ended, notify and return
                 if (debug){ // debug
                     this.model.notifyObservers("SHOW_MESSAGE", "Day " + this.model.getDay() + " has ended.");
+                    this.model.notifyObservers("SHOW_MESSAGE", "At end of Day, nextPlayerIndex is: " + nextPlayerIndex);
                 }
                 return CompletableFuture.completedFuture(null);
             } else {
@@ -385,7 +393,7 @@ public class GameController{
         }
 
             // Start processing the list of players from the first player
-        return processPlayerList(players, 0).thenCompose(ignored -> {
+        return processPlayerList(players, this.nextPlayerIndex).thenCompose(ignored -> {
             // Check if the day has ended
             if (dayEnded) {
                 // Day has ended, stop processing further cycles
@@ -420,10 +428,17 @@ public class GameController{
         }
 
         return playerTurnGUI(player.getID()).thenCompose(ignored -> {
-            // Check if the number of scenes is less than or equal to 9
-            if (this.model.getBoard().getNumScenesRemaining() <= 9) {
+            // Check if the number of scenes is less than or equal to 1
+            if (this.model.getBoard().getNumScenesRemaining() <= 1) {
                 // Day has ended, set the flag and stop processing further players
                 dayEnded = true;
+                // Set nextPlayerIndex to the next player after the current one
+                this.nextPlayerIndex = (index + 1) % players.size();
+
+                if (debug) { //debug
+                    this.model.notifyObservers("SHOW_MESSAGE", "Day has ended. Next player index set to: " + nextPlayerIndex);
+                }
+
                 // Day has ended, stop processing further players
                 return CompletableFuture.completedFuture(null);
             } else {
@@ -483,7 +498,6 @@ public class GameController{
      * @param turnCompleted The CompletableFuture that completes when the turn ends.
      */
     private void processPlayerActions(Player player, CompletableFuture<Void> turnCompleted) {
-        this.currentPlayer = player; // Set currentPlayer here
         player.setActive(true);
     
         
@@ -535,7 +549,7 @@ public class GameController{
                     removePlayerActionButtons();
     
                     // After player's action ends, check if only 1 scene remains
-                    if (this.model.getBoard().getNumScenesRemaining() <= 9) {
+                    if (this.model.getBoard().getNumScenesRemaining() <= 1) {
                         // player.setActive(false);
                         endDay();  // End the day if only 1 scene remains
                         if (debug){ // debug
