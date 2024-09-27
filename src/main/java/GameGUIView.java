@@ -24,7 +24,7 @@ public class GameGUIView implements GameView {
 
     // Dice colors
     private static final String[] diceColor = {
-        "r", "o", "y", "g", "c", "b", "v", "p"
+        "red", "orange", "yellow", "green", "cyan", "blue", "violet", "pink"
     };
 
     // Singleton instance
@@ -44,31 +44,19 @@ public class GameGUIView implements GameView {
     // Constants
     private final int BOARD_IMAGE_WIDTH = 1200;
     private final int BOARD_IMAGE_HEIGHT = 900;
-    // private final int BOARD_IMAGE_WIDTH_ADJUST = 28;
-    private final int BOARD_IMAGE_HEIGHT_ADJUST = 0; //  54;
-
-    // private static final int BOARD_LAYER = 0;
-    // private static final int SCENE_CARD_LAYER = 1;
-    // private static final int CONSOLE_LAYER = 1;
-    // private static final int PLAYER_STATS_LAYER = 1;
-    // private static final int SCENE_CARD_COVER_LAYER = 2;
-    // private static final int BUTTON_LAYER = 4;
-    // private static final int PLAYER_DICE_LAYER = 10;
+    private final int BOARD_IMAGE_HEIGHT_ADJUST = 0;
     
     private static final int SIDEBAR_LEFT_BORDER = 36;
     private static final int SIDEBAR_RIGHT_BORDER = 28;
-    // private static final int MENU_Y = 10;
     private static final int SIDEBAR_WIDTH = 300;
     private static final int BOARD_OFFSET_X = SIDEBAR_LEFT_BORDER + 
                                             SIDEBAR_WIDTH + 
                                             SIDEBAR_RIGHT_BORDER;
 
-    // private static final int CONSOLE_X = 10;
     private static final int CONSOLE_Y = 8;
     private static final int CONSOLE_WIDTH = 300;
     private static final int CONSOLE_HEIGHT = 464;
 
-    // private static final int PLAYER_STATS_X = 10;
     private static final int PLAYER_STATS_Y = 488;
     private static final int PLAYER_STATS_ROW_HEIGHT = 46;
     private static final int PLAYER_STATS_DICE_COLUMN_WIDTH = 46;
@@ -76,16 +64,6 @@ public class GameGUIView implements GameView {
     private static final int PLAYER_STATS_WIDTH = 300;
 
     private static final int CARD_HEIGHT = 115;
-    private static final int CARD_WIDTH = 205;
-
-    private static final int DICE_HEIGHT = 40;
-    private static final int DICE_WIDTH = 40;
-    private static final int DICE_LOCATION_ROLE_OFFSET_X = 10;
-    private static final int DICE_LOCATION_ROLE_OFFSET_Y = 10;
-    private static final int DICE_SCENECARD_ROLE_OFFSET_X = 10;
-    private static final int DICE_SCENECARD_ROLE_OFFSET_Y = 10;
-    private static final int SHOT_HEIGHT = 42;
-    private static final int SHOT_WIDTH = 42;
 
     private static final int TRAILER_X_OFFSET = 11;
     private static final int TRAILER_Y_OFFSET = 104;
@@ -94,10 +72,10 @@ public class GameGUIView implements GameView {
     private static final int DICE_X_SPACING = 46;
     private static final int DICE_Y_SPACING = 46;
 
-    private static final int UPGRADE_BUTTON_X_OFFSET = -8; // was -5 and looked centered left.right
+    private static final int UPGRADE_BUTTON_X_OFFSET = -8;
     private static final int UPGRADE_BUTTON_Y_OFFSET = -2;
-    private static final int UPGRADE_BUTTON_Y_SPACING = 0; // was -6
-    private static final int UPGRADE_BUTTON_H = 21; // was -5
+    private static final int UPGRADE_BUTTON_Y_SPACING = 0;
+    private static final int UPGRADE_BUTTON_H = 21;
     private static final int UPGRADE_BUTTON_W = 36;
 
 
@@ -274,13 +252,13 @@ public class GameGUIView implements GameView {
             case "ADD_CARD_BACK":
                 addCardBack((Map<String, Integer>) eventData);
                 break;
+            case "REMOVE_CARD_BACK":
+                removeCardBack((Map<String, Integer>) eventData);
+                break;
             case "CREATE_PLAYER_STATS_TABLE":
                 List<Player> players = (List<Player>) eventData;
                 addDiceImageListeners(players);
                 createPlayerStats(players);
-                break;
-            case "UPDATE_PLAYER_STAT":
-                updatePlayerStat(eventData);
                 break;
             case "HIGHLIGHT_PLAYER_ROW":
                 playerStatsManager.highlightRow((int) eventData);
@@ -303,14 +281,8 @@ public class GameGUIView implements GameView {
             case "PLAYER_WORK":
                 handlePlayerWork((Map<String, Object>) eventData);
                 break;
-            case "LOAD_GAME":
-                handleLoadGame(eventData);
-                break;
-            case "SCORE_UPDATE":
-                handleScoreUpdate(eventData);
-                break;
-            case "GAME_EVENT":
-                handleGameEvent(eventData);
+            case "SHOW_SCORES":
+                showScores((List<String>) eventData);
                 break;
             default:
                 System.out.println("Unknown event type: " + eventType);
@@ -403,10 +375,6 @@ public class GameGUIView implements GameView {
      * @param eventData number of players (int)
      */
     private void initDiceLabels(Map<Integer, Map<String, Integer>> playerData) {
-        // // numPlayers is the size of the playerData map
-        // int numPlayers = playerData.size();
-        // // Determine initial dice rank based on number of players
-        // int rank = numPlayers < 7 ? 1 : 2; // 1 if numPlayers under 7, else 2
     
         // Create player dice labels and store them in playerDiceLabels
         for (Map.Entry<Integer, Map<String, Integer>> entry : 
@@ -420,7 +388,7 @@ public class GameGUIView implements GameView {
             // Create a new Label for the dice image
             Label diceImageLabel = new Label();
             // Create filename reference for dice image
-            String diceFilename = diceColor[playerID - 1] + playerRank;
+            String diceFilename = diceColor[playerID - 1].substring(0, 1) + playerRank;
             // Set the icon for the dice label (dice image)
             setDiceLabelIcon(diceImageLabel, diceFilename);
             
@@ -462,7 +430,7 @@ public class GameGUIView implements GameView {
 
 
     /**
-     * Add a card to the GUI board.
+     * Add a card to board.
      * 
      * @param cardInfo The card info
      */
@@ -477,13 +445,26 @@ public class GameGUIView implements GameView {
     }
 
     /**
-     * Add card backs to GUI board.
+     * Add card backs to board.
      * 
      * @param eventData The event data
      */
     private void addCardBack(Map<String, Integer> addCardBack) {
         int x = addCardBack.get("locationX");
         int y = addCardBack.get("locationY");
+        // Add offset to x to compensate for left sidebar
+        int new_x = x + BOARD_OFFSET_X;
+        moveCardToLocation(new_x, y, "CardBack-small.jpg");
+    }
+
+    /**
+     * Remove card backs from board.
+     * 
+     * @param eventData The event data
+     */
+    private void removeCardBack(Map<String, Integer> removeCardBack) {
+        int x = removeCardBack.get("locationX");
+        int y = removeCardBack.get("locationY");
         // Add offset to x to compensate for left sidebar
         int new_x = x + BOARD_OFFSET_X;
         moveCardToLocation(new_x, y, "CardBack-small.jpg");
@@ -521,34 +502,12 @@ public class GameGUIView implements GameView {
             if (diceLabel != null) {
                 player.rankProperty().addListener((obs, oldRank, newRank) -> {
                     Platform.runLater(() -> {
-                        String newDiceFilename = diceColor[player.getID() - 1] + newRank.intValue();
+                        String newDiceFilename = diceColor[player.getID() - 1].substring(0, 1) + newRank.intValue();
                         setDiceLabelIcon(diceLabel, newDiceFilename);
                     });
                 });
             }
         }
-    }
-
-    /**
-     * Update a single player's stats.
-     * 
-     * @param playerID The ID of the player to update.
-     * @param dollars New value for dollars.
-     * @param credits New value for credits.
-     * @param rehearsalTokens New value for rehearsal tokens.
-     */
-    public void updatePlayerStat(Object eventData) {
-        Map<String, Object> playerData = (Map<String, Object>) eventData;
-        int playerID = (Integer) playerData.get("playerID");
-        int dollars = (Integer) playerData.get("dollars");
-        int credits = (Integer) playerData.get("credits");
-        int rehearsalTokens = (Integer) playerData.get("tokens");
-        playerStatsManager.updatePlayerStat(
-            playerID, 
-            dollars, 
-            credits, 
-            rehearsalTokens
-        );
     }
 
     /**
@@ -594,13 +553,6 @@ public class GameGUIView implements GameView {
             Area locationArea = (Area) buttonData.get("locationArea");
 
             if (onCard){ // Role is OnCard and needs location 
-                // If onCard the role area needs to have the location x and y 
-                // added onti it's own x and y
-
-
-                // Get the scene card for the role from the board
-                // board.getLocation
-
 
                 Area workArea = new Area(
                     offsetArea.getX() + locationArea.getX() - 5, 
@@ -766,23 +718,24 @@ public class GameGUIView implements GameView {
 
     }
 
-
-
-
-    private void handleLoadGame(Object eventData) {
-        // TODO: Handle load game event
+    /**
+     * Display the final scores for all players.
+     * 
+     * @param playerScores A list of strings each containing the final score for a player.
+     */
+    private void showScores(List<String> playerScores) {
+        int index = 0;
+        for (String playerScoreString : playerScores) {
+            String color = diceColor[index];
+            String colorFormatted = color.substring(0, 1)
+                                         .toUpperCase() + 
+                                    color.substring(1);
+            String colorPlayerScoreString = colorFormatted + playerScoreString;
+            // messageArea.append(coloredMessage + "\n");
+            showMessage(colorPlayerScoreString);
+            index += 1;
+        }
     }
-
-    private void handleScoreUpdate(Object eventData) {
-        // Handle score update event
-        System.out.println("Score updated: " + eventData);
-    }
-
-    private void handleGameEvent(Object eventData) {
-        // Handle general game event
-        System.out.println("Game event occurred: " + eventData);
-    }
-
 
 //Observer Pattern Method Utilities
 
@@ -818,16 +771,6 @@ public class GameGUIView implements GameView {
         rootGroup.getChildren().add(cardView);
     }
 
-    // /**
-    //  * Mark a take as wrapped.
-    //  * 
-    //  * @param take The take to be marked as wrapped
-    //  */
-    // public void markTakeAsWrapped(String locationName, GameModel model) {
-    //     Location location = model.getLocation(locationName);
-
-    // }
-
     /**
      * Get the player's input in GUI mode.
      * 
@@ -846,7 +789,8 @@ public class GameGUIView implements GameView {
             Map<String, Object> commandData = new HashMap<>();
             commandData.put("command", command);
             commandData.put("data", data);
-            future.complete(commandData); // Complete the future with the clicked button's info
+            // Complete the future with the clicked button's info
+            future.complete(commandData); 
         });
     
         return future;
