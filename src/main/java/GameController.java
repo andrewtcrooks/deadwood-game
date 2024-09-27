@@ -177,20 +177,21 @@ public class GameController{
             "Game over!"
         );
 
+        // Get the list of players from the model
         List<Player> players = this.model.getPlayers();
 
-        // Sort players by score and then by ID if scores are tied
-        players.sort(
+        // Create a copy of the players list
+        List<Player> playersCopy = new ArrayList<>(players);
+
+        // Sort players list copy by score and then by ID if scores are tied
+        playersCopy.sort(
             Comparator.comparingInt(Player::getScore)
                     .reversed()
                     .thenComparingInt(player -> player.getID())
         );
 
         // Get highest score
-        int highestScore = players.get(0).getScore();
-
-        // Reset players to sorted list of players
-        players = this.model.getPlayers();
+        int highestScore = playersCopy.get(0).getScore();
 
         // Get the winners
         List<Player> winners = new ArrayList<>();
