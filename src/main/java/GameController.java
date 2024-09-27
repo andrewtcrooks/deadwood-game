@@ -4,24 +4,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
-
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Collections;
 import javafx.application.Platform;
 
-import java.util.Comparator;
 
 /**
  * Represents the game controller for the game.
  * It manages the game flow.
  */
+
+
 public class GameController{
-    private static boolean debug = false;
+    private static final boolean debug = false;
     private GameModel model;
     private GameView view;
     private int nextPlayerIndex = 0;
     private boolean dayEnded = false;
-    // private List<Area> areasWithListeners;
     private static final HashMap<String, PlayerAction> actionMap = 
         new HashMap<>();
+    private List<Player> playerTurnOrder;
     // Command Pattern action maps
     static {
         actionMap.put("who", new PlayerActionWho());
@@ -71,7 +74,8 @@ public class GameController{
     ) {
         this.model = model;
         this.view = view;
-  
+        this.playerTurnOrder = new ArrayList<>(model.getPlayers());
+
         // CLI Mode: Get the number of players and init model
         if (view instanceof GameCLIView) {
             int numPlayers = this.view.getNumPlayers();
@@ -112,7 +116,6 @@ public class GameController{
         this.model.getBoard().resetBoard(deck, locations);
 
         if (view instanceof GameGUIView) {
-            //TODO: fix this part that clear up the gui each day
 
             // Get the area for the Trailer location from the model
             Area trailerArea = this.model.getLocation("Trailer").getArea();
@@ -139,7 +142,13 @@ public class GameController{
             // Redeal the cards and card backs
             initializeLocationCards();
             // Prevents location roles from staying occupied on the next day
-            resetAllLocationRolesToUnoccipied();
+            resetAllLocationRolesToUnoccupied();
+            // reset all takes
+            this.model.getLocations().values().forEach(location -> {
+                location.getTakes().forEach(take -> {
+                    take.reset();
+                });
+            });
 
             // remove all remaining buttons
             this.model.notifyObservers("REMOVE_ALL_BUTTONS", null);
@@ -147,14 +156,6 @@ public class GameController{
             this.model.notifyObservers("REMOVE_ALL_SHOTS", null);
             // bring all player dice to front
             this.model.notifyObservers("BRING_DICE_TO_FRONT", null);
-
-
-            if (this.model.getDay() >= this.model.getNumDays()) {
-                scoreGame();
-            }
-            // // Increment the day count
-            // this.model.incrementDay();
-
         }
     }
 
@@ -186,18 +187,15 @@ public class GameController{
                 break;
             }
         }
+
         // Print scores and indicate the winner(s)
+        List<String> playerScoreStringList = new ArrayList<>();
         for (Player player : players) {
-            String winnerIndicator = 
-                player.getScore() == highestScore ? "  !Winner!" : "";
-            this.model.notifyObservers(
-                "SHOW_MESSAGE", 
-                "Player ID: " + player.getID() + ", Score: " + 
-                player.getScore() + winnerIndicator
-            );
-
+            String winnerIndicator = player.getScore() == highestScore ? "  !!!Winner!!!" : "";
+            String playerScoreString = player.getID() + "," + player.getScore() + winnerIndicator;
+            playerScoreStringList.add(playerScoreString);
         }
-
+        this.model.notifyObservers("SHOW_SCORES", playerScoreStringList);
     }
 
     
@@ -326,7 +324,7 @@ public class GameController{
     
         // Base case: if the current day is greater than the total number of days, stop recursion.
         if (day > numDays) {
-            this.model.notifyObservers("SHOW_MESSAGE", "All days completed. Ending game.");
+            this.model.notifyObservers("SHOW_MESSAGE", "All days completed.");
             return CompletableFuture.completedFuture(null);  // Game ends
         }
         
@@ -358,7 +356,9 @@ public class GameController{
         if (debug) {
             this.model.notifyObservers("SHOW_MESSAGE", "Starting playDayGUI. nextPlayerIndex is: " + nextPlayerIndex);
         }
-        dayEnded = false;  // Reset the flag for the new day
+        // Reset the flag for the new day
+        dayEnded = false;  
+
         // Start processing player cycles
         return processPlayerCycle().thenCompose(ignored -> {
             // Check if the day has ended
@@ -368,6 +368,19 @@ public class GameController{
                     this.model.notifyObservers("SHOW_MESSAGE", "Day " + this.model.getDay() + " has ended.");
                     this.model.notifyObservers("SHOW_MESSAGE", "At end of Day, nextPlayerIndex is: " + nextPlayerIndex);
                 }
+
+                // Check if this is not the last day
+                if (this.model.getDay() < this.model.getNumDays()) {
+                    endDay();  // Only call endDay() if it's not the last day
+                    if (debug){ // debug
+                        this.model.notifyObservers("SHOW_MESSAGE", "endDay() called.");
+                    }
+                } else {
+                    if (debug){ // debug
+                        this.model.notifyObservers("SHOW_MESSAGE", "Last day has ended. Skipping endDay().");
+                    }
+                }
+
                 return CompletableFuture.completedFuture(null);
             } else {
                 // Day has not ended, continue with the next player cycle
@@ -387,13 +400,12 @@ public class GameController{
             return CompletableFuture.completedFuture(null);
         }
         
-        List<Player> players = model.getPlayers();
         if (debug){
             this.model.notifyObservers("SHOW_MESSAGE", "Starting a new player cycle.");
         }
 
             // Start processing the list of players from the first player
-        return processPlayerList(players, this.nextPlayerIndex).thenCompose(ignored -> {
+        return processPlayersRecursive(playerTurnOrder.iterator()).thenCompose(ignored -> {
             // Check if the day has ended
             if (dayEnded) {
                 // Day has ended, stop processing further cycles
@@ -405,47 +417,44 @@ public class GameController{
         });
     }
 
-    /**
-     * Recursively processes each player's turn within a cycle.
-     * 
-     * @param players The list of players.
-     * @param index   The current player's index.
-     * @return CompletableFuture that completes when all players have taken their turns.
-     */
-    private CompletableFuture<Void> processPlayerList(List<Player> players, int index) {
-        if (dayEnded || index >= players.size()) {
+    private CompletableFuture<Void> processPlayersRecursive(Iterator<Player> playerIterator) {
+        if (dayEnded || !playerIterator.hasNext()) {
             // Completed a full cycle of all players
             if (debug){
                 this.model.notifyObservers("SHOW_MESSAGE", "Completed a full cycle of player turns.");
             }
             return CompletableFuture.completedFuture(null);
         }
-
-        Player player = players.get(index);
-
+    
+        Player player = playerIterator.next();
+    
         if (debug){
             this.model.notifyObservers("SHOW_MESSAGE", "Processing turn for Player ID: " + player.getID());
         }
-
+    
         return playerTurnGUI(player.getID()).thenCompose(ignored -> {
             // Check if the number of scenes is less than or equal to 1
             if (this.model.getBoard().getNumScenesRemaining() <= 1) {
                 // Day has ended, set the flag and stop processing further players
                 dayEnded = true;
-                // Set nextPlayerIndex to the next player after the current one
-                this.nextPlayerIndex = (index + 1) % players.size();
-
-                if (debug) { //debug
-                    this.model.notifyObservers("SHOW_MESSAGE", "Day has ended. Next player index set to: " + nextPlayerIndex);
+                // Rotate the playerTurnOrder so that the next player is at the front
+                rotatePlayerTurnOrder(player);
+                if (debug) { // debug
+                    this.model.notifyObservers("SHOW_MESSAGE", "Day has ended. Next player is: Player ID " + playerTurnOrder.get(0).getID());
                 }
-
-                // Day has ended, stop processing further players
                 return CompletableFuture.completedFuture(null);
             } else {
-                // Day has not ended, Continue with the next player's turn
-                return processPlayerList(players, index + 1);
+                // Day has not ended, continue with the next player's turn
+                return processPlayersRecursive(playerIterator);
             }
         });
+    }
+
+    private void rotatePlayerTurnOrder(Player lastPlayer) {
+        int index = playerTurnOrder.indexOf(lastPlayer);
+        if (index >= 0) {
+            Collections.rotate(playerTurnOrder, - (index + 1));
+        }
     }
 
     /**
@@ -550,8 +559,10 @@ public class GameController{
     
                     // After player's action ends, check if only 1 scene remains
                     if (this.model.getBoard().getNumScenesRemaining() <= 1) {
+                        // End the day if only 1 scene remains
+                        dayEnded = true;
                         // player.setActive(false);
-                        endDay();  // End the day if only 1 scene remains
+
                         if (debug){ // debug
                             this.model.notifyObservers("SHOW_MESSAGE", "Day incremented to: " + this.model.getDay());
                         }
@@ -572,7 +583,6 @@ public class GameController{
                         // Complete the future to proceed to the next player
                         turnCompleted.complete(null);
                     } else {
-                        // TODO: remove debug line below
                         if (debug){ // debug
                             this.model.notifyObservers("SHOW_MESSAGE", "Continuing actions for Player ID: " + player.getID());
                         }
@@ -652,15 +662,10 @@ public class GameController{
      */
     private void addMoveListenersToNeighbors(Player player) {
         String locationName = this.model.getBoard().getPlayerLocationName(player);
-        // String formattedLocationName = locationName.substring(0, 1).toUpperCase() + 
-        //                                locationName.substring(1);
         Location location = this.model.getLocation(locationName);
         List<String> neighbors = location.getNeighbors();
 
         for (String neighborName : neighbors) {
-            // make sure neighborName has first letter capitalized
-            // String formattedNeighborName = neighborName.substring(0, 1).toUpperCase() + 
-            //                       neighborName.substring(1);
             Location neighborLocation = this.model.getLocation(neighborName);
             Area area = neighborLocation.getArea();
             // Create a HashMap to hold the event data
@@ -809,14 +814,6 @@ public class GameController{
     }
 
     private void addUpgradeListenerToCastingOffice(Player player) {
-        // Get player's location name
-        String locationName = this.model.getBoard()
-                                        .getPlayerLocationName(player);
-        // Get the location (must be the Casting Office in this case)
-        Location location = this.model.getLocation(locationName);
-        // Get the area
-        Area area = location.getArea();
-
         // Retrieve the list of upgrades
         List<Upgrade> upgrades = this.model.getUpgrades();
 
@@ -859,9 +856,6 @@ public class GameController{
      */
     private void initializePlayerDice() {
         // Constants for calculating player dice placement
-        int GENERAL_Y_OFFSET = 40;
-        int TRAILER_CASTING_X_OFFSET = 47;
-        int TRAILER_CASTING_Y_OFFSET = 47;
         Board board = this.model.getBoard();
 
         // Make a Map to hold data for initializing player dice
@@ -876,19 +870,6 @@ public class GameController{
             Map<String, Integer> playerInfo = new HashMap<>();
             playerInfo.put("playerRank", player.getRank());
 
-            // if (
-            //     locationString.equals("Trailer") || 
-            //     locationString.equals("Casting Office")
-            // ) {
-            //     // Calculate row and column for Trailer and Casting Office
-            //     int row = (playerID - 1) / 4;
-            //     int col = (playerID - 1) % 4;
-            //     x += col * TRAILER_CASTING_X_OFFSET;
-            //     y += row * TRAILER_CASTING_Y_OFFSET;
-            // } else {
-            //     // Apply general Y offset for other locations
-            //     y += playerID * GENERAL_Y_OFFSET;
-            // }
             // Add player location to playerInfo
             playerInfo.put("locationX", x);
             playerInfo.put("locationY", y);
@@ -900,7 +881,7 @@ public class GameController{
 
 
 
-        // move all playres to trailer using obsever method for "PLAYER_MOVE"
+        // move all players to trailer using observer method for "PLAYER_MOVE"
         // get Trailer location
         Location trailer = this.model.getLocation("Trailer");
         Area area = trailer.getArea();
@@ -913,6 +894,7 @@ public class GameController{
             moveData.put("locationArea", area);
             this.model.notifyObservers("PLAYER_MOVE", moveData);
         }
+
     }
 
     /**
@@ -954,30 +936,9 @@ public class GameController{
     }
 
     /**
-     * Moves the player to the selected location.
-     * 
-     * @param playerID The ID of the player to move.
-     * @param locationName The name of the location to move to.
+     * Resets all location roles to unoccupied.
      */
-    public void movePlayerToLocation(int playerID, String locationName) {
-        // Update the model with the player's new location
-        Player player = this.model.getPlayer(playerID);
-        Location location = this.model.getLocation(locationName);
-        Board board = this.model.getBoard();
-        board.setPlayerLocation(player, locationName);
-        
-        // Create and populate the movePlayer HashMap
-        HashMap<String, Object> eventData = new HashMap<>();
-        eventData.put("playerID", player.getID());
-        eventData.put("locationName", locationName);
-        eventData.put("locationArea", location.getArea());
-        
-        // Pass the string and the movePlayer HashMap to notifyObservers
-        this.model.notifyObservers("PLAYER_MOVE", eventData);
-    }
-
-
-    public void resetAllLocationRolesToUnoccipied() {
+    public void resetAllLocationRolesToUnoccupied() {
         // get location
         Map<String,Location> locations = this.model.getLocations();
         // for each location
@@ -988,7 +949,6 @@ public class GameController{
             }
         }
     }
-
 
     /**
      * Handles the MOVE command.
