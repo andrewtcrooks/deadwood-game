@@ -40,7 +40,6 @@ public class ShotManager {
      * @param group The group to which the shot image is added.
      * @param area  The area where the image is placed.
      */
-    @SuppressWarnings("unused")
     public void placeShotImage(Group group, Area area) {
         if (shotImage == null) {
             System.out.println("Shot image not loaded.");
