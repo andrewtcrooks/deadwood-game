@@ -741,7 +741,6 @@ public class GameGUIView implements GameView {
 
     }
 
-
     /**
      * Handle player work event.
      * 
@@ -791,6 +790,7 @@ public class GameGUIView implements GameView {
             index += 1;
         }
     }
+
 
 //Observer Pattern Method Utilities
 
@@ -850,7 +850,6 @@ public class GameGUIView implements GameView {
     
         return future;
     }
-
 
     /**
      * Interface for the number of players callback.
