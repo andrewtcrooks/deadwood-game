@@ -51,7 +51,7 @@ public class GameModel implements Subject {
         return instance;
     }
 
-    // TODO: uncomment to run Unit Tests
+    // DEBUG: uncomment to run Unit Tests
     /**
      * Resets the instance of the Model.
      */
