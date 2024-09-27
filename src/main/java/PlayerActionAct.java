@@ -191,21 +191,10 @@ public class PlayerActionAct implements PlayerAction {
         } 
 
         if (view instanceof GameGUIView) {
+            // Add a grayscale card back to the location
+            addWrappedCardback(locationName, model);
 
-            // TODO:  make card back at location visible again
-
-
-            // // Re-add cardback to location
             Area area = location.getArea();
-            // int x = location.getArea().getX();
-            // int y = location.getArea().getY();
-            // // Create a HashMap to hold the event data
-            // Map<String, Object> cardbackData = new HashMap<>();
-            // // Add data to eventData
-            // cardbackData.put("locationX", x);
-            // cardbackData.put("locationY", y);
-            // // Add cardback to the location as well
-            // model.notifyObservers("ADD_CARD_BACK", cardbackData);
             
             // Iterate through each player and move them back to the location
             for (Player playerEntry : playersAtLocation) {
@@ -254,6 +243,26 @@ public class PlayerActionAct implements PlayerAction {
             rolls.add(dice.getValue()); // Get the value of the roll
         }
         return rolls;
+    }
+
+    /**
+     * Call this method when a scene wraps to add a grayscale card back.
+     * @param locationName The name of the location where the scene wrapped.
+     */
+    private void addWrappedCardback(String locationName, GameModel model) {
+        // Retrieve the location details from the model
+        Location location = model.getLocation(locationName);
+        Area area = location.getArea();
+        Map<String, Object> eventData = new HashMap<>();
+        eventData.put("locationName", locationName);
+        eventData.put("locationX", area.getX());
+        eventData.put("locationY", area.getY());
+
+        // Notify observers to add a grayscale card back
+        model.notifyObservers("ADD_WRAPPED_CARD_BACK", eventData);
+
+        // Immediately bring all player dice to the front
+        model.notifyObservers("BRING_DICE_TO_FRONT", null);
     }
 
 }
