@@ -158,30 +158,6 @@ public class GameModel implements Subject {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        // List<String> trailer_neighbors = Arrays.asList(
-        //     "Main Street", "Saloon", "Hotel"
-        // );
-        // Location trailer = new Location(
-        //     "Trailer", 
-        //     trailer_neighbors, 
-        //     new Area(991,248,194,201), 
-        //     Arrays.asList(), 
-        //     Arrays.asList()
-        // );
-        // List<String> office_neighbors = Arrays.asList(
-        //     "Train Station",
-        //     "Ranch",
-        //     "Secret Hideout"
-        // );
-        // Location office = new Location(
-        //     "Casting Office", 
-        //     office_neighbors, 
-        //     new Area(9, 459, 208, 209), 
-        //     Arrays.asList(), 
-        //     Arrays.asList()
-        // );
-        // this.locations.put("Trailer", trailer);
-        // this.locations.put("Casting Office", office);
     }
 
     public void initUpgrades(String upgradesXMLFilePath) {
