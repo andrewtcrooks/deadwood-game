@@ -71,20 +71,16 @@ Not required but highly recommended that you have the following installed before
 
 On each players turn, pink translucent clickable areas are added to indicate potential player moves. Scrolling over these areas will popup a tooltip to indicate an action the player can take with the button such as Move, Work, Act, Rehearse, Upgrade, and End.
 
-* Move - While not working a role, click on any highlighted neighboring location scene card or neighboring location button (in the case of the Casting Office or Trailer) to be mvoed to that location.
-* Work - Click on any highlighted roles at the current location to take the role (you cannot leave the location until the scene is wrapped).
-* Act - Click on the highlighted takes at the area to act the next take and if successful wrap the take. Success depends on rolling a number equal to or greater than the budget listed in upper right corner of the location's scene card. Wrap all the takes at a location to wrap the scene and get the bonus payout! Bonus payout adds the bonus payout dice roles to each user who is working a role on a card (not the lcoation itself) in a round-robin fashion starting from the highest rank to the lowest.
-* Rehearse - Click anywhere on the scene card, unless the player is on that card, in which case clicking the user's die on the card will end the turn. Rehearsing is important as rehearsing gives you a rehearsal token and each rehearsal token adds to your Act dice role while working at the current location. Rehearsing sufficiently first reduces the likelihood of the Act attempt failing.
-* Upgrade - At the casting office, upgrade buttons for upgrades the user can afford will appear. Clicking on them upgrades the user to that rank and charges their dollars or credits. Upgrading is important as the final score = ( dollars + credits + 5 * users_rank).
-* End - Click on the current player's die.
+* **Move** - While not working a role, click on any highlighted neighboring location scene card or neighboring location button (in the case of the Casting Office or Trailer) to be moved to that location.
+* **Work** - Click on any highlighted roles at the current location to take the role (you cannot leave the location until the scene card is wrapped).
+* **Act** - Click on the highlighted takes (numbers in a circle) at the area to act the next take and if successful then wrap the take. Success depends on rolling a number equal to or greater than the budget listed in upper right corner of the location's scene card. Wrap all the takes at a location to wrap the scene card and get the bonus payout! Bonus payout rolls a number of dice equal to the scene card budget and adds the dice roles to each user who is working a role on a card (not the lcoation itself) in a round-robin fashion starting from the highest rank to the lowest.
+* **Rehearse** - Click anywhere on a highlighted scene card, unless the active player is on that card, in which case clicking the user's die on the card will end the turn while clicking anywhere else on the card will rehearse (even other player dice). Rehearsing is important as rehearsing gives you a rehearsal token and each rehearsal token adds to your dice role when you **Act** while working at the current location. Rehearsing sufficiently first reduces the likelihood of the **Act** attempt failing.
+* **Upgrade** - At the casting office, upgrade buttons for upgrades the user can afford will appear. Clicking on them upgrades the user to that rank and charges their dollars or credits. Upgrading is important as the final score = ( dollars + credits + 5 * users_rank).
+* **End** - Click on the current player's die.
 
 ![Project Screenshot](images/screenshot_begingame.png "Beginning of Game")
 
-Users can move 
-
-
-
-when all the takes (the numbers inside the circles at each location) have been wrapped, the scene itself will wrap and the cards will be covered with grayscale card backs to indicate that the scene has been wrapped. When all but the last scene has wrapped, the game will proceed to the next day and if there are no more days it will end the game, give the user scores, and declare a winner or winners in the case of a tie.
+After taking a role at a location, users must remain at the location until all the takes (the numbers inside the circles at each location) have been wrapped (black clapperboard icon present). Once the scene itself wraps, the cards will be covered with grayscale card backs to indicate that the scene has been wrapped. When all but the last scene has wrapped, the game will proceed to the next day and if there are no more days it will end the game, give the user scores, and declare a winner or winners in the case of a tie.
 
 ![Project Screenshot](images/screenshot_endgame.png)
 
