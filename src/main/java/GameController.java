@@ -1,7 +1,9 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.Comparator;
@@ -25,6 +27,7 @@ public class GameController{
     private static final HashMap<String, PlayerAction> actionMap = 
         new HashMap<>();
     private List<Player> playerTurnOrder;
+    private Set<String> visitedLocations = new HashSet<>();
     // Command Pattern action maps
     static {
         actionMap.put("who", new PlayerActionWho());
@@ -156,6 +159,9 @@ public class GameController{
             this.model.notifyObservers("REMOVE_ALL_SHOTS", null);
             // bring all player dice to front
             this.model.notifyObservers("BRING_DICE_TO_FRONT", null);
+
+            // Reset visited locations
+            visitedLocations.clear();
         }
     }
 
@@ -917,19 +923,22 @@ public class GameController{
                 int x = area.getX();
                 int y = area.getY();
                 int sceneCardID = board.getLocationSceneCardID(location
-                                    .getName());
+                                       .getName());
                 if (sceneCardID != 0) { 
+
                     // Make a Map to hold card ID and coords for the scene card
                     Map<String, Integer> addCard = new HashMap<>();
-                    // Make a Map to hold the coords for the card back
-                    Map<String, Integer> addCardBacks = new HashMap<>();
-                    addCardBacks.put("locationX", x);
-                    addCardBacks.put("locationY", y);
                     addCard.put("sceneCardID", sceneCardID);
                     addCard.put("locationX", x);
                     addCard.put("locationY", y);
                     this.model.notifyObservers("ADD_CARD", addCard);
-                    // this.model.notifyObservers("ADD_CARD_BACKS", addCardBacks);
+
+                    // Make a Map to hold the coords for the card back
+                    Map<String, Object> addCardBack = new HashMap<>();
+                    addCardBack.put("locationName", location.getName());
+                    addCardBack.put("locationX", x);
+                    addCardBack.put("locationY", y);
+                    this.model.notifyObservers("ADD_CARD_BACK", addCardBack);
                 }
             }
         }
@@ -955,15 +964,28 @@ public class GameController{
      */
     private void handleMoveCommand(Player player, Object data) {
         String locationName = (String) data;
+        
         // Move player in the model
         this.model.getBoard().setPlayerLocation(player, locationName);
         player.setHasMoved(true);
 
+        // Check if the location has been visited yet on this day
+        if (!visitedLocations.contains(locationName)) {
+            visitedLocations.add(locationName);
+
+            // Remove the card back for this location
+            Map<String, Object> removeCardBack = new HashMap<>();
+            removeCardBack.put("locationName", locationName);
+            this.model.notifyObservers("REMOVE_CARD_BACK", removeCardBack);
+        }
+
         // Move player on the board
         Location location = this.model.getLocations().get(locationName);
         Area area = location.getArea();
+
         // Create a HashMap to hold the event data
         Map<String, Object> eventData = new HashMap<>();
+
         // Add data to eventData
         eventData.put("locationName", locationName);
         eventData.put("playerID", player.getID());

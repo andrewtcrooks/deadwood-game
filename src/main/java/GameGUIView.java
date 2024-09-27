@@ -28,6 +28,7 @@ public class GameGUIView implements GameView {
     Map<String, Label> playerDiceLabels = new HashMap<>();
     private Group rootGroup;
     private Stage stage;
+    private Map<String, ImageView> cardBacks = new HashMap<>();
 
     // Managers
     private final ConsoleManager consoleManager;
@@ -242,10 +243,10 @@ public class GameGUIView implements GameView {
                 addCard((Map<String, Integer>) eventData);
                 break;
             case "ADD_CARD_BACK":
-                addCardBack((Map<String, Integer>) eventData);
+                addCardBack((Map<String, Object>) eventData);
                 break;
             case "REMOVE_CARD_BACK":
-                removeCardBack((Map<String, Integer>) eventData);
+                removeCardBack((Map<String, Object>) eventData);
                 break;
             case "CREATE_PLAYER_STATS_TABLE":
                 List<Player> players = (List<Player>) eventData;
@@ -439,27 +440,53 @@ public class GameGUIView implements GameView {
     /**
      * Add card backs to board.
      * 
-     * @param eventData The event data
+     * @param eventData The event data containing location details.
      */
-    private void addCardBack(Map<String, Integer> addCardBack) {
-        int x = addCardBack.get("locationX");
-        int y = addCardBack.get("locationY");
+    private void addCardBack(Map<String, Object> addCardBack) {
+        String locationName = (String) addCardBack.get("locationName");
+        int x = (Integer) addCardBack.get("locationX");
+        int y = (Integer) addCardBack.get("locationY");
+
         // Add offset to x to compensate for left sidebar
         int new_x = x + BOARD_OFFSET_X;
-        moveCardToLocation(new_x, y, "CardBack-small.jpg");
+
+        // Load the card back image
+        InputStream cardBackImageStream = getClass().getClassLoader().getResourceAsStream("CardBack-small.jpg");
+        if (cardBackImageStream == null) {
+            System.err.println("Error: CardBack-small.jpg not found");
+            return;
+        }
+        Image cardBackImage = new Image(cardBackImageStream);
+
+        // Create an ImageView for the card back
+        ImageView cardBackView = new ImageView(cardBackImage);
+        cardBackView.setLayoutX(new_x);
+        cardBackView.setLayoutY(y);
+
+        // Add the card back to the root group
+        rootGroup.getChildren().add(cardBackView);
+
+        // Store the card back in the map
+        cardBacks.put(locationName, cardBackView);
     }
 
     /**
      * Remove card backs from board.
      * 
-     * @param eventData The event data
+     * @param eventData The event data containing location details.
      */
-    private void removeCardBack(Map<String, Integer> removeCardBack) {
-        int x = removeCardBack.get("locationX");
-        int y = removeCardBack.get("locationY");
-        // Add offset to x to compensate for left sidebar
-        int new_x = x + BOARD_OFFSET_X;
-        moveCardToLocation(new_x, y, "CardBack-small.jpg");
+    private void removeCardBack(Map<String, Object> removeCardBack) {
+        String locationName = (String) removeCardBack.get("locationName");
+        ImageView cardBackView = cardBacks.get(locationName);
+
+        if (cardBackView != null) {
+            // Remove the card back from the root group
+            rootGroup.getChildren().remove(cardBackView);
+            // Remove the entry from the map
+            cardBacks.remove(locationName);
+        } else {
+            System.err.println("Error: No card back found for location " + locationName);
+        }
     }
 
     /**
