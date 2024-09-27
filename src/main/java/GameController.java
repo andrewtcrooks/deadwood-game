@@ -170,21 +170,29 @@ public class GameController{
      */
     public void scoreGame() {
 
-        List<Player> players = this.model.getPlayers();
-        // Sort players by score and then by ID if scores are tied
-        players.sort(
-            Comparator.comparingInt(Player::getScore)
-                    .reversed()
-                    .thenComparingInt(player -> player.getID())
-        );
+
         // Print game over screen
         this.model.notifyObservers(
             "SHOW_MESSAGE", 
             "Game over!"
         );
 
-        // declare player(s) with the highest score the winner
+        List<Player> players = this.model.getPlayers();
+
+        // Sort players by score and then by ID if scores are tied
+        players.sort(
+            Comparator.comparingInt(Player::getScore)
+                    .reversed()
+                    .thenComparingInt(player -> player.getID())
+        );
+
+        // Get highest score
         int highestScore = players.get(0).getScore();
+
+        // Reset players to sorted list of players
+        players = this.model.getPlayers();
+
+        // Get the winners
         List<Player> winners = new ArrayList<>();
         for (Player player : players) {
             if (player.getScore() == highestScore) {
@@ -197,8 +205,8 @@ public class GameController{
         // Print scores and indicate the winner(s)
         List<String> playerScoreStringList = new ArrayList<>();
         for (Player player : players) {
-            String winnerIndicator = player.getScore() == highestScore ? "  !!!Winner!!!" : "";
-            String playerScoreString = player.getID() + "," + player.getScore() + winnerIndicator;
+            String winnerIndicator = player.getScore() == highestScore ? "           !!!Winner!!!" : "";
+            String playerScoreString = " : " + player.getScore() + winnerIndicator;
             playerScoreStringList.add(playerScoreString);
         }
         this.model.notifyObservers("SHOW_SCORES", playerScoreStringList);
@@ -970,7 +978,10 @@ public class GameController{
         player.setHasMoved(true);
 
         // Check if the location has been visited yet on this day
-        if (!visitedLocations.contains(locationName)) {
+        if (!visitedLocations.contains(locationName) && 
+            !locationName.equals("Trailer") && 
+            !locationName.equals("Casting Office")
+        ) {
             visitedLocations.add(locationName);
 
             // Remove the card back for this location
