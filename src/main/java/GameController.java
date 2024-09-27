@@ -77,7 +77,9 @@ public class GameController{
     ) {
         this.model = model;
         this.view = view;
-        this.playerTurnOrder = new ArrayList<>(model.getPlayers());
+        if (view instanceof GameGUIView) {
+            this.playerTurnOrder = new ArrayList<>(model.getPlayers());
+        }
 
         // CLI Mode: Get the number of players and init model
         if (view instanceof GameCLIView) {
