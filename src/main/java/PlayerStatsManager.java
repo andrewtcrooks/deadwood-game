@@ -147,7 +147,7 @@ public class PlayerStatsManager {
                      * Updates the dice icon based on the player's current rank.
                      */
                     private void updateImage(Player player) {
-                        String diceFilename = diceColor[player.getID() - 1] + player.getRank() + ".png";
+                        String diceFilename = diceColor[player.getID() - 1].substring(0, 1) + player.getRank() + ".png";
                         InputStream diceImageStream = getClass().getClassLoader().getResourceAsStream("dice/" + diceFilename);
                         if (diceImageStream != null) {
                             Image diceImage = new Image(diceImageStream);
