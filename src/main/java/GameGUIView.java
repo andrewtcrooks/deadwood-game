@@ -6,7 +6,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.scene.Group;
-import javafx.scene.Node;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -16,11 +15,6 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 public class GameGUIView implements GameView {
-
-    private CompletableFuture<String> playerInputFuture;
-
-    // Number of players
-    private int numPlayers;
 
     // Dice colors
     private static final String[] diceColor = {
@@ -107,8 +101,6 @@ public class GameGUIView implements GameView {
             CONSOLE_HEIGHT
         );
 
-        // initialize the player input future
-        playerInputFuture = new CompletableFuture<>();
     }
 
 
