@@ -208,10 +208,8 @@ public class Deadwood extends Application{
             addTask(() -> runCreateBoardElements(controller)); 
             // Step 7: Refresh the board
             addTask(this::runRefreshView); 
-            // Step 8: Play days
-            addTask(() -> runPlayDays(controller)); 
-            // Step 9: Score game
-            // addTask(() -> runScoreGame(controller)); 
+            // Step 8: Play days and score the game at the end
+            addTask(() -> runPlayDaysThenScoreGame(controller)); 
 
             // Start processing the tasks in the queue
             processNextTask();
@@ -306,7 +304,6 @@ public class Deadwood extends Application{
      */
     private void runCreateBoardElements(GameController controller) {
         controller.createBoardElements();
-        
         processNextTask(); // Continue to the next task
     }
 
@@ -315,20 +312,11 @@ public class Deadwood extends Application{
      * 
      * @param controller the game controller
      */
-    public void runPlayDays(GameController controller) {
+    public void runPlayDaysThenScoreGame(GameController controller) {
         controller.playDaysGUI().thenRun(() -> {
             Platform.runLater(controller::scoreGame);  // GUI-specific end
         });
     }
-
-    // /**
-    //  * Run the scoreGame method on the JavaFX application thread.
-    //  * 
-    //  * @param controller the game controller
-    //  */
-    // private void runScoreGame(GameController controller) {
-    //     controller.scoreGame();
-    // }
     
     /**
      * Add a new task to the JavaFX application thread queue
