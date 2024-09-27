@@ -1,6 +1,7 @@
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Label;
@@ -243,7 +244,10 @@ public class GameGUIView implements GameView {
                 addCard((Map<String, Integer>) eventData);
                 break;
             case "ADD_CARD_BACK":
-                addCardBack((Map<String, Object>) eventData);
+                addCardBack((Map<String, Object>) eventData, false);
+                break;
+            case "ADD_WRAPPED_CARD_BACK":
+                addCardBack((Map<String, Object>) eventData, true);
                 break;
             case "REMOVE_CARD_BACK":
                 removeCardBack((Map<String, Object>) eventData);
@@ -442,7 +446,7 @@ public class GameGUIView implements GameView {
      * 
      * @param eventData The event data containing location details.
      */
-    private void addCardBack(Map<String, Object> addCardBack) {
+    private void addCardBack(Map<String, Object> addCardBack, boolean isGrayscale) {
         String locationName = (String) addCardBack.get("locationName");
         int x = (Integer) addCardBack.get("locationX");
         int y = (Integer) addCardBack.get("locationY");
@@ -463,13 +467,45 @@ public class GameGUIView implements GameView {
         cardBackView.setLayoutX(new_x);
         cardBackView.setLayoutY(y);
 
+        // Apply grayscale effect if required
+        if (isGrayscale) {
+            applyWrappedSceneEffect(cardBackView);
+        }
+
         // Add the card back to the root group
         rootGroup.getChildren().add(cardBackView);
 
-        // Store the card back in the map
-        cardBacks.put(locationName, cardBackView);
+        // Store the card back in the map if not grayscale
+        if (!isGrayscale) {
+            cardBacks.put(locationName, cardBackView);
+        }
+
     }
 
+    /**
+     * Apply a dark gray effect to the given ImageView to indicate a wrapped scene.
+     * 
+     * @param imageView The ImageView to apply the effect to.
+     */
+    private void applyWrappedSceneEffect(ImageView imageView) {
+        ColorAdjust darkGrayAdjust = new ColorAdjust();
+
+        // Shift hue to neutral (no color)
+        darkGrayAdjust.setHue(0);          
+          
+        // Desaturate to remove original colors
+        darkGrayAdjust.setSaturation(-1);
+
+        // Darkens the image
+        darkGrayAdjust.setBrightness(-0.7);
+
+        // Adds more depth
+        darkGrayAdjust.setContrast(0.4);
+        
+        // Apply the effect to the image view
+        imageView.setEffect(darkGrayAdjust);
+    }
+    
     /**
      * Remove card backs from board.
      * 
