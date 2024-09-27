@@ -73,14 +73,34 @@ On each players turn, pink translucent clickable areas are added to indicate pot
 
 * **Move** - While not working a role, click on any highlighted neighboring location scene card or neighboring location button (in the case of the Casting Office or Trailer) to be moved to that location.
 * **Work** - Click on any highlighted roles at the current location to take the role (you cannot leave the location until the scene card is wrapped).
-* **Act** - Click on the highlighted takes (numbers in a circle) at the area to act the next take and if successful then wrap the take. Success depends on rolling a number equal to or greater than the budget listed in upper right corner of the location's scene card. Wrap all the takes at a location to wrap the scene card and get the bonus payout! Bonus payout rolls a number of dice equal to the scene card budget and adds the dice roles to each user who is working a role on a card (not the lcoation itself) in a round-robin fashion starting from the highest rank to the lowest.
+* **Act** - Click on the highlighted takes (numbers in a circle) at the area to act the next take and if successful then wrap the take. Success depends on rolling a number equal to or greater than the budget listed in upper right corner of the location's scene card. Wrap all the takes at a location to wrap the scene card and get the bonus payout! Bonus payout rolls a number of dice equal to the scene card budget and adds the dice roles to each user who is working a role on a card (not a location role) in a round-robin fashion starting from the highest rank to the lowest.
 * **Rehearse** - Click anywhere on a highlighted scene card, unless the active player is on that card, in which case clicking the user's die on the card will end the turn while clicking anywhere else on the card will rehearse (even other player dice). Rehearsing is important as rehearsing gives you a rehearsal token and each rehearsal token adds to your dice role when you **Act** while working at the current location. Rehearsing sufficiently first reduces the likelihood of the **Act** attempt failing.
 * **Upgrade** - At the casting office, upgrade buttons for upgrades the user can afford will appear. Clicking on them upgrades the user to that rank and charges their dollars or credits. Upgrading is important as the final score = ( dollars + credits + 5 * users_rank).
 * **End** - Click on the current player's die.
 
+After taking a role at a location, users must remain at the location until all the takes (the numbers inside the circles at each location) have been wrapped (black clapperboard icon present). Once the scene itself wraps, the cards will be covered with grayscale card backs to indicate that the scene has been wrapped. When all but the last scene has wrapped, the game will proceed to the next day and if there are no more days it will end the game, give the user scores, and declare a winner or winners in the case of a tie.
+
+## Screenshots
+
+### Game Start
+
 ![Project Screenshot](images/screenshot_begingame.png "Beginning of Game")
 
-After taking a role at a location, users must remain at the location until all the takes (the numbers inside the circles at each location) have been wrapped (black clapperboard icon present). Once the scene itself wraps, the cards will be covered with grayscale card backs to indicate that the scene has been wrapped. When all but the last scene has wrapped, the game will proceed to the next day and if there are no more days it will end the game, give the user scores, and declare a winner or winners in the case of a tie.
+### First Moves
+
+![Project Screenshot](images/screenshot_firstmoves.png "Beginning of Game")
+
+### Upgrading
+
+![Project Screenshot](images/screenshot_upgrades.png "Beginning of Game")
+
+![Project Screenshot](images/screenshot_upgrades2.png "Beginning of Game")
+
+### A new day begins
+
+![Project Screenshot](images/screenshot_day3begins.png "Beginning of Game")
+
+### End game
 
 ![Project Screenshot](images/screenshot_endgame.png)
 
@@ -108,6 +128,10 @@ Run the following command to execute all unit tests:
 ```
 
 This will run all tests and generate a report in `build/reports/tests/test/index.html`. You can open this file in a web browser to view the test results.
+
+## Current issues
+
+With the addition of IntegerProperty to replace the primitve int type into the Player class, the Gson library's ability to save and load the player data has been compromised. As such, the CLI version's ability to load and save the game has been compromised. There is no expectation that this feature will be fixed in the future as there is no demand for it.
 
 ## Additional Information
 
